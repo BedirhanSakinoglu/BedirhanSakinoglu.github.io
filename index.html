@@ -1,9 +1,135 @@
-<!doctype html>
 <html>
-  <head>
-    <title>This is the title of the webpage!</title>
-  </head>
-  <body>
-    <p>This is an example paragraph. Anything in the <strong>body</strong> tag will appear on the page, just like this <strong>p</strong> tag and its contents.</p>
-  </body>
+<style>
+*{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+    padding: 2rem;
+    text-align: left;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+body h1{
+    font-weight: 600;
+}
+
+.container{
+    
+    margin: 1rem auto;
+    
+    text-align: justify;
+    transition: all 0.3s;
+}
+.container p{
+    line-height: 1.5;
+    letter-spacing: 0.3px;
+    word-spacing: 2px;
+}
+
+.container p:first-child::first-letter{
+    color:#FE5F55;
+    font-weight: bold;
+    font-size: 70px;
+    float: left;
+    line-height: 60px;
+    padding-right: 8px;
+    margin-top: -3px;
+}
+
+@media screen and (max-width:600px){
+    .container{
+        width: 100%;
+        padding: 1rem;
+    }
+}
+</style>
+<body>
+<div style="width: 60%;" class="container">
+<h1>1. Introduction</h1>
+<div class="container">
+<p >This project proposal is for the Shipping Company Data Management System. In the report, first, the description of this project will be explained in terms of its functionalities such as how a customer can send a package and receive a package. Then, functional requirements and non-functional requirements, which are security, usability, and scalability will be listed. Afterward, the limitations of this system which are the disabilities and abilities that users have will be discussed. Lastly, The ER model of the database will be shown to give a brief understanding of the system. </p>
+</div>
+<br>
+<h1>2. Project Description</h1>
+<div class="container">
+<p>This project is a web-based database management application that will be
+used by both the employees and customers of the shipping system. The aim of the project is to increase the efficiency of communication and planning between branches, employees, and customers.
+</p>
+</div>
+<br>
+<p>
+There are three user types in our project: customer, courier, employee. Each user will create an account with a username and a password then each of them will log in to the system. The system enables customers to ship their package by either submitting it to the branch directly or calling a courier so that s/he can transfer the package to the branch. A package can be fragile, spoilable, or normal. The packaging material such as the bubble pouch will be determined by the package type. Customers will be limited to calling only 2 couriers to their location in a day so that their right to call a courier is not abused. There are 3 types of couriers; fast, heavy, and default. Fast couriers are a little bit more expensive and they carry small, light packages. Heavy couriers carry big and heavy packages while default couriers carry normal packages at an affordable price. Since customers can send a package, they can also receive packages. If customers want to receive their package at a certain time period in the day, they have the ability to state that. The system enables the customer to track their packages as well. There are branches in each location where 10 to 50 employees work. These employees are charged with assigning packages to couriers which a branch has delivered from other branches and an employee can assign at most 20 packages to each courier. There are two ways that a customer can receive his/her package; couriers transport packages to each customer’s location or the customer can go to the branch’s already determined pickup location to take the package in person. These locations can be any type of shop and the customer can choose which pick-up location they want to go to according to their closeness to that location. There is also another functionality that our system provides which is to make contracts with companies. Some companies can make deals with specific shipping systems and they can send their packages via the shipping system. Since many packages are transported on a daily basis, some may be malformed. So, in order not to lose the trust of one’s customers, the system enables them to decline the shipping and write a report about that incident. Also, some packages may get lost due to extraordinary factors and for the same reason, customers have the right to file a report about it. There is also an evaluation step for customers so that they can rank their shipping experience. Each courier is evaluated with points.
+</p>
+<br>
+<p>
+Because there are different user types and different request combinations, a well-structured database will be needed for this project. The database will allow the data to be organized more efficiently than a normal file system.
+</p>
+<br>
+<h1>3. Requirements</h1>
+<h2>&nbsp&nbsp3.1. Functional</h2>
+<h3>&nbsp&nbsp&nbsp&nbspCustomer</h3>
+<ul>
+  <li>Customers can send packages by calling a courier to their location.</li>
+  <li>Customers can send packages by handing them over to the branch themselves.</li>
+  <li>Customers can fill a report and decline the shipping for malfunctioned packages and lost packages as well.</li>
+  <li>Customers can state what time they want their cargo to be delivered. </li>
+  <li>Customers can track their cargo status.</li>
+  <li>Customers can rate and review the couriers so that their corresponding branches can see the couriers’ performance.</li>
+  <li>Customers can determine the package type.</li>
+  <li>Customers can choose courier type according to their package.</li>
+  <li>Customers can determine whether they want their package to be delivered by a courier or take it in person from a pickup location.</li>
+</ul>
+<h3>&nbsp&nbsp&nbsp&nbspCourier</h3>
+<ul>
+	<li>Couriers deliver the package to their assigned branch.</li>
+</ul>
+
+<h3>&nbsp&nbsp&nbsp&nbspEmployee</h3>
+<ul>
+	<li>Employees that are working in a branch, transfer packages to destination branches.</li>
+	<li>Employees assign the packages to couriers to deliver to customers.</li>
+</ul>
+
+<h2>&nbsp&nbsp3.2. Non-Functional</h2>
+<h3>&nbsp&nbsp&nbsp&nbspSecurity</h3>
+<ul>
+	<li>Address of the customers must be kept private from other customers. </li>
+	<li>Usernames and passwords will be private.</li>
+	<li>Customers will rank couriers anonymously. </li>
+</ul>
+
+<h3>&nbsp&nbsp&nbsp&nbspUsability</h3>
+<ul>
+	<li>A user-friendly interface will be implemented so that everyone can use it without having any problem with the functionalities of the system. Each operation can be executed easily. </li>
+</ul>
+
+<h3>&nbsp&nbsp&nbsp&nbspScalability</h3>
+<ul>
+	<li>The database can be enlarged without losing performance.</li>
+	<li>The system is able to handle an increase in workload by not causing any performance degradation. </li>
+</ul>
+<br>
+
+<h1>4. Limitations</h1>
+
+<ul>
+	<li>Username cannot be changed after creating an account.</li>
+	<li>User passwords must include upper, lower characters with a numeric character(s).</li>
+	<li>Complaints about a malformed or lost package cannot exceed 500 characters.</li>
+	<li>Complaint reports about malformed and lost packages cannot be filed 15 days after the delivery date. </li>
+	<li>An employee can assign at most 20 packages to a courier per day.  </li>
+	<li>There must be at least 10 and at most 50 employees in each branch.</li>
+	<li>Customers can call at most 2 couriers to send packages in a day.</li>
+	<li>Each package is priced out by its dimension and weight.</li>
+	<li>Fast couriers can carry up to 10 kg, heavy couriers can carry up to 1000 kg and default couriers can carry up to 250 kg.</li>
+</ul>
+<br>
+
+<h1>5. ER Model</h1>
+<img style="width:100%; object-fit:cover;" src="er_diagram.png">
+
+</div>
+</body>
 </html>
