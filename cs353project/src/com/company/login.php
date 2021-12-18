@@ -3,10 +3,6 @@ session_start();
 require_once "config.php";
 $msg = '';
 
-if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-    header("location: welcome.php");
-    exit;
-}
 
 function logIn($mysqli)
 {
@@ -14,23 +10,81 @@ function logIn($mysqli)
     $pass = $_POST['password'];
     $query = "SELECT * FROM user WHERE username='$user' AND password='$pass'";
     $result = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
+    $userType = "none";
     if($result){
         if($result->num_rows==1) {
+            if (isset($_POST['usertype'])){
+                $userType = $_POST['usertype'];
+            }
             $_SESSION['username'] = $user;
             $_SESSION['password'] = $pass;
             $_SESSION['loggedin'] = true;
-            header("location: welcome.php");
+            if($userType == "customer"){
+                $query_cust = "SELECT * FROM user u, customer c WHERE u.username='$user' AND c.customer_ID = u.user_ID";
+                $result_cust = $mysqli->query($query_cust) or die('Error in query: ' . $mysqli->error);
+                if($result_cust->num_rows==1) {
+                    header("location: customerDashboard.php");
+                }
+                else{
+                    echo '<script type="text/javascript">
+                        alert("Incorrect Usertype");
+                        </script>';
+                }
+            }
+            else if($userType == "employee"){
+                $query_emp = "SELECT * FROM user u, employee e WHERE u.username='$user' AND e.employee_ID = u.user_ID";
+                $result_emp = $mysqli->query($query_emp) or die('Error in query: ' . $mysqli->error);
+                if($result_emp->num_rows==1) {
+                    header("location: employeeDashboard.php");
+                }
+                else{
+                    echo '<script type="text/javascript">
+                        alert("Incorrect Usertype");
+                        </script>';
+                }
+            }
+            else if($userType == "companyrepresentative"){
+                $query_comp = "SELECT * FROM user u, company_representative cr WHERE u.username='$user' AND cr.company_ID = u.user_ID";
+                $result_comp = $mysqli->query($query_comp) or die('Error in query: ' . $mysqli->error);
+                if($result_comp->num_rows==1) {
+                    header("location: companyRepresentativeDashboard.php");
+                }
+                else{
+                    echo '<script type="text/javascript">
+                        alert("Incorrect Usertype");
+                        </script>';
+                }
+            }
+            else if($userType == "courier"){
+                $query_cour = "SELECT * FROM user u, courier c WHERE u.username='$user' AND c.courier_ID = u.user_ID";
+                $result_cour = $mysqli->query($query_cour) or die('Error in query: ' . $mysqli->error);
+                if($result_cour->num_rows==1) {
+                    header("location: companyRepresentativeDashboard.php");
+                }
+                else{
+                    echo '<script type="text/javascript">
+                        alert("Incorrect Usertype");
+                        </script>';
+                }
+
+
+            }
         }
+    }
+    else{
+        echo '<script type="text/javascript">
+            alert("Incorrect Username or Password");
+            </script>';
     }
 }
 
-if (isset($_POST['login'])){
+if (isset($_POST['logIn'])){
     logIn($mysqli);
 }
 ?>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>Projet</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
@@ -235,50 +289,59 @@ if (isset($_POST['login'])){
     </div>
 
     <div class="split right">
-        <form>
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <!--   con = Container  for items in the form-->
             <div class="con">
                 <!--     Start  header Content  -->
                 <header class="head-form">
-                    <?php
-                    if($sett){
-                        echo sprintf("<h2>ZAAAAAAAA</h2>");
-                    }
-                    else{
-                        echo sprintf("<h2>Log In</h2>");
-                    }
-                    ?>
+                    <h2>Log In</h2>
                     <!--     A welcome message or an explanation of the login form -->
-                    <p>Login by using your username and password</p>
+                    <p>Please select your user type:</p>
+                    <div>
+                        <input type="radio" id="customer"
+                               name="usertype" value="customer" required>
+                        <label for="customer">Customer</label>
+
+                        <input type="radio" id="courier"
+                               name="usertype" value="courier">
+                        <label for="courier">Courier</label>
+
+                        <input type="radio" id="employee"
+                               name="usertype" value="employee">
+                        <label for="courier">Employee</label>
+                        <br/>
+                        <input type="radio" id="companyrepresentative"
+                               name="usertype" value="companyrepresentative">
+                        <label for="companyrepresentative">Company Representative</label>
+                    </div>
+
                 </header>
                 <!--     End  header Content  -->
                 <br>
                 <div class="field-set">
-                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">                    <!--   user name -->
-                    <span class="input-item">
+                        <span class="input-item">
 
                     </span>
-                    <!--   user name Input-->
-                    <input class="form-input" id="txt-input" type="text" placeholder="Username" name = "username" required>
-                    <br>
+                        <!--   user name Input-->
+                        <input class="form-input" id="txt-input" type="text" placeholder="Username" name = "username" required>
+                        <br>
 
-                    <!--   Password -->
+                        <!--   Password -->
 
-                    <span class="input-item">
-
-                    </span>
-                    <!--   Password Input-->
-                    <input class="form-input" type="password" placeholder="Password" id="pwd"  name="password" required>
-
-                    <!--      Show/hide password  -->
-                    <span>
+                        <span class="input-item">
 
                     </span>
-                    <br>
-                    <!--        buttons -->
-                    <!--      button LogIn -->
-                    <button class="log-in" type = "submit" name = "logIn"> Log In </button>
-                </form>
+                        <!--   Password Input-->
+                        <input class="form-input" type="password" placeholder="Password" id="pwd"  name="password" required>
+
+                        <!--      Show/hide password  -->
+                        <span>
+
+                    </span>
+                        <br>
+                        <!--        buttons -->
+                        <!--      button LogIn -->
+                        <button class="log-in" type = "submit" name = "logIn"> Log In </button>
                 </div>
 
                 <!--   other buttons -->
