@@ -106,9 +106,9 @@ public class DBConnector {
                             "courier_ID INT," +
                             "review_ID INT," +
                             "text VARCHAR(50) NOT NULL," +
-                            "rate FLOAT" +
+                            "rate FLOAT," +
                             "PRIMARY KEY (courier_ID, review_ID)," +
-                            "FOREIGN KEY (courier_ID ) REFERENCES user(user_ID)" +
+                            "FOREIGN KEY (courier_ID) REFERENCES user(user_ID)" +
                             ");"
             );
 
@@ -167,6 +167,21 @@ public class DBConnector {
                             ");"
             );
 
+            //package Table
+            stmt.executeUpdate(
+                    "CREATE TABLE package(" +
+                            "package_ID INT AUTO_INCREMENT," +
+                            "weight FLOAT," +
+                            "dimension VARCHAR(50) NOT NULL," +
+                            "deliver_address VARCHAR(50) NOT NULL," +
+                            "status VARCHAR(50) NOT NULL," +
+                            "send_time DATE NOT NULL," +
+                            "delivery_time DATE NOT NULL," +
+                            "package_type VARCHAR(50) NOT NULL," +
+                            "courier_type INT" +
+                            ");"
+            );
+
             //report Table
             stmt.executeUpdate(
                     "CREATE TABLE report(" +
@@ -177,8 +192,20 @@ public class DBConnector {
                             "report_type VARCHAR(50) NOT NULL," +
                             "is_accepted VARCHAR(50) NOT NULL," +
                             "PRIMARY KEY (customer_ID, report_ID, package_ID)," +
-                            "FOREIGN KEY (customer_ID) REFERENCES customer (customer_ID)" +
+                            "FOREIGN KEY (customer_ID) REFERENCES customer(customer_ID)," +
                             "FOREIGN KEY (package_ID) REFERENCES package(package_ID)" +
+                            ");"
+            );
+
+            //pickup_location Table
+            stmt.executeUpdate(
+                    "CREATE TABLE pickup_location(" +
+                            "package_ID INT AUTO_INCREMENT," +
+                            "location_ID INT AUTO_INCREMENT," +
+                            "location_name VARCHAR(50) NOT NULL," +
+                            "address VARCHAR(50) NOT NULL," +
+                            "phone VARCHAR(50) NOT NULL UNIQUE," +
+                            "PRIMARY KEY (location_ID)" +
                             ");"
             );
 
@@ -206,57 +233,155 @@ public class DBConnector {
                             ");"
             );
 
-            //assign_to Table bitmedi
+            //assign_to Table
             stmt.executeUpdate(
                     "CREATE TABLE assign_to_employee(" +
                             "package_ID INT," +
                             "employee_ID INT," +
                             "is_accepted VARCHAR(50) NOT NULL," +
-                            "PRIMARY KEY (customer_ID, report_ID, package_ID)," +
-                            "FOREIGN KEY (customer_ID) REFERENCES customer (customer_ID)" +
-                            "FOREIGN KEY (package_ID) REFERENCES package(package_ID);" +
+                            "PRIMARY KEY (package_ID)," +
+                            "FOREIGN KEY (package_ID) REFERENCES package(package_ID)," +
+                            "FOREIGN KEY (employee_ID) REFERENCES employee(employee_ID)" +
                             ");"
             );
 
-            //collect Table ***********************************DÜZELT
+            //collect Table
             stmt.executeUpdate(
                     "CREATE TABLE collect(" +
                             "package_ID INT," +
-                            "employee_ID INT," +
-                            "is_accepted VARCHAR(50) NOT NULL," +
-                            "report_type VARCHAR(50) NOT NULL," +
-                            "is_accepted VARCHAR(50) NOT NULL," +
-                            "PRIMARY KEY (customer_ID, report_ID, package_ID)," +
-                            "FOREIGN KEY (customer_ID) REFERENCES customer (customer_ID)" +
-                            "FOREIGN KEY (package_ID) REFERENCES package(package_ID);" +
+                            "courier_ID INT," +
+                            "PRIMARY KEY (package_ID)," +
+                            "FOREIGN KEY (package_ID) REFERENCES package(package_ID)," +
+                            "FOREIGN KEY (courier_ID) REFERENCES courier(courier_ID)" +
                             ");"
             );
 
-            //package Table
-
             //send Table
+            stmt.executeUpdate(
+                    "CREATE TABLE send(" +
+                            "package_ID INT," +
+                            "customer_ID INT," +
+                            "PRIMARY KEY (package_ID)," +
+                            "FOREIGN KEY (customer_ID) REFERENCES customer(customer_ID)," +
+                            "FOREIGN KEY (package_ID) REFERENCES package(package_ID)" +
+                            ");"
+            );
 
             //take Table
-
-            //call_courier Table
-
-            //pickup_location Table
-
-            //submit_pack Table
-
-            //transfer_pack Table
+            stmt.executeUpdate(
+                    "CREATE TABLE take(" +
+                            "package_ID INT," +
+                            "customer_ID INT," +
+                            "PRIMARY KEY (package_ID)," +
+                            "FOREIGN KEY (customer_ID) REFERENCES customer(customer_ID)," +
+                            "FOREIGN KEY (package_ID) REFERENCES package(package_ID)" +
+                            ");"
+            );
 
             //branch Table
+            stmt.executeUpdate(
+                    "CREATE TABLE branch(" +
+                            "branch_ID INT AUTO_INCREMENT," +
+                            "address VARCHAR(50) NOT NULL," +
+                            "phone VARCHAR(50) NOT NULL UNIQUE," +
+                            "PRIMARY KEY (branch_ID)" +
+                            ");"
+            );
+
+            //call_courier Table
+            stmt.executeUpdate(
+                    "CREATE TABLE call_courier(" +
+                            "package_ID INT AUTO_INCREMENT," +
+                            "courier_ID INT," +
+                            "branch_ID INT," +
+                            "customer_ID INT," +
+                            "PRIMARY KEY (courier_ID, branch_ID)," +
+                            "FOREIGN KEY (courier_ID) REFERENCES courier(courier_ID)," +
+                            "FOREIGN KEY (branch_ID) REFERENCES branch(branch_ID )," +
+                            "FOREIGN KEY (customer_ID) REFERENCES customer(customer_ID)" +
+                            ");"
+            );
+
+            //submit_pack Table
+            stmt.executeUpdate(
+                    "CREATE TABLE submit_pack(" +
+                            "package_ID INT," +
+                            "branch_ID INT," +
+                            "PRIMARY KEY (package_ID)," +
+                            "FOREIGN KEY (branch_ID) REFERENCES branch(branch_ID)," +
+                            "FOREIGN KEY (package_ID) REFERENCES package(package_ID)" +
+                            ");"
+            );
+
+            //transfer_pack Table
+            stmt.executeUpdate(
+                    "CREATE TABLE transfer_pack(" +
+                            "package_ID INT," +
+                            "branch_ID INT," +
+                            "employee_ID," +
+                            "PRIMARY KEY (package_ID)," +
+                            "FOREIGN KEY (branch_ID) REFERENCES branch(branch_ID)," +
+                            "FOREIGN KEY (employee_ID) REFERENCES employee(employee_ID)," +
+                            "FOREIGN KEY (package_ID) REFERENCES package(package_ID)" +
+                            ");"
+            );
 
             //contract Table
+            stmt.executeUpdate(
+                    "CREATE TABLE contract(" +
+                            "package_ID INT," +
+                            "company_ID INT," +
+                            "branch_ID INT," +
+                            "is_Approved VARCHAR(50) NOT NULL," +
+                            "PRIMARY KEY (company_ID, branch_ID)," +
+                            "FOREIGN KEY (branch_ID) REFERENCES branch(branch_ID)," +
+                            "FOREIGN KEY (company_ID) REFERENCES company_representative(company_ID)" +
+                            ");"
+            );
 
             //chosen_location Table
+            stmt.executeUpdate(
+                    "CREATE TABLE chosen_location(" +
+                            "location_ID INT," +
+                            "branch_ID INT," +
+                            "PRIMARY KEY (location_ID)," +
+                            "FOREIGN KEY (branch_ID) REFERENCES branch(branch_ID)," +
+                            "FOREIGN KEY (location_ID) REFERENCES pickup_location(location_ID)" +
+                            ");"
+            );
 
             //works Table
+            stmt.executeUpdate(
+                    "CREATE TABLE works(" +
+                            "employee_ID INT," +
+                            "branch_ID INT," +
+                            "PRIMARY KEY (employee_ID)," +
+                            "FOREIGN KEY (branch_ID) REFERENCES branch(branch_ID)," +
+                            "FOREIGN KEY (employee_ID) REFERENCES employee(employee_ID)" +
+                            ");"
+            );
 
             //works_at Table
+            stmt.executeUpdate(
+                    "CREATE TABLE works_at(" +
+                            "courier_ID INT," +
+                            "branch_ID INT," +
+                            "PRIMARY KEY (employee_ID)," +
+                            "FOREIGN KEY (branch_ID) REFERENCES branch(branch_ID)," +
+                            "FOREIGN KEY (courier_ID) REFERENCES courier(courier_ID)" +
+                            ");"
+            );
 
             //has Table
+            stmt.executeUpdate(
+                    "CREATE TABLE has(" +
+                            "package_ID INT," +
+                            "report_ID INT," +
+                            "PRIMARY KEY (package_ID)," +
+                            "FOREIGN KEY (report_ID) REFERENCES report(report_ID)," +
+                            "FOREIGN KEY (package_ID) REFERENCES package(package_ID)" +
+                            ");"
+            );
 
 
         } catch (SQLException e) {
