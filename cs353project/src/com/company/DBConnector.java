@@ -13,10 +13,10 @@ public class DBConnector {
             e.printStackTrace();
         }
 
-        final String USERNAME = "";
-        final String PASSWORD = "";
-        final String DBNAME = "";
-        final String URL = "jdbc:mysql://dijkstra.ug.bcc.bilkent.edu.tr/" + DBNAME;
+        final String USERNAME = "root";
+        final String PASSWORD = "projet123";
+        final String DBNAME = "projetdb";
+        final String URL = "jdbc:mysql://localhost:3306/" + DBNAME;
 
         System.out.println("Connecting to database");
         Connection connection;
@@ -36,32 +36,33 @@ public class DBConnector {
 
             // Drop tables if they exist already
             System.out.println("Dropping tables");
-            stmt.executeUpdate("DROP TABLE IF EXISTS user");
-            stmt.executeUpdate("DROP TABLE IF EXISTS customer");
-            stmt.executeUpdate("DROP TABLE IF EXISTS courier");
-            stmt.executeUpdate("DROP TABLE IF EXISTS send_to");
-            stmt.executeUpdate("DROP TABLE IF EXISTS company_representative");
-            stmt.executeUpdate("DROP TABLE IF EXISTS employee");
-            stmt.executeUpdate("DROP TABLE IF EXISTS evaluate");
-            stmt.executeUpdate("DROP TABLE IF EXISTS deliver");
-            stmt.executeUpdate("DROP TABLE IF EXISTS report");
-            stmt.executeUpdate("DROP TABLE IF EXISTS choose");
-            stmt.executeUpdate("DROP TABLE IF EXISTS assigns");
-            stmt.executeUpdate("DROP TABLE IF EXISTS assign_to_employee");
-            stmt.executeUpdate("DROP TABLE IF EXISTS collect");
-            stmt.executeUpdate("DROP TABLE IF EXISTS package");
-            stmt.executeUpdate("DROP TABLE IF EXISTS send");
-            stmt.executeUpdate("DROP TABLE IF EXISTS take");
-            stmt.executeUpdate("DROP TABLE IF EXISTS call_courier");
-            stmt.executeUpdate("DROP TABLE IF EXISTS pickup_location");
-            stmt.executeUpdate("DROP TABLE IF EXISTS submit_pack");
-            stmt.executeUpdate("DROP TABLE IF EXISTS transfer_pack");
-            stmt.executeUpdate("DROP TABLE IF EXISTS branch");
-            stmt.executeUpdate("DROP TABLE IF EXISTS contract");
-            stmt.executeUpdate("DROP TABLE IF EXISTS chosen_location");
-            stmt.executeUpdate("DROP TABLE IF EXISTS works");
-            stmt.executeUpdate("DROP TABLE IF EXISTS works_at");
             stmt.executeUpdate("DROP TABLE IF EXISTS has");
+            stmt.executeUpdate("DROP TABLE IF EXISTS works_at");
+            stmt.executeUpdate("DROP TABLE IF EXISTS works");
+            stmt.executeUpdate("DROP TABLE IF EXISTS chosen_location");
+            stmt.executeUpdate("DROP TABLE IF EXISTS contract");
+            stmt.executeUpdate("DROP TABLE IF EXISTS transfer_pack");
+            stmt.executeUpdate("DROP TABLE IF EXISTS submit_pack");
+            stmt.executeUpdate("DROP TABLE IF EXISTS call_courier");
+            stmt.executeUpdate("DROP TABLE IF EXISTS branch");
+            stmt.executeUpdate("DROP TABLE IF EXISTS take");
+            stmt.executeUpdate("DROP TABLE IF EXISTS send");
+            stmt.executeUpdate("DROP TABLE IF EXISTS collect");
+            stmt.executeUpdate("DROP TABLE IF EXISTS assign_to_employee");
+            stmt.executeUpdate("DROP TABLE IF EXISTS assigns");
+            stmt.executeUpdate("DROP TABLE IF EXISTS choose");
+            stmt.executeUpdate("DROP TABLE IF EXISTS pickup_location");
+            stmt.executeUpdate("DROP TABLE IF EXISTS report");
+            stmt.executeUpdate("DROP TABLE IF EXISTS package");
+            stmt.executeUpdate("DROP TABLE IF EXISTS deliver");
+            stmt.executeUpdate("DROP TABLE IF EXISTS evaluate");
+            stmt.executeUpdate("DROP TABLE IF EXISTS employee");
+            stmt.executeUpdate("DROP TABLE IF EXISTS company_representative");
+            stmt.executeUpdate("DROP TABLE IF EXISTS send_to");
+            stmt.executeUpdate("DROP TABLE IF EXISTS courier_review");
+            stmt.executeUpdate("DROP TABLE IF EXISTS courier");
+            stmt.executeUpdate("DROP TABLE IF EXISTS customer");
+            stmt.executeUpdate("DROP TABLE IF EXISTS user");
 
             // Create tables
 
@@ -95,7 +96,7 @@ public class DBConnector {
                             "salary INT," +
                             "price INT," +
                             "courier_type VARCHAR(50) NOT NULL," +
-                            "PRIMARY KEY (courier_ID)" +
+                            "PRIMARY KEY (courier_ID)," +
                             "FOREIGN KEY (courier_ID) REFERENCES user(user_ID)" +
                             ");"
             );
@@ -178,7 +179,8 @@ public class DBConnector {
                             "send_time DATE NOT NULL," +
                             "delivery_time DATE NOT NULL," +
                             "package_type VARCHAR(50) NOT NULL," +
-                            "courier_type INT" +
+                            "courier_type INT," +
+                            "PRIMARY KEY (package_ID)" +
                             ");"
             );
 
@@ -191,16 +193,14 @@ public class DBConnector {
                             "content VARCHAR(50) NOT NULL," +
                             "report_type VARCHAR(50) NOT NULL," +
                             "is_accepted VARCHAR(50) NOT NULL," +
-                            "PRIMARY KEY (customer_ID, report_ID, package_ID)," +
                             "FOREIGN KEY (customer_ID) REFERENCES customer(customer_ID)," +
-                            "FOREIGN KEY (package_ID) REFERENCES package(package_ID)" +
+                            "PRIMARY KEY (report_ID)" +
                             ");"
             );
 
             //pickup_location Table
             stmt.executeUpdate(
                     "CREATE TABLE pickup_location(" +
-                            "package_ID INT AUTO_INCREMENT," +
                             "location_ID INT AUTO_INCREMENT," +
                             "location_name VARCHAR(50) NOT NULL," +
                             "address VARCHAR(50) NOT NULL," +
@@ -291,7 +291,6 @@ public class DBConnector {
             //call_courier Table
             stmt.executeUpdate(
                     "CREATE TABLE call_courier(" +
-                            "package_ID INT AUTO_INCREMENT," +
                             "courier_ID INT," +
                             "branch_ID INT," +
                             "customer_ID INT," +
@@ -318,7 +317,7 @@ public class DBConnector {
                     "CREATE TABLE transfer_pack(" +
                             "package_ID INT," +
                             "branch_ID INT," +
-                            "employee_ID," +
+                            "employee_ID INT," +
                             "PRIMARY KEY (package_ID)," +
                             "FOREIGN KEY (branch_ID) REFERENCES branch(branch_ID)," +
                             "FOREIGN KEY (employee_ID) REFERENCES employee(employee_ID)," +
@@ -366,7 +365,7 @@ public class DBConnector {
                     "CREATE TABLE works_at(" +
                             "courier_ID INT," +
                             "branch_ID INT," +
-                            "PRIMARY KEY (employee_ID)," +
+                            "PRIMARY KEY (courier_ID)," +
                             "FOREIGN KEY (branch_ID) REFERENCES branch(branch_ID)," +
                             "FOREIGN KEY (courier_ID) REFERENCES courier(courier_ID)" +
                             ");"
@@ -383,6 +382,10 @@ public class DBConnector {
                             ");"
             );
 
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('utku_sezer', '123', 'utkus@gmail.com', '05439984328')");
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('lara_fener', '123', 'laraf@gmail.com', '05439984323')");
+            stmt.executeUpdate("INSERT INTO customer VALUES(1,'kkfl ldfk kdl')");
+            stmt.executeUpdate("INSERT INTO customer VALUES(2,'eeheh ldfk kdl')");
 
         } catch (SQLException e) {
             System.out.println("SQLException: " + e.getMessage());
