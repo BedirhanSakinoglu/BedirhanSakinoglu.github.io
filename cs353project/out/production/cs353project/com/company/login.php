@@ -224,7 +224,7 @@ if (isset($_POST['logIn'])){
         .input-item {
             background: #fff;
             color: #333;
-            padding: 14.5px 0px 15px 9px;
+            /*padding: 14.5px 0px 15px 9px;*/
             border-radius: 5px 0px 0px 5px;
         }
 
@@ -260,7 +260,7 @@ if (isset($_POST['logIn'])){
             display: inline-block;
             color: #fff;
 
-            width: 30vh;
+            width: 33vh;
             height: 5vh;
 
             padding: 0 20px;
@@ -382,7 +382,7 @@ if (isset($_POST['logIn'])){
                     <!--      Forgot Password button-->
                     <p>Don't have an account ?</p>
                     <!--     Sign Up button -->
-                    <button class="btn submits sign-up">Sign Up
+                    <button class="btn submits sign-up" formnovalidate>Sign Up
                         <!--         Sign Up font icon -->
                         <i class="fa fa-user-plus" aria-hidden="true"></i>
                     </button>
