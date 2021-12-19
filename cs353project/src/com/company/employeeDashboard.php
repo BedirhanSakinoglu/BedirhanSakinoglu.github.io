@@ -6,6 +6,8 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
 } else if(!isset($_SESSION['loggedin'])){
     header("location: login.php");
 }
+$username = $_SESSION['username'];
+$id = $_SESSION['user_id'];
 ?>
 <h1> employee </h1>
 <body>

@@ -19,11 +19,20 @@ function logIn($mysqli)
             $_SESSION['username'] = $user;
             $_SESSION['password'] = $pass;
             $_SESSION['loggedin'] = true;
+            $_SESSION['user_id'] = -1;
             if($userType == "customer"){
                 $query_cust = "SELECT * FROM user u, customer c WHERE u.username='$user' AND c.customer_ID = u.user_ID";
                 $result_cust = $mysqli->query($query_cust) or die('Error in query: ' . $mysqli->error);
                 if($result_cust->num_rows==1) {
                     header("location: customerDashboard.php");
+                    //lets find the user id belonging to this username
+                    $query_find_cust_id = "SELECT customer_ID FROM user u, customer c WHERE u.username = '$user' AND c.customer_ID = u.user_ID";
+                    $result_find_cust_id = $mysqli->query($query_find_cust_id) or die('Error in query: ' . $mysqli->error);
+                    if($result_find_cust_id->num_rows==1){
+                        $row=$result_find_cust_id->fetch_assoc();
+                        $id = (int) $row['customer_ID'];
+                        $_SESSION['user_id'] = $id;
+                    }
                 }
                 else{
                     echo '<script type="text/javascript">
@@ -36,6 +45,14 @@ function logIn($mysqli)
                 $result_emp = $mysqli->query($query_emp) or die('Error in query: ' . $mysqli->error);
                 if($result_emp->num_rows==1) {
                     header("location: employeeDashboard.php");
+                    //lets find the user id belonging to this username
+                    $query_find_emp_id = "SELECT employee_ID FROM user u, employee e WHERE u.username = '$user' AND e.employee_ID = u.user_ID";
+                    $result_find_emp_id = $mysqli->query($query_find_emp_id) or die('Error in query: ' . $mysqli->error);
+                    if($result_find_emp_id->num_rows==1){
+                        $row=$result_find_emp_id->fetch_assoc();
+                        $id = (int) $row['employee_ID'];
+                        $_SESSION['user_id'] = $id;
+                    }
                 }
                 else{
                     echo '<script type="text/javascript">
@@ -48,6 +65,14 @@ function logIn($mysqli)
                 $result_comp = $mysqli->query($query_comp) or die('Error in query: ' . $mysqli->error);
                 if($result_comp->num_rows==1) {
                     header("location: companyRepresentativeDashboard.php");
+                    //lets find the user id belonging to this username
+                    $query_find_comp_rep_id = "SELECT employee_ID FROM user u, company_representative c WHERE u.username = '$user' AND c.company_ID = u.user_ID";
+                    $result_find_comp_rep_id = $mysqli->query($query_find_comp_rep_id) or die('Error in query: ' . $mysqli->error);
+                    if($result_find_comp_rep_id->num_rows==1){
+                        $row=$result_find_comp_rep_id->fetch_assoc();
+                        $id = (int) $row['company_ID'];
+                        $_SESSION['user_id'] = $id;
+                    }
                 }
                 else{
                     echo '<script type="text/javascript">
@@ -59,7 +84,15 @@ function logIn($mysqli)
                 $query_cour = "SELECT * FROM user u, courier c WHERE u.username='$user' AND c.courier_ID = u.user_ID";
                 $result_cour = $mysqli->query($query_cour) or die('Error in query: ' . $mysqli->error);
                 if($result_cour->num_rows==1) {
-                    header("location: companyRepresentativeDashboard.php");
+                    header("location: courierDashboard.php");
+                    //lets find the user id belonging to this username
+                    $query_find_cor_id = "SELECT courier_ID FROM user u, courier c WHERE u.username = '$user' AND c.courier_ID = u.user_ID";
+                    $result_find_cor_id = $mysqli->query($query_find_cor_id) or die('Error in query: ' . $mysqli->error);
+                    if($result_find_cor_id->num_rows==1){
+                        $row=$result_find_cor_id->fetch_assoc();
+                        $id = (int) $row['company_ID'];
+                        $_SESSION['user_id'] = $id;
+                    }
                 }
                 else{
                     echo '<script type="text/javascript">
