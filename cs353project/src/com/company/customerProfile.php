@@ -1,5 +1,15 @@
 <?php
+session_start();
+require_once "config.php";
 
+
+if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
+    header("location: login.php");
+} else if(!isset($_SESSION['loggedin'])){
+    header("location: login.php");
+}
+
+$id = $_SESSION['user_id'];
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -66,9 +76,8 @@
 
         .grid-container{
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            grid-template-rows: 35vh 35vh;
-            column-gap: 5vh;
+            grid-template-columns: 1fr;
+            grid-template-rows: 8vh 4vh 4vh 4vh 4vh;
             row-gap: 5vh;
             margin-right: 3vh;
             margin-left: 3vh;
@@ -85,8 +94,9 @@
         }
 
         p {
-            font-family: 'Dubai Light';
+            font-family: 'Google Sans';
             margin-bottom: 5vh;
+            font-size: 4vh;
         }
 
         h2 {
@@ -95,6 +105,12 @@
             color: white;
             margin-left: 3vh;
             padding-top: 1vh;
+        }
+
+        h3{
+            font-family: 'Google Sans';
+            font-size: 5vh;
+            color: rgb(23, 103, 161);
         }
         /* End body rules */
 
@@ -151,18 +167,37 @@
 <body>
 <div class="banner-container">
     <div class="banner-item left"><h2>ProJet</h2></div>
-    <div class="banner-item middle"><button class="banner-button">Home</button> <button class="banner-button">My Profile</button></div>
-    <div class="banner-item right"><button class="banner-button">Logout</button></div>
+    <div class="banner-item middle"><button class="banner-button" onclick="location.href='customerDashboard.php';">Home</button> <button class="banner-button" onclick="location.href='customerProfile.php';">My Profile</button></div>
+    <div class="banner-item right"><button class="banner-button" onclick="location.href='logout.php';">Logout</button></div>
 </div>
 <div class="grid-container">
-    <div class="grid-item"><p>Send Packages</p> <button class="send-button">Call Courier</button> <button class="send-button">Deliver Yourself</button></div>
-    <div class="grid-item"><p>My Packages</p> <img src="../../asset/package.jpg" style="width:50%;height:60%"> </div>
-    <div class="grid-item"><p>My Profile</p> <img src="../../asset/myprofile.png" style="width:30%;height:50%"></div>
-    <div class="grid-item"><p>Create Report</p><img src="../../asset/report.png" style="width:30%;height:60%"></div>
-    <div class="grid-item"><p>Review Courier</p> <img src="../../asset/courier1.png" style="width:50%;height:60%"></div>
-    <div class="grid-item"><p>Logout</p> <img src="../../asset/logout.png" style="width:50%;height:60%"></div>
+    <?php
+        $query = "SELECT * FROM user u, customer c WHERE u.user_ID='$id' AND c.customer_ID = u.user_ID";
+        $result = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
+        $result_customer = $result->fetch_assoc();
+    ?>
+    <div><h3>
+            <?php
+                echo sprintf($result_customer['username']);
+            ?>
+        </h3></div>
+    <div><p><?php
+                echo sprintf("User ID: ");
+                echo sprintf($result_customer['user_ID']);
+            ?></p></div>
+    <div><p><?php
+                echo sprintf("Email: ");
+                echo sprintf($result_customer['email']);
+            ?></p></div>
+    <div><p><?php
+                echo sprintf("Phone Number: ");
+                echo sprintf($result_customer['phone']);
+            ?></p></div>
+    <div><p><?php
+                echo sprintf("Address: ");
+                echo sprintf($result_customer['address']);
+            ?></p></div>
 </div>
 
 </body>
 </html>
-

@@ -99,8 +99,6 @@ function logIn($mysqli)
                         alert("Incorrect Usertype");
                         </script>';
                 }
-
-
             }
         }
     }
@@ -111,9 +109,97 @@ function logIn($mysqli)
     }
 }
 
+function register_customer($mysqli){
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $email = $_POST['email'];
+    $address = $_POST['address'];
+    $phone = $_POST['phone'];
+    $sql="INSERT INTO user (username, email, password, phone) 
+                            VALUES ('$username', '$email', '$password', '$phone')";
+    $mysqli->query($sql) or die('Error in query: ' . $mysqli->error);;
+    //mysqli_query($mysqli,$sql);
+    $id = mysqli_insert_id($mysqli);
+    $sql2="INSERT INTO customer (customer_ID, address) VALUES ($id, '$address')";
+    //mysqli_query($mysqli,$sql2);
+    $mysqli->query($sql2) or die('Error in query: ' . $mysqli->error);
+    header("location: customerDashboard.php");
+    $_SESSION['user_id'] = $id;
+}
+
+function register_courier($mysqli){
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $salary = $_POST['salary'];
+    $price = $_POST['price'];
+    $couriertype = $_POST['couriertype'];
+
+    $sql="INSERT INTO user (username, email, password, phone) 
+                            VALUES ('$username', '$email', '$password', '$phone')";
+    $mysqli->query($sql) or die('Error in query: ' . $mysqli->error);;
+    //mysqli_query($mysqli,$sql);
+    $id = mysqli_insert_id($mysqli);
+    $sql2="INSERT INTO courier (courier_ID, salary, price, courier_type) VALUES ($id, '$salary', '$price', '$couriertype')";
+    //mysqli_query($mysqli,$sql2);
+    $mysqli->query($sql2) or die('Error in query: ' . $mysqli->error);;
+    header("location: courierDashboard.php");
+    $_SESSION['user_id'] = $id;
+}
+
+function register_employee($mysqli){
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $salary = $_POST['salary'];
+    $sql="INSERT INTO user (username, email, password, phone) 
+                            VALUES ('$username', '$email', '$password', '$phone')";
+    $mysqli->query($sql) or die('Error in query: ' . $mysqli->error);;
+    $id = mysqli_insert_id($mysqli);
+    $sql2="INSERT INTO employee (employee_ID, salary) VALUES ($id, '$salary')";
+    $mysqli->query($sql2) or die('Error in query: ' . $mysqli->error);;
+    header("location: employeeDashboard.php");
+    $_SESSION['user_id'] = $id;
+}
+
+function register_companyrepresentative($mysqli){
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $company_name = $_POST['companyname'];
+    $sql="INSERT INTO user (username, email, password, phone) 
+                            VALUES ('$username', '$email', '$password', '$phone')";
+    $mysqli->query($sql) or die('Error in query: ' . $mysqli->error);;
+    $id = mysqli_insert_id($mysqli);
+    $sql2="INSERT INTO company_representative(company_ID, company_name) VALUES ($id, '$company_name')";
+    $mysqli->query($sql2) or die('Error in query: ' . $mysqli->error);;
+    header("location: companyRepresentativeDashboard.php");
+    $_SESSION['user_id'] = $id;
+}
+
 if (isset($_POST['logIn'])){
     logIn($mysqli);
 }
+
+if (isset($_POST['register_customer'])){
+    register_customer($mysqli);
+}
+
+if (isset($_POST['register_courier'])){
+    register_courier($mysqli);
+}
+
+if (isset($_POST['register_employee'])){
+    register_employee($mysqli);
+}
+
+if (isset($_POST['register_companyrepresentative'])){
+    register_companyrepresentative($mysqli);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -122,6 +208,7 @@ if (isset($_POST['logIn'])){
     <title>Projet</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <meta name="generator" content="Web Page Maker (unregistered version)">
+    <script type="text/javascript" src="login.js"></script>
     <style>
         /* Fonts Form Google Font ::- https://fonts.google.com/  -:: */
         @import url('https://fonts.googleapis.com/css?family=Abel|Abril+Fatface|Alegreya|Arima+Madurai|Dancing+Script|Dosis|Merriweather|Oleo+Script|Overlock|PT+Serif|Pacifico|Playball|Playfair+Display|Share|Unica+One|Vibur');
@@ -324,73 +411,104 @@ if (isset($_POST['logIn'])){
     <div class="split right">
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <!--   con = Container  for items in the form-->
-            <div class="con">
+            <?php
+            if(isset($_POST['signup'])){
+                echo sprintf("<div class=\"con\">
+                        <!--     Start  header Content  -->
+                        <header class=\"head-form\">
+                            <h2>Sign Up</h2>
+                            <!--     A welcome message or an explanation of the login form -->
+                            <p>Please select your user type:</p>
+                            <div id=\"test\">
+                                <input type=\"radio\" id=\"customer\"
+                                       name=\"registertype\" value=\"customer\" onclick=\"checkButton()\" required>
+                                <label for=\"customer\">Customer</label>
+        
+                                <input type=\"radio\" id=\"courier\"
+                                       name=\"registertype\" value=\"courier\" onclick=\"checkButton()\">
+                                <label for=\"courier1\">Courier</label>
+        
+                                <input type=\"radio\" id=\"employee\"
+                                       name=\"registertype\" value=\"employee\" onclick=\"checkButton()\">
+                                <label for=\"employee\">Employe</label>
+                                <br/>
+                                <input type=\"radio\" id=\"companyrepresentative\"
+                                       name=\"registertype\" value=\"companyrepresentative\" onclick=\"checkButton()\">
+                                <label for=\"companyrepresentative\">Company Representative</label>   
+                            </div>
+                    </div>");
+
+            }
+            else{
+                echo sprintf("<div class=\"con\">
                 <!--     Start  header Content  -->
-                <header class="head-form">
+                <header class=\"head-form\">
                     <h2>Log In</h2>
                     <!--     A welcome message or an explanation of the login form -->
                     <p>Please select your user type:</p>
                     <div>
-                        <input type="radio" id="customer"
-                               name="usertype" value="customer" required>
-                        <label for="customer">Customer</label>
+                        <input type=\"radio\" id=\"customer\"
+                               name=\"usertype\" value=\"customer\" required>
+                        <label for=\"customer\">Customer</label>
 
-                        <input type="radio" id="courier"
-                               name="usertype" value="courier">
-                        <label for="courier">Courier</label>
+                        <input type=\"radio\" id=\"courier\"
+                               name=\"usertype\" value=\"courier\">
+                        <label for=\"courier\">Courier</label>
 
-                        <input type="radio" id="employee"
-                               name="usertype" value="employee">
-                        <label for="courier">Employee</label>
+                        <input type=\"radio\" id=\"employee\"
+                               name=\"usertype\" value=\"employee\">
+                        <label for=\"employee\">Employee</label>
                         <br/>
-                        <input type="radio" id="companyrepresentative"
-                               name="usertype" value="companyrepresentative">
-                        <label for="companyrepresentative">Company Representative</label>
+                        <input type=\"radio\" id=\"companyrepresentative\"
+                               name=\"usertype\" value=\"companyrepresentative\">
+                        <label for=\"companyrepresentative\">Company Representative</label>                        
                     </div>
 
                 </header>
                 <!--     End  header Content  -->
                 <br>
-                <div class="field-set">
-                        <span class="input-item">
+                <div class=\"field-set\">
+                        <span class=\"input-item\">
 
                     </span>
-                        <!--   user name Input-->
-                        <input class="form-input" id="txt-input" type="text" placeholder="Username" name = "username" required>
-                        <br>
+                    <!--   user name Input-->
+                    <input class=\"form-input\" id=\"txt-input\" type=\"text\" placeholder=\"Username\" name = \"username\" required>
+                    <br>
 
-                        <!--   Password -->
+                    <!--   Password -->
 
-                        <span class="input-item">
-
-                    </span>
-                        <!--   Password Input-->
-                        <input class="form-input" type="password" placeholder="Password" id="pwd"  name="password" required>
-
-                        <!--      Show/hide password  -->
-                        <span>
+                    <span class=\"input-item\">
 
                     </span>
-                        <br>
-                        <!--        buttons -->
-                        <!--      button LogIn -->
-                        <button class="log-in" type = "submit" name = "logIn"> Log In </button>
+                    <!--   Password Input-->
+                    <input class=\"form-input\" type=\"password\" placeholder=\"Password\" id=\"pwd\"  name=\"password\" required>
+
+                    <!--      Show/hide password  -->
+                    <span>
+
+                    </span>
+                    <br>
+                    <!--        buttons -->
+                    <!--      button LogIn -->
+                    <button class=\"log-in\" type = \"submit\" name = \"logIn\"> Log In </button>
                 </div>
 
                 <!--   other buttons -->
-                <div class="other">
+                <div class=\"other\">
                     <!--      Forgot Password button-->
                     <p>Don't have an account ?</p>
                     <!--     Sign Up button -->
-                    <button class="btn submits sign-up" formnovalidate>Sign Up
+                    <button class=\"btn submits sign-up\" name=\"signup\" formnovalidate>Sign Up
                         <!--         Sign Up font icon -->
-                        <i class="fa fa-user-plus" aria-hidden="true"></i>
+                        <i class=\"fa fa-user-plus\" aria-hidden=\"true\"></i>
                     </button>
                     <!--      End Other the Division -->
                 </div>
 
                 <!--   End Conrainer  -->
-            </div>
+            </div>");
+            }
+            ?>
 
             <!-- End Form -->
         </form>

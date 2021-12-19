@@ -99,8 +99,6 @@ function logIn($mysqli)
                         alert("Incorrect Usertype");
                         </script>';
                 }
-
-
             }
         }
     }
@@ -182,7 +180,7 @@ function register_companyrepresentative($mysqli){
     $_SESSION['user_id'] = $id;
 }
 
-if (isset($_POST['login'])){
+if (isset($_POST['logIn'])){
     logIn($mysqli);
 }
 

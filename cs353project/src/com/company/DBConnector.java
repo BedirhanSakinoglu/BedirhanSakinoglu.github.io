@@ -53,12 +53,12 @@ public class DBConnector {
             stmt.executeUpdate("DROP TABLE IF EXISTS choose");
             stmt.executeUpdate("DROP TABLE IF EXISTS pickup_location");
             stmt.executeUpdate("DROP TABLE IF EXISTS report");
-            stmt.executeUpdate("DROP TABLE IF EXISTS package");
             stmt.executeUpdate("DROP TABLE IF EXISTS deliver");
             stmt.executeUpdate("DROP TABLE IF EXISTS evaluate");
             stmt.executeUpdate("DROP TABLE IF EXISTS employee");
             stmt.executeUpdate("DROP TABLE IF EXISTS company_representative");
             stmt.executeUpdate("DROP TABLE IF EXISTS send_to");
+            stmt.executeUpdate("DROP TABLE IF EXISTS package");
             stmt.executeUpdate("DROP TABLE IF EXISTS courier_review");
             stmt.executeUpdate("DROP TABLE IF EXISTS courier");
             stmt.executeUpdate("DROP TABLE IF EXISTS customer");
@@ -113,13 +113,31 @@ public class DBConnector {
                             ");"
             );
 
+            //package Table
+            stmt.executeUpdate(
+                    "CREATE TABLE package(" +
+                            "package_ID INT AUTO_INCREMENT," +
+                            "weight FLOAT," +
+                            "dimension VARCHAR(50) NOT NULL," +
+                            "delivery_address VARCHAR(50) NOT NULL," +
+                            "status VARCHAR(50) NOT NULL," +
+                            "send_time DATE NOT NULL," +
+                            "delivery_time DATE NOT NULL," +
+                            "package_type VARCHAR(50) NOT NULL," +
+                            "courier_type INT," +
+                            "PRIMARY KEY (package_ID)" +
+                            ");"
+            );
+
             //send_to Table
             stmt.executeUpdate(
                     "CREATE TABLE send_to(" +
                             "sender_ID INT," +
                             "taker_ID INT," +
-                            "PRIMARY KEY (sender_ID , taker_ID)," +
+                            "package_ID INT," +
+                            "PRIMARY KEY (sender_ID , taker_ID, package_ID)," +
                             "FOREIGN KEY (sender_ID) REFERENCES customer(customer_ID)," +
+                            "FOREIGN KEY (package_ID) REFERENCES package(package_ID)," +
                             "FOREIGN KEY (taker_ID ) REFERENCES customer(customer_ID)" +
                             ");"
             );
@@ -165,22 +183,6 @@ public class DBConnector {
                             "PRIMARY KEY (customer_ID, courier_ID)," +
                             "FOREIGN KEY (customer_ID) REFERENCES customer(customer_ID)," +
                             "FOREIGN KEY (courier_ID ) REFERENCES courier(courier_ID)" +
-                            ");"
-            );
-
-            //package Table
-            stmt.executeUpdate(
-                    "CREATE TABLE package(" +
-                            "package_ID INT AUTO_INCREMENT," +
-                            "weight FLOAT," +
-                            "dimension VARCHAR(50) NOT NULL," +
-                            "deliver_address VARCHAR(50) NOT NULL," +
-                            "status VARCHAR(50) NOT NULL," +
-                            "send_time DATE NOT NULL," +
-                            "delivery_time DATE NOT NULL," +
-                            "package_type VARCHAR(50) NOT NULL," +
-                            "courier_type INT," +
-                            "PRIMARY KEY (package_ID)" +
                             ");"
             );
 
@@ -383,9 +385,32 @@ public class DBConnector {
             );
 
             stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('utku_sezer', '123', 'utkus@gmail.com', '05439984328')");
+            stmt.executeUpdate("INSERT INTO customer VALUES(LAST_INSERT_ID(),'bilkent camlık')");
             stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('lara_fener', '123', 'laraf@gmail.com', '05439984323')");
-            stmt.executeUpdate("INSERT INTO customer VALUES(1,'kkfl ldfk kdl')");
-            stmt.executeUpdate("INSERT INTO customer VALUES(2,'eeheh ldfk kdl')");
+            stmt.executeUpdate("INSERT INTO customer VALUES(LAST_INSERT_ID(),'yasamkent karina')");
+
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('ege_uyar', '233', 'egey@gmail.com', '05437684328')");
+            stmt.executeUpdate("INSERT INTO customer VALUES(LAST_INSERT_ID(),'manisa havuz')");
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('bilge_han', '4993', 'bilgeh@gmail.com', '00939984323')");
+            stmt.executeUpdate("INSERT INTO customer VALUES(LAST_INSERT_ID(),'yasamkent cagdas')");
+
+            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(35.5, 'Not delivered', DATE '2015-12-17' ,'spoilable','30x30x43','hamamönü', DATE '2015-12-31',0)");
+            stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(1,2, LAST_INSERT_ID())");
+
+            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(32.1, 'Not delivered', DATE '2015-12-17' ,'spoilable','30x10x43','izmir', DATE '2010-12-31',0)");
+            stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(1,2,LAST_INSERT_ID())");
+
+            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(10, 'Not delivered', DATE '2012-01-17' ,'fragile','10x30x43','bilkent', DATE '2019-12-31',0)");
+            stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(2,1,LAST_INSERT_ID())");
+
+            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(100, 'Not delivered', DATE '2010-01-17' ,'spoiled','10x10x43','karacaahmet', DATE '2019-12-31',0)");
+            stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(2,1,LAST_INSERT_ID())");
+
+            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(9.5, 'Not delivered', DATE '2020-01-17' ,'box','10x57x43','selcuk efes', DATE '2020-12-31',0)");
+            stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(3,1,LAST_INSERT_ID())");
+
+            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(90.5, 'Not delivered', DATE '2020-01-17' ,'fragile','10x57x43','77 yurt', DATE '2020-12-31',0)");
+            stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(1,4,LAST_INSERT_ID())");
 
         } catch (SQLException e) {
             System.out.println("SQLException: " + e.getMessage());
