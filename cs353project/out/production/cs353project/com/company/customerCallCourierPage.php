@@ -7,8 +7,24 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
 } else if(!isset($_SESSION['loggedin'])){
     header("location: login.php");
 }
-
 $id = $_SESSION['user_id'];
+
+
+function test($mysqli){
+    echo '<script>alert("Welcome to Geeks for Geeks")</script>';
+    /*
+    $package_type = "<script>document.write(sessionStorage.getItem('package_type'));</script>";
+    $sql="INSERT INTO package (weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) 
+                            VALUES (35.5, 'Not delivered', DATE '2015-12-17' ,'$package_type','30x30x43','hamamönü', DATE '2021-12-31',0)";
+    $mysqli->query($sql) or die('Error in query: ' . $mysqli->error);
+    */
+    header("location: customerDashboard.php");
+
+}
+if (isset($_POST['test'])){
+    test($mysqli);
+}
+
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -19,6 +35,8 @@ $id = $_SESSION['user_id'];
     <meta name="generator" content="Web Page Maker (unregistered version)">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="customerCallCourierPageJS.js"></script>
     <style>
         /* Fonts Form Google Font ::- https://fonts.google.com/  -:: */
         @import url('https://fonts.googleapis.com/css?family=Abel|Abril+Fatface|Alegreya|Arima+Madurai|Dancing+Script|Dosis|Merriweather|Oleo+Script|Overlock|PT+Serif|Pacifico|Playball|Playfair+Display|Share|Unica+One|Vibur');
@@ -64,6 +82,10 @@ $id = $_SESSION['user_id'];
 
         .left{
             text-align: left;
+        }
+
+        .left:hover{
+            cursor: pointer;
         }
 
         .middle{
@@ -113,10 +135,6 @@ $id = $_SESSION['user_id'];
             color: rgb(23, 103, 161);
         }
         /* End body rules */
-
-        form{
-            all: unset;
-        }
 
         /* buttons  */
         .banner-button {
@@ -168,18 +186,17 @@ $id = $_SESSION['user_id'];
         .row {
             margin: 0px !important;
         }
-
     </style>
 
 </head>
 <body>
-<div class="banner-container">
-    <div class="banner-item left"><h2>ProJet</h2></div>
-    <div class="banner-item middle"><button class="banner-button" onclick="location.href='customerDashboard.php';">Home</button> <button class="banner-button" onclick="location.href='customerProfile.php';">My Profile</button></div>
-    <div class="banner-item right"><button class="banner-button" onclick="location.href='logout.php';">Logout</button></div>
-</div>
-<div>
-    <div class="row">
+    <div class="banner-container">
+        <div class="banner-item left" onclick="location.href='customerDashboard.php';"><h2>ProJet</h2></div>
+        <div class="banner-item middle"><button class="banner-button" onclick="location.href='customerDashboard.php';">Home</button> <button class="banner-button" onclick="location.href='customerProfile.php';">My Profile</button></div>
+        <div class="banner-item right"><button class="banner-button" onclick="location.href='logout.php';">Logout</button></div>
+    </div>
+    <div>
+        <div class="row">
             <div class="col-8">
                 <ul class="list-group list-group-flush ml-2">
                     <li class="list-group-item mt-4 border border-secondary">
@@ -242,8 +259,8 @@ $id = $_SESSION['user_id'];
                                name="date_month" value="" class="m-2" style="width: 5vh" required>
 
                         <span>/</span>
-                        <input type="text" id="date_month"
-                               name="date_month" value="" class="m-2" style="width: 5vh" required>
+                        <input type="text" id="date_year"
+                               name="date_year" value="" class="m-2" style="width: 5vh" required>
                     </li>
                     <li class="list-group-item mt-4 border border-secondary">
                         <h3 class="text-primary">Choose a Delivery Type*</h3>
@@ -275,13 +292,11 @@ $id = $_SESSION['user_id'];
                     </div>
                 </div>
                 <form action="" method="post">
-                    <button type="submit" class="btn btn-primary mt-auto ">Continue to next step</button>
+                    <button type="submit" class="btn btn-primary mt-auto" onclick="testForPHP();" name="test">Continue to next step</button>
                 </form>
 
             </div>
-
+        </div>
     </div>
-</div>
-
 </body>
 </html>

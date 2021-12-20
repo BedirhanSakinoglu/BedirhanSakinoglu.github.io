@@ -11,7 +11,16 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
 
 $id = $_SESSION['user_id'];
 if (isset($_POST['send_report'])){
-    echo "<script>if(confirm('Report Sent! We will reach you soon!')){document.location.href='customerDashboard.php'};</script>";
+    $package_problem = $_POST['package_problem'];
+    $description = $_POST['description'];
+    //report insertion yapılcak
+    //created relationuna eklencek
+    //design reportta yazıyo
+    //package id ler alt alta bastırılırken tıklanabilir olcak ve slide bar eklencek aşağı insin diye
+    //ve sayfa bi kaydı yamuldu anlamadım benim bilgisayarın çözünürlükten dolayı :)  -Larari
+    echo "<script>
+            if(confirm('Report Sent! We will reach you soon!')){document.location.href='customerDashboard.php'};
+            </script>";
 }
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -68,6 +77,10 @@ if (isset($_POST['send_report'])){
 
         .left{
             text-align: left;
+        }
+
+        .left:hover{
+            cursor: pointer;
         }
 
         .middle{
@@ -178,7 +191,7 @@ if (isset($_POST['send_report'])){
 </head>
 <body>
 <div class="banner-container">
-    <div class="banner-item left"><h2>ProJet</h2></div>
+    <div class="banner-item left" onclick="location.href='customerDashboard.php';"><h2>ProJet</h2></div>
     <div class="banner-item middle"><button class="banner-button" onclick="location.href='customerDashboard.php';">Home</button> <button class="banner-button" onclick="location.href='customerProfile.php';">My Profile</button></div>
     <div class="banner-item right"><button class="banner-button" onclick="location.href='logout.php';">Logout</button></div>
 </div>
@@ -186,14 +199,15 @@ if (isset($_POST['send_report'])){
     <div class="row">
         <h1>Report Package</h1>
         <div class="col-8">
+            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <ul class="list-group list-group-flush ml-2">
                 <li class="list-group-item mt-4 border border-secondary">
-                    <h3 class="text-primary">Select the ID of the package which will be reported*</h3>
+                    <h3 class="text-primary">Select the ID of the package which will be reported.*</h3>
                     <table id="packages">
                         <tr>
                             <th>Package ID</th>
                         </tr>
-                        <form method="post">
+                        <tr>
                             <?php
                             $query = "SELECT p.package_ID
                                         FROM package p, send_to st
@@ -208,18 +222,17 @@ if (isset($_POST['send_report'])){
                                 }
                             }
                             ?>
-                        </form>
+                        </tr>
                     </table>
-
                 </li>
                 <li class="list-group-item mt-4 border border-secondary">
                     <h3 class="text-primary">Select the problem about your package*</h3>
                     <input type="radio" id="malformed"
-                           name="package_problem" value="malformed" required>
+                           name="package_problem" value="malformed" onclick="checkButton()" required>
                     <label for="malformed" class="mr-5">Package is Malformed</label>
 
                     <input type="radio" id="lost"
-                           name="package_problem" value="lost">
+                           name="package_problem" value="lost" onclick="checkButton()">
                     <label for="lost" class="mr-5">Package is Lost</label>
                 </li>
                 <li class="list-group-item mt-4 border border-secondary">
@@ -229,6 +242,7 @@ if (isset($_POST['send_report'])){
                 </li>
 
             </ul>
+            </form>
         </div>
         <div class="col-4 border-left border-primary d-flex flex-column">
             <div class="mt-5 ml-1 p-1">

@@ -65,6 +65,10 @@ $id = $_SESSION['user_id'];
             text-align: left;
         }
 
+        .left:hover{
+            cursor: pointer;
+        }
+
         .middle{
             text-align: center;
         }
@@ -166,7 +170,7 @@ $id = $_SESSION['user_id'];
 </head>
 <body>
 <div class="banner-container">
-    <div class="banner-item left"><h2>ProJet</h2></div>
+    <div class="banner-item left" onclick="location.href='customerDashboard.php';"><h2>ProJet</h2></div>
     <div class="banner-item middle"><button class="banner-button" onclick="location.href='customerDashboard.php';">Home</button> <button class="banner-button" onclick="location.href='customerProfile.php';">My Profile</button></div>
     <div class="banner-item right"><button class="banner-button" onclick="location.href='logout.php';">Logout</button></div>
 </div>

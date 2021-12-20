@@ -117,7 +117,7 @@ function register_customer($mysqli){
     $phone = $_POST['phone'];
     $sql="INSERT INTO user (username, email, password, phone) 
                             VALUES ('$username', '$email', '$password', '$phone')";
-    $mysqli->query($sql) or die('Error in query: ' . $mysqli->error);;
+    $mysqli->query($sql) or die('Error in query: ' . $mysqli->error);
     //mysqli_query($mysqli,$sql);
     $id = mysqli_insert_id($mysqli);
     $sql2="INSERT INTO customer (customer_ID, address) VALUES ($id, '$address')";
