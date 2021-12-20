@@ -20,6 +20,17 @@ function set_session_info($mysqli){
     $_SESSION['delivery_time'] = $_POST['delivery_time_1'];
     $_SESSION['delivery_type'] = $_POST['delivery_type_1'];
 
+    if($_SESSION['delivery_type'] == "deliver_person") {
+        header("location: courierToPersonPage.php");
+    }
+    else if($_SESSION['delivery_type'] == "deliver_pickup_location") {
+        header("location: courierToPickupLocationPage.php");
+    }
+    else if($_SESSION['delivery_type'] == "deliver_address") {
+        header("location: courierToAddressPage.php");
+    }
+
+
     //check delivery_type
     /*
     if() {
