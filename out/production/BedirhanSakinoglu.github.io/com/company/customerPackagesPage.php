@@ -39,10 +39,11 @@ if (isset($_POST['confirm'])){
         }
         h1 {
             font-size: 75px;
-            text-align: center;
+            text-align: left;
             background-size: 100% auto !important;
             font-family: 'Google Sans';
-            color: #3e403f;
+            color: #1c4894;
+            padding-bottom: 3vh;
         }
         /* Start body rules */
         body {
@@ -54,6 +55,43 @@ if (isset($_POST['confirm'])){
             font-family: 'Dubai Light';
 
             /* background-image: linear-gradient(to top, #d9afd9 0%, #97d9e1 100%); */
+        }
+
+        .confirm-button {
+            color: #fff;
+
+            background: #377095;
+            width: 100%;
+            height: 5vh;
+            outline: none;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s linear;
+            letter-spacing: 0.05em;
+        }
+
+        #packages {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #packages td, #customers th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #packages tr:nth-child(even){background-color: #f2f2f2;}
+
+        #packages tr:hover {background-color: #ddd;}
+
+        #packages th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            padding-left: 8px;
+            text-align: left;
+            background-color: #3aafff;
+            color: white;
         }
 
         .banner-container{
@@ -72,6 +110,10 @@ if (isset($_POST['confirm'])){
             text-align: left;
         }
 
+        .left:hover{
+            cursor: pointer;
+        }
+
         .middle{
             text-align: center;
         }
@@ -82,9 +124,6 @@ if (isset($_POST['confirm'])){
         }
 
         .grid-container{
-            display: grid;
-            grid-template-columns: 1fr;
-            grid-template-rows: 8vh 4vh 4vh 4vh 4vh;
             row-gap: 5vh;
             margin-right: 3vh;
             margin-left: 3vh;
@@ -173,9 +212,9 @@ if (isset($_POST['confirm'])){
 </head>
 <body>
 <div class="banner-container">
-    <div class="banner-item left"><h2>ProJet</h2></div>
-    <div class="banner-item middle"><button class="banner-button">Home</button> <button class="banner-button">My Profile</button></div>
-    <div class="banner-item right"><button class="banner-button">Logout</button></div>
+    <div class="banner-item left" onclick="location.href='customerDashboard.php';"><h2>ProJet</h2></div>
+    <div class="banner-item middle"><button class="banner-button" onclick="location.href='customerDashboard.php';">Home</button> <button class="banner-button" onclick="location.href='customerProfile.php';">My Profile</button></div>
+    <div class="banner-item right"><button class="banner-button" onclick="location.href='logout.php';">Logout</button></div>
 </div>
 <div class="grid-container">
     <h1>My Packages</h1>
@@ -188,9 +227,10 @@ if (isset($_POST['confirm'])){
             <th>Receiver</th>
             <th>Status</th>
             <th>Delivery Address</th>
-            <th>Confirm Package</th>
+            <th style="background-color: white;"></th>
         </tr>
         <form method="post">
+
             <?php
             $query1 = "SELECT p.package_ID, p.send_time, p.delivery_time, st.sender_ID, st.taker_ID, p.status, p.delivery_address
                         FROM package p, send_to st
@@ -213,8 +253,8 @@ if (isset($_POST['confirm'])){
                     $result_taker_name = $mysqli->query($query_taker_name) or die('Error in query: ' . $mysqli->error);
                     $taker_name = $result_taker_name->fetch_assoc();
 
-                    echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td>
-                                </tr>", $row['package_ID'], $row['send_time'], $row['delivery_time'], $sender_name['username'], $taker_name['username'], $row['status'], $row['delivery_address']);
+                    echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> </tr>",
+                        $row['package_ID'], $row['send_time'], $row['delivery_time'], $sender_name['username'], $taker_name['username'], $row['status'], $row['delivery_address']);
                 }
             }
 
@@ -234,7 +274,7 @@ if (isset($_POST['confirm'])){
 
                     if($row['status'] != 'delivered') {
                         echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td>
-                                 <td><button type='submit' name='confirm' value='$pid'>Confirm</button></td></tr>", $row['package_ID'], $row['send_time'], $row['delivery_time'], $sender_name['username'], $taker_name['username'], $row['status'], $row['delivery_address']);
+                                 <td style='padding: 0px'><button class='confirm-button' type='submit' name='confirm' value='$pid'>Confirm Package</button></td></tr>", $row['package_ID'], $row['send_time'], $row['delivery_time'], $sender_name['username'], $taker_name['username'], $row['status'], $row['delivery_address']);
                     }
                     else{
                         echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td>

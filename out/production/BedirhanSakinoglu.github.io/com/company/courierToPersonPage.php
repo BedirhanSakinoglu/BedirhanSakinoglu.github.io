@@ -2,13 +2,6 @@
 session_start();
 require_once "config.php";
 
-
-if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
-    header("location: login.php");
-} else if(!isset($_SESSION['loggedin'])){
-    header("location: login.php");
-}
-
 $id = $_SESSION['user_id'];
 ?>
 
@@ -18,6 +11,10 @@ $id = $_SESSION['user_id'];
     <title>Customer Dashboard</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <meta name="generator" content="Web Page Maker (unregistered version)">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="customerCallCourierPageJS.js"></script>
     <style>
         /* Fonts Form Google Font ::- https://fonts.google.com/  -:: */
         @import url('https://fonts.googleapis.com/css?family=Abel|Abril+Fatface|Alegreya|Arima+Madurai|Dancing+Script|Dosis|Merriweather|Oleo+Script|Overlock|PT+Serif|Pacifico|Playball|Playfair+Display|Share|Unica+One|Vibur');
@@ -80,8 +77,9 @@ $id = $_SESSION['user_id'];
 
         .grid-container{
             display: grid;
-            grid-template-columns: 1fr;
-            grid-template-rows: 8vh 4vh 4vh 4vh 4vh;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 35vh 35vh;
+            column-gap: 5vh;
             row-gap: 5vh;
             margin-right: 3vh;
             margin-left: 3vh;
@@ -90,7 +88,6 @@ $id = $_SESSION['user_id'];
 
         .grid-item {
             background-color: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(0, 0, 0, 0.8);
             padding: 20px;
             font-size: 30px;
             text-align: center;
@@ -98,9 +95,8 @@ $id = $_SESSION['user_id'];
         }
 
         p {
-            font-family: 'Google Sans';
+            font-family: 'Dubai Light';
             margin-bottom: 5vh;
-            font-size: 2vh;
         }
 
         h2 {
@@ -113,7 +109,7 @@ $id = $_SESSION['user_id'];
 
         h3{
             font-family: 'Google Sans';
-            font-size: 3vh;
+            font-size: 4vh;
             color: rgb(23, 103, 161);
         }
         /* End body rules */
@@ -165,18 +161,40 @@ $id = $_SESSION['user_id'];
             background: #29436c;
             box-shadow: none;
         }
+        .row {
+            margin: 0px !important;
+        }
     </style>
 
 </head>
 <body>
-<div class="banner-container">
-    <div class="banner-item left" onclick="location.href='customerDashboard.php';"><h2>ProJet</h2></div>
-    <div class="banner-item middle"><button class="banner-button">Home</button> <button class="banner-button">My Profile</button></div>
-    <div class="banner-item right"><button class="banner-button">Logout</button></div>
-</div>
-<div class="grid-container">
-
-</div>
-
+    <div class="banner-container">
+        <div class="banner-item left" onclick="location.href='customerDashboard.php';"><h2>ProJet</h2></div>
+        <div class="banner-item middle"><button class="banner-button" onclick="location.href='customerDashboard.php';">Home</button> <button class="banner-button" onclick="location.href='customerProfile.php';">My Profile</button></div>
+        <div class="banner-item right"><button class="banner-button" onclick="location.href='logout.php';">Logout</button></div>
+    </div>
+    <div>
+        <form action="" method="post">
+            <div class="row" id="zaxd">
+                <div class="col-8">
+                </div>
+                <div class="col-4 border-left border-primary d-flex flex-column">
+                    <h3 class="text-primary mt-4">Step 1/2</h3>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%">
+                        </div>
+                    </div>
+                    <div class="mt-5 ml-1 p-1">
+                        <div class="">
+                            <p>&#9642; Please fill information about your package needed to continue.</p>
+                            <p>&#9642; Information about delivery address will be asked in the next step.</p>
+                            <p>&#9642; Mandatory information about the package are denoted with the * sign.</p>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-auto" name="get_info">Continue to next step</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </body>
 </html>
