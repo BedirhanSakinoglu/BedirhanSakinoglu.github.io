@@ -11,15 +11,17 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
 
 $id = $_SESSION['user_id'];
 if (isset($_POST['send_report'])){
+    $package_id = $_POST['PACKAGE'];
     $package_problem = $_POST['package_problem'];
-    $description = $_POST['description'];
-    //report insertion yapılcak
-    //created relationuna eklencek
-    //design reportta yazıyo
-    //package id ler alt alta bastırılırken tıklanabilir olcak ve slide bar eklencek aşağı insin diye
-    //ve sayfa bi kaydı yamuldu anlamadım benim bilgisayarın çözünürlükten dolayı :)  -Larari
+    $description = $_POST['report_description'];
+
+    $query_insert_report = ("INSERT INTO report(customer_ID,content,report_type,is_accepted) VALUES('$id', '$description', '$package_problem', 'FALSE') ");
+    mysqli_query($mysqli, $query_insert_report) or die('Error in query: ' . $mysqli->error);
+
+    $query_insert_has_relation = ("INSERT INTO has(package_ID,report_ID) VALUES('$package_id', LAST_INSERT_ID()) ");
+    mysqli_query($mysqli, $query_insert_has_relation) or die('Error in query: ' . $mysqli->error);
     echo "<script>
-            if(confirm('Report Sent! We will reach you soon!')){document.location.href='customerDashboard.php'};
+            if(confirm('Report Created' )){document.location.href='customerDashboard.php'};
             </script>";
 }
 ?>
@@ -262,7 +264,7 @@ if (isset($_POST['send_report'])){
                                         $receiver_info = $mysqli->query($receiver_query) or die('Error in query: ' . $mysqli->error);
                                         $receiver_name = $receiver_info->fetch_assoc();
 
-                                        echo sprintf("<tr><td style='width:4vh; text-align: center'><input type='radio' id='$package_id' name='PACKAGES' value='$package_id'></td><td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td>
+                                        echo sprintf("<tr><td style='width:4vh; text-align: center'><input type='radio' id='$package_id' name='PACKAGE' value='$package_id' required></td><td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td>
                                 </tr>", $row['package_ID'], $sender_name['username'], $receiver_name['username'], $row['send_time'], $row['status']);
                                     }
                                 }
@@ -275,11 +277,11 @@ if (isset($_POST['send_report'])){
                 <li class="list-group-item mt-4 mr-5 border border-secondary">
                     <h3 class="panel-header">Select the problem about your package*</h3>
                     <input type="radio" id="malformed_package"
-                           name="package_type" value="malformed_package" required>
+                           name="package_problem" value="malformed_package" required>
                     <label for="default_package" class="mr-5">Package is Malformed</label>
 
                     <input type="radio" id="lost_package"
-                           name="package_type" value="lost_package">
+                           name="package_problem" value="lost_package">
                     <label for="fragile_package" class="mr-5">Package is Lost</label>
                 </li>
                 <li class="list-group-item mt-4 mr-5 border border-secondary">

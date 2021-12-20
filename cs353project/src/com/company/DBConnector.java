@@ -191,7 +191,6 @@ public class DBConnector {
                     "CREATE TABLE report(" +
                             "report_ID INT AUTO_INCREMENT," +
                             "customer_ID INT," +
-                            "package_ID  INT," +
                             "content VARCHAR(50) NOT NULL," +
                             "report_type VARCHAR(50) NOT NULL," +
                             "is_accepted VARCHAR(50) NOT NULL," +

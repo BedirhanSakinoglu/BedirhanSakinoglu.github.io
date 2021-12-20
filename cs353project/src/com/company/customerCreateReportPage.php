@@ -15,11 +15,13 @@ if (isset($_POST['send_report'])){
     $package_problem = $_POST['package_problem'];
     $description = $_POST['report_description'];
 
-    //Databasee insertlenecek basit iş gerisi doğru
-    //Query yazılacak
+    $query_insert_report = ("INSERT INTO report(customer_ID,content,report_type,is_accepted) VALUES('$id', '$description', '$package_problem', 'FALSE') ");
+    mysqli_query($mysqli, $query_insert_report) or die('Error in query: ' . $mysqli->error);
 
+    $query_insert_has_relation = ("INSERT INTO has(package_ID,report_ID) VALUES('$package_id', LAST_INSERT_ID()) ");
+    mysqli_query($mysqli, $query_insert_has_relation) or die('Error in query: ' . $mysqli->error);
     echo "<script>
-            if(confirm('$package_id'+'$package_problem'+'$description' )){document.location.href='customerDashboard.php'};
+            if(confirm('Report Created' )){document.location.href='customerDashboard.php'};
             </script>";
 }
 ?>
@@ -262,7 +264,7 @@ if (isset($_POST['send_report'])){
                                         $receiver_info = $mysqli->query($receiver_query) or die('Error in query: ' . $mysqli->error);
                                         $receiver_name = $receiver_info->fetch_assoc();
 
-                                        echo sprintf("<tr><td style='width:4vh; text-align: center'><input type='radio' id='$package_id' name='PACKAGE' value='$package_id'></td><td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td>
+                                        echo sprintf("<tr><td style='width:4vh; text-align: center'><input type='radio' id='$package_id' name='PACKAGE' value='$package_id' required></td><td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td>
                                 </tr>", $row['package_ID'], $sender_name['username'], $receiver_name['username'], $row['send_time'], $row['status']);
                                     }
                                 }
