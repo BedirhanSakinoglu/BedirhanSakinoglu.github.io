@@ -10,19 +10,28 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
 $id = $_SESSION['user_id'];
 
 
-function test($mysqli){
-    echo '<script>alert("Welcome to Geeks for Geeks")</script>';
-    /*
-    $package_type = "<script>document.write(sessionStorage.getItem('package_type'));</script>";
-    $sql="INSERT INTO package (weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) 
-                            VALUES (35.5, 'Not delivered', DATE '2015-12-17' ,'$package_type','30x30x43','hamamönü', DATE '2021-12-31',0)";
-    $mysqli->query($sql) or die('Error in query: ' . $mysqli->error);
-    */
-    header("location: customerDashboard.php");
+function set_session_info($mysqli){
+    $_POST['package_type'] = $_SESSION['package_type'];
+    $_POST['weight'] = $_SESSION['weight'];
+    $_POST['dimension1'] = $_SESSION['dimension1'];
+    $_POST['dimension2'] = $_SESSION['dimension2'];
+    $_POST['dimension3'] = $_SESSION['dimension3'];
+    $_POST['courier_type'] = $_SESSION['courier_type'];
+    $_POST['delivery_time'] = $_SESSION['delivery_time'];
+    $_POST['delivery_type'] = $_SESSION['delivery_type'];
 
+    if($_SESSION['delivery_type'] == "deliver_person") {
+        header("location: courierToPersonPage.php");
+    }
+    else if($_SESSION['delivery_type'] == "deliver_pickup_location") {
+        header("location: courierToPickupLocationPage.php");
+    }
+    else if($_SESSION['delivery_type'] == "deliver_address") {
+        header("location: courierToAddressPage.php");
+    }
 }
-if (isset($_POST['test'])){
-    test($mysqli);
+if (isset($_POST['get_info'])){
+    set_session_info($mysqli);
 }
 
 ?>
@@ -196,107 +205,107 @@ if (isset($_POST['test'])){
         <div class="banner-item right"><button class="banner-button" onclick="location.href='logout.php';">Logout</button></div>
     </div>
     <div>
-        <div class="row">
-            <div class="col-8">
-                <ul class="list-group list-group-flush ml-2">
-                    <li class="list-group-item mt-4 border border-secondary">
-                        <h3 class="text-primary">Choose a Package Type*</h3>
-                        <input type="radio" id="default_package"
-                               name="package_type" value="default_package" required>
-                        <label for="default_package" class="mr-5">Default Package</label>
+        <form action="" method="post">
+            <div class="row">
+                <div class="col-8">
+                    <ul class="list-group list-group-flush ml-2">
+                        <li class="list-group-item mt-4 border border-secondary">
+                            <h3 class="text-primary">Choose a Package Type*</h3>
+                            <input type="radio" id="default_package"
+                                   name="package_type" value="default_package" required>
+                            <label for="default_package" class="mr-5">Default Package</label>
 
-                        <input type="radio" id="fragile_package"
-                               name="package_type" value="fragile_package">
-                        <label for="fragile_package" class="mr-5">Fragile Package</label>
+                            <input type="radio" id="fragile_package"
+                                   name="package_type" value="fragile_package">
+                            <label for="fragile_package" class="mr-5">Fragile Package</label>
 
-                        <input type="radio" id="spoilable_package"
-                               name="package_type" value="spoilable_package">
-                        <label for="spoilable_package" class="mr-5">Spoilable Package</label>
-                    </li>
-                    <li class="list-group-item mt-4 border border-secondary">
-                        <h3 class="text-primary">Enter the Necessary Properties About The Package*</h3>
-                        <label for="weight" class="ml-1">Weight(kg):</label>
-                        <input type="text" id="weight"
-                               name="weight" value="weight" class="mr-4" required>
+                            <input type="radio" id="spoilable_package"
+                                   name="package_type" value="spoilable_package">
+                            <label for="spoilable_package" class="mr-5">Spoilable Package</label>
+                        </li>
+                        <li class="list-group-item mt-4 border border-secondary">
+                            <h3 class="text-primary">Enter the Necessary Properties About The Package*</h3>
+                            <label for="weight" class="ml-1">Weight(kg):</label>
+                            <input type="text" id="weight"
+                                   name="weight" value="" class="mr-4" required>
 
-                        <label for="dimension" class="ml-1">Dimensions(cm x cm x cm):</label>
-                        <input type="text" id="dimension1"
-                               name="dimension1" value="" class="m-3" style="width: 5vh" required>
+                            <label for="dimension" class="ml-1">Dimensions(cm x cm x cm):</label>
+                            <input type="text" id="dimension1"
+                                   name="dimension1" value="" class="m-3" style="width: 5vh" required>
 
-                        <span>X</span>
-                        <input type="text" id="dimension2"
-                               name="dimension2" value="" class="m-3" style="width: 5vh" required>
+                            <span>X</span>
+                            <input type="text" id="dimension2"
+                                   name="dimension2" value="" class="m-3" style="width: 5vh" required>
 
-                        <span>X</span>
-                        <input type="text" id="dimension3"
-                               name="dimension3" value="" class="m-3" style="width: 5vh" required>
-                    </li>
-                    <li class="list-group-item mt-4 border border-secondary">
-                        <h3 class="text-primary">Choose Courier Type*</h3>
-                        <input type="radio" id="default_courier"
-                               name="courier_type" value="default_courier" required>
-                        <label for="default_courier" class="mr-5">Default Courier</label>
+                            <span>X</span>
+                            <input type="text" id="dimension3"
+                                   name="dimension3" value="" class="m-3" style="width: 5vh" required>
+                        </li>
+                        <li class="list-group-item mt-4 border border-secondary">
+                            <h3 class="text-primary">Choose Courier Type*</h3>
+                            <input type="radio" id="default_courier"
+                                   name="courier_type" value="default_courier" required>
+                            <label for="default_courier" class="mr-5">Default Courier</label>
 
-                        <input type="radio" id="fast_courier"
-                               name="courier_type" value="fast_courier">
-                        <label for="fast_courier" class="mr-5">Fast Courier</label>
+                            <input type="radio" id="fast_courier"
+                                   name="courier_type" value="fast_courier">
+                            <label for="fast_courier" class="mr-5">Fast Courier</label>
 
-                        <input type="radio" id="heavy_courier"
-                               name="courier_type" value="heavy_courier">
-                        <label for="heavy_courier" class="mr-5">Heavy Courier</label>
-                    </li>
-                    <li class="list-group-item mt-4 border border-secondary">
-                        <h3 class="text-primary">Select Delivery Time</h3>
-                        <input type="checkbox" class="" id="default_time">
-                        <label for="default_time" class="mr-5">Send in default time</label>
-                        <br>
-                        <label for="date" class="ml-1">Choose Date (DD/MM/YY):</label>
-                        <input type="text" id="date_day"
-                               name="date_day" value="" class="m-2" style="width: 5vh" required>
+                            <input type="radio" id="heavy_courier"
+                                   name="courier_type" value="heavy_courier">
+                            <label for="heavy_courier" class="mr-5">Heavy Courier</label>
+                        </li>
+                        <li class="list-group-item mt-4 border border-secondary">
+                            <h3 class="text-primary">Select Delivery Time</h3>
+                            <input type="checkbox" class="" id="default_time">
+                            <label for="default_time" class="mr-5">Send in default time</label>
+                            <br>
+                            <label for="date" class="ml-1">Choose Date (DD/MM/YY):</label>
+                            <input type="text" id="date_day"
+                                   name="date_day" value="" class="m-2" style="width: 5vh" required>
 
-                        <span>/</span>
-                        <input type="text" id="date_month"
-                               name="date_month" value="" class="m-2" style="width: 5vh" required>
+                            <span>/</span>
+                            <input type="text" id="date_month"
+                                   name="date_month" value="" class="m-2" style="width: 5vh" required>
 
-                        <span>/</span>
-                        <input type="text" id="date_year"
-                               name="date_year" value="" class="m-2" style="width: 5vh" required>
-                    </li>
-                    <li class="list-group-item mt-4 border border-secondary">
-                        <h3 class="text-primary">Choose a Delivery Type*</h3>
-                        <input type="radio" id="deliver_person"
-                               name="deliver_person" value="deliver_person" required>
-                        <label for="deliver_person" class="mr-5">Deliver to a Person</label>
+                            <span>/</span>
+                            <input type="text" id="date_year"
+                                   name="date_year" value="" class="m-2" style="width: 5vh" required>
+                        </li>
+                        <li class="list-group-item mt-4 border border-secondary">
+                            <h3 class="text-primary">Choose a Delivery Type*</h3>
+                            <input type="radio" id="deliver_person"
+                                   name="delivery_type" value="deliver_person" required>
+                            <label for="deliver_person" class="mr-5">Deliver to a Person</label>
 
-                        <input type="radio" id="deliver_pickup_location"
-                               name="deliver_pickup_location" value="deliver_pickup_location">
-                        <label for="deliver_pickup_location" class="mr-5">Deliver to a Pick-up Location</label>
+                            <input type="radio" id="deliver_pickup_location"
+                                   name="delivery_type" value="deliver_pickup_location">
+                            <label for="deliver_pickup_location" class="mr-5">Deliver to a Pick-up Location</label>
 
-                        <input type="radio" id="deliver_address"
-                               name="deliver_address" value="deliver_address">
-                        <label for="deliver_address" class="mr-5">Deliver to an Address</label>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-4 border-left border-primary d-flex flex-column">
-                <h3 class="text-primary mt-4">Step 1/2</h3>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%">
-                    </div>
+                            <input type="radio" id="deliver_address"
+                                   name="delivery_type" value="deliver_address">
+                            <label for="deliver_address" class="mr-5">Deliver to an Address</label>
+                        </li>
+                    </ul>
                 </div>
-                <div class="mt-5 ml-1 p-1">
-                    <div class="">
-                        <p>&#9642; Please fill information about your package needed to continue.</p>
-                        <p>&#9642; Information about delivery address will be asked in the next step.</p>
-                        <p>&#9642; Mandatory information about the package are denoted with the * sign.</p>
+                <div class="col-4 border-left border-primary d-flex flex-column">
+                    <h3 class="text-primary mt-4">Step 1/2</h3>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%">
+                        </div>
                     </div>
+                    <div class="mt-5 ml-1 p-1">
+                        <div class="">
+                            <p>&#9642; Please fill information about your package needed to continue.</p>
+                            <p>&#9642; Information about delivery address will be asked in the next step.</p>
+                            <p>&#9642; Mandatory information about the package are denoted with the * sign.</p>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-auto" name="get_info">Continue to next step</button>
                 </div>
-                <form action="" method="post">
-                    <button type="submit" class="btn btn-primary mt-auto" onclick="testForPHP();" name="test">Continue to next step</button>
-                </form>
-
             </div>
-        </div>
+        </form>
+
     </div>
 </body>
 </html>

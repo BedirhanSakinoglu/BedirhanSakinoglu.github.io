@@ -412,8 +412,6 @@ public class DBConnector {
             stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(90.5, 'Not delivered', DATE '2020-01-17' ,'fragile','10x57x43','77 yurt', DATE '2020-12-31',0)");
             stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(1,4,LAST_INSERT_ID())");
 
-            stmt.executeUpdate("INSERT INTO courier()");
-
         } catch (SQLException e) {
             System.out.println("SQLException: " + e.getMessage());
             e.printStackTrace();
