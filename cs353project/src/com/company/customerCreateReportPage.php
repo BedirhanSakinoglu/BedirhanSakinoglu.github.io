@@ -10,6 +10,9 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
 }
 
 $id = $_SESSION['user_id'];
+if (isset($_POST['send_report'])){
+    echo "<script>if(confirm('Report Sent! We will reach you soon!')){document.location.href='customerDashboard.php'};</script>";
+}
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -191,7 +194,20 @@ $id = $_SESSION['user_id'];
                             <th>Package ID</th>
                         </tr>
                         <form method="post">
-
+                            <?php
+                            $query = "SELECT p.package_ID
+                                        FROM package p, send_to st
+                                        WHERE st.taker_ID = '$id' AND p.package_ID = st.package_ID";
+                            $packages = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
+                            if($packages->num_rows > 0)
+                            {
+                                while($row = $packages->fetch_assoc()){
+                                    $package_id = $row['package_ID'];
+                                    echo sprintf("<tr> <td>%s</td> 
+                                </tr>", $row['package_ID']);
+                                }
+                            }
+                            ?>
                         </form>
                     </table>
 
@@ -225,7 +241,7 @@ $id = $_SESSION['user_id'];
                 </div>
             </div>
             <form action="" method="post">
-                <button type="submit" class="btn btn-primary mt-auto ">Send Report</button>
+                <button type="submit" class="btn btn-primary mt-auto " name='send_report'>Send Report</button>
             </form>
 
         </div>
