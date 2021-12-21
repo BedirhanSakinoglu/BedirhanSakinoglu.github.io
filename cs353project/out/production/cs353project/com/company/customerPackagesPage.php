@@ -273,7 +273,7 @@ if (isset($_POST['confirm'])){
                     $result_taker_name = $mysqli->query($query_taker_name) or die('Error in query: ' . $mysqli->error);
                     $taker_name = $result_taker_name->fetch_assoc();
 
-                    if($row['status'] != 'delivered') {
+                    if($row['status'] == 'on branch') {
                         echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td>
                                  <td style='padding: 0px'><button class='confirm-button' type='submit' name='confirm' value='$pid'>Confirm Package</button></td></tr>", $row['package_ID'], $row['send_time'], $row['delivery_time'], $sender_name['username'], $taker_name['username'], $row['status'], $row['delivery_address']);
                     }

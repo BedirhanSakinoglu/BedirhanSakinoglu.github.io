@@ -421,29 +421,29 @@ public class DBConnector {
             stmt.executeUpdate("INSERT INTO works VALUES(7, 1)");
             stmt.executeUpdate("INSERT INTO works VALUES(8, 2)");
 
-            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(35.5, 'Not delivered', DATE '2015-12-17' ,'spoilable','30x30x43','hamamönü', DATE '2015-12-31',0)");
+            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(35.5, 'order received', DATE '2015-12-17' ,'spoilable','30x30x43','hamamönü', DATE '2015-12-31',0)");
             stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(1,2, LAST_INSERT_ID())");
 
-            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(32.1, 'Not delivered', DATE '2015-12-17' ,'spoilable','30x10x43','izmir', DATE '2010-12-31',0)");
+            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(32.1, 'on transfer', DATE '2015-12-17' ,'spoilable','30x10x43','izmir', DATE '2010-12-31',0)");
             stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(1,2,LAST_INSERT_ID())");
 
-            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(10, 'Not delivered', DATE '2012-01-17' ,'fragile','10x30x43','bilkent', DATE '2019-12-31',0)");
+            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(10, 'on branch', DATE '2012-01-17' ,'fragile','10x30x43','bilkent', DATE '2019-12-31',0)");
             stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(2,1,LAST_INSERT_ID())");
 
-            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(100, 'Not delivered', DATE '2010-01-17' ,'spoiled','10x10x43','karacaahmet', DATE '2019-12-31',0)");
+            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(100, 'on branch', DATE '2010-01-17' ,'spoiled','10x10x43','karacaahmet', DATE '2019-12-31',0)");
             stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(2,1,LAST_INSERT_ID())");
 
-            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(9.5, 'Not delivered', DATE '2020-01-17' ,'box','10x57x43','selcuk efes', DATE '2020-12-31',0)");
+            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(9.5, 'order received', DATE '2020-01-17' ,'box','10x57x43','selcuk efes', DATE '2020-12-31',0)");
             stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(3,1,LAST_INSERT_ID())");
 
-            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(90.5, 'Not delivered', DATE '2020-01-17' ,'fragile','10x57x43','77 yurt', DATE '2020-12-31',0)");
+            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(90.5, 'order received', DATE '2020-01-17' ,'fragile','10x57x43','77 yurt', DATE '2020-12-31',0)");
             stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(1,4,LAST_INSERT_ID())");
 
-            stmt.executeUpdate("INSERT INTO assigns VALUES(1,5,'delivered')");
-            stmt.executeUpdate("INSERT INTO assigns VALUES(2,5,'delivered')");
-            stmt.executeUpdate("INSERT INTO assigns VALUES(3,6,'delivered')");
-            stmt.executeUpdate("INSERT INTO assigns VALUES(4,6,'delivered')");
-            stmt.executeUpdate("INSERT INTO assigns VALUES(5,5,'Not delivered')");
+            stmt.executeUpdate("INSERT INTO assigns VALUES(1,5,'received package')");
+            stmt.executeUpdate("INSERT INTO assigns VALUES(2,5,'received package')");
+            stmt.executeUpdate("INSERT INTO assigns VALUES(3,6,'received package')");
+            stmt.executeUpdate("INSERT INTO assigns VALUES(4,6,'received package')");
+            stmt.executeUpdate("INSERT INTO assigns VALUES(5,5,'not received package')");
 
         } catch (SQLException e) {
             System.out.println("SQLException: " + e.getMessage());

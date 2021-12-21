@@ -18,6 +18,7 @@ $id = $_SESSION['user_id'];
     <title>Customer Dashboard</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <meta name="generator" content="Web Page Maker (unregistered version)">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <style>
         /* Fonts Form Google Font ::- https://fonts.google.com/  -:: */
         @import url('https://fonts.googleapis.com/css?family=Abel|Abril+Fatface|Alegreya|Arima+Madurai|Dancing+Script|Dosis|Merriweather|Oleo+Script|Overlock|PT+Serif|Pacifico|Playball|Playfair+Display|Share|Unica+One|Vibur');
@@ -176,7 +177,7 @@ $id = $_SESSION['user_id'];
 </div>
 <div class="grid-container">
     <?php
-    $query = "SELECT * FROM user u, courier c, branch b, works_at w
+    $query = "SELECT * FROM user u, courier c, branch b, works_at w 
 WHERE u.user_ID='$id' AND c.courier_ID = u.user_ID AND b.branch_ID = w.branch_ID AND w.courier_ID = c.courier_ID";
     $result = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
     $result_courier = $result->fetch_assoc();

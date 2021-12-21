@@ -24,6 +24,7 @@ function test(){
     <title>Courier Dashboard</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <meta name="generator" content="Web Page Maker (unregistered version)">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <style>
         /* Fonts Form Google Font ::- https://fonts.google.com/  -:: */
         @import url('https://fonts.googleapis.com/css?family=Abel|Abril+Fatface|Alegreya|Arima+Madurai|Dancing+Script|Dosis|Merriweather|Oleo+Script|Overlock|PT+Serif|Pacifico|Playball|Playfair+Display|Share|Unica+One|Vibur');
@@ -86,13 +87,14 @@ function test(){
 
         .grid-container{
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            grid-template-rows: 35vh 35vh;
-            column-gap: 5vh;
-            row-gap: 5vh;
-            margin-right: 3vh;
-            margin-left: 3vh;
-            margin-top: 7vh;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 30vh 30vh;
+            grid-auto-flow: column;
+            column-gap: 7vh;
+            row-gap: 7vh;
+            margin-right: 30vh;
+            margin-left: 30vh;
+            margin-top: 10vh;
         }
 
         .grid-item {
@@ -102,6 +104,12 @@ function test(){
             text-align: center;
             box-shadow: 0 5px 20px hsla(205, 75%, 36%, 0.31);
         }
+
+        .item1{
+            grid-column: 1;
+            grid-row: 1 / 3;
+        }
+
 
         p {
             font-family: 'Dubai Light';
@@ -174,6 +182,9 @@ function test(){
     <div class="banner-item right"><button class="banner-button" onclick="location.href='logout.php';">Logout</button></div>
 </div>
 <div class="grid-container">
+    <div class='grid-item item1' onclick="location.href='courierAssignedPackagesPage.php';" style="cursor: pointer;"><p>Assigned Packages</p> <img src='../../asset/package.jpg' style='width:100%;'> </div>
+    <div class="grid-item" onclick="location.href='courierProfile.php';" style="cursor: pointer;"><p>My Profile</p> <img src="../../asset/myprofile.png" style="width:25%;"></div>
+    <div class="grid-item" onclick="location.href='logout.php';" style="cursor: pointer;"><p>Logout</p><img src="../../asset/logout.png" style="width:30%; "></div>
 
 </div>
 

@@ -9,6 +9,12 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
     header("location: login.php");
 }
 
+if(isset($_POST['hand_over_btn'])){
+    $status_package_ID = $_POST['hand_over_btn'];
+    $status_change_query = "UPDATE package SET status='on branch' WHERE package_ID = '$status_package_ID' ";
+    mysqli_query($mysqli, $status_change_query);
+}
+
 $id = $_SESSION['user_id'];
 ?>
 
@@ -18,6 +24,7 @@ $id = $_SESSION['user_id'];
     <title>Customer Dashboard</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <meta name="generator" content="Web Page Maker (unregistered version)">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <style>
         /* Fonts Form Google Font ::- https://fonts.google.com/  -:: */
         @import url('https://fonts.googleapis.com/css?family=Abel|Abril+Fatface|Alegreya|Arima+Madurai|Dancing+Script|Dosis|Merriweather|Oleo+Script|Overlock|PT+Serif|Pacifico|Playball|Playfair+Display|Share|Unica+One|Vibur');
@@ -32,10 +39,11 @@ $id = $_SESSION['user_id'];
         }
         h1 {
             font-size: 75px;
-            text-align: center;
+            text-align: left;
             background-size: 100% auto !important;
             font-family: 'Google Sans';
-            color: #3e403f;
+            color: #1c4894;
+            padding-bottom: 3vh;
         }
         /* Start body rules */
         body {
@@ -47,6 +55,43 @@ $id = $_SESSION['user_id'];
             font-family: 'Dubai Light';
 
             /* background-image: linear-gradient(to top, #d9afd9 0%, #97d9e1 100%); */
+        }
+
+        .confirm-button {
+            color: #fff;
+
+            background: #377095;
+            width: 100%;
+            height: 5vh;
+            outline: none;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s linear;
+            letter-spacing: 0.05em;
+        }
+
+        #packages {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #packages td, #customers th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #packages tr:nth-child(even){background-color: #f2f2f2;}
+
+        #packages tr:hover {background-color: #ddd;}
+
+        #packages th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            padding-left: 8px;
+            text-align: left;
+            background-color: #3aafff;
+            color: white;
         }
 
         .banner-container{
@@ -175,7 +220,56 @@ $id = $_SESSION['user_id'];
     <div class="banner-item right"><button class="banner-button" onclick="location.href='logout.php';">Logout</button></div>
 </div>
 <div class="grid-container">
+    <h1>Assigned Packages</h1>
+    <table id="packages">
+        <tr>
+            <th>Package ID</th>
+            <th>Date Sent</th>
+            <th>Pickup Address</th>
+            <th>Delivery Address</th>
+            <th>Delivery Date</th>
+            <th>Package Status</th>
+            <th style="background-color: white;"></th>
+        </tr>
+        <form method="post">
+        <?php
+        //to get package_id, send_time, delivery_time, status, delivery_address
+        $query1 = "SELECT *
+                        FROM package p, assigns a
+                        WHERE a.courier_ID = '$id' AND p.package_ID = a.package_ID";
 
+        $packages1 = $mysqli->query($query1) or die('Error in query: ' . $mysqli->error);
+        if($packages1->num_rows > 0)
+        {
+            while($row = $packages1->fetch_assoc())
+            {
+                if($row['status'] == "order received"){
+                    $assigned_package_ID = $row['package_ID'];
+                    $pickup_query = "SELECT c.address FROM send_to st, customer c WHERE st.sender_ID = c.customer_ID AND st.package_ID = '$assigned_package_ID'";
+                    $pickup = $mysqli->query($pickup_query) or die('Error in query: ' . $mysqli->error);
+                    $pickup_address = $pickup->fetch_assoc();
+
+                    $delivery_query = "SELECT b.address FROM works_at wa, branch b WHERE b.branch_ID = wa.branch_ID AND wa.courier_ID = '$id'";
+                    $delivery = $mysqli->query($delivery_query) or die('Error in query: ' . $mysqli->error);
+                    $delivery_address = $delivery->fetch_assoc();
+
+                    echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td> <td style='padding: 0px'><button class='confirm-button' type='submit' name='hand_over_btn' value='$assigned_package_ID'>Delivered to Branch</button></td> </tr>",
+                        $row['package_ID'], $row['send_time'], $pickup_address['address'], $delivery_address['address'],$row['delivery_time'], $row['status']);
+                }
+
+                else if($row['status'] == "on branch"){
+                    $pickup_query = "SELECT b.address FROM works_at wa, branch b WHERE b.branch_ID = wa.branch_ID AND wa.courier_ID = '$id'";
+                    $pickup = $mysqli->query($pickup_query) or die('Error in query: ' . $mysqli->error);
+                    $pickup_address = $pickup->fetch_assoc();
+
+                    echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td> </tr>",
+                        $row['package_ID'], $row['send_time'], $pickup_address['address'], $row['delivery_address'],$row['delivery_time'], $row['status']);
+                }
+            }
+        }
+        ?>
+        </form>
+    </table>
 </div>
 
 </body>
