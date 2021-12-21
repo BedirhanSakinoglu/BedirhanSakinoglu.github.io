@@ -10,12 +10,6 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
 }
 
 $id = $_SESSION['user_id'];
-
-function test(){
-    echo '<script type="text/javascript">
-                        alert("Incorrect Usertype");
-                        </script>';
-}
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -24,7 +18,6 @@ function test(){
     <title>Customer Dashboard</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <meta name="generator" content="Web Page Maker (unregistered version)">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <style>
         /* Fonts Form Google Font ::- https://fonts.google.com/  -:: */
         @import url('https://fonts.googleapis.com/css?family=Abel|Abril+Fatface|Alegreya|Arima+Madurai|Dancing+Script|Dosis|Merriweather|Oleo+Script|Overlock|PT+Serif|Pacifico|Playball|Playfair+Display|Share|Unica+One|Vibur');
@@ -87,9 +80,8 @@ function test(){
 
         .grid-container{
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            grid-template-rows: 35vh 35vh;
-            column-gap: 5vh;
+            grid-template-columns: 1fr;
+            grid-template-rows: 8vh 4vh 4vh 4vh 4vh;
             row-gap: 5vh;
             margin-right: 3vh;
             margin-left: 3vh;
@@ -98,6 +90,7 @@ function test(){
 
         .grid-item {
             background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.8);
             padding: 20px;
             font-size: 30px;
             text-align: center;
@@ -105,8 +98,9 @@ function test(){
         }
 
         p {
-            font-family: 'Dubai Light';
+            font-family: 'Google Sans';
             margin-bottom: 5vh;
+            font-size: 4vh;
         }
 
         h2 {
@@ -115,6 +109,12 @@ function test(){
             color: white;
             margin-left: 3vh;
             padding-top: 1vh;
+        }
+
+        h3{
+            font-family: 'Google Sans';
+            font-size: 5vh;
+            color: rgb(23, 103, 161);
         }
         /* End body rules */
 
@@ -170,21 +170,13 @@ function test(){
 </head>
 <body>
 <div class="banner-container">
-    <div class="banner-item left" onclick="location.href='customerDashboard.php';"><h2>ProJet</h2></div>
-    <div class="banner-item middle"><button class="banner-button" onclick="location.href='customerDashboard.php';">Home</button> <button class="banner-button" onclick="location.href='customerProfile.php';">My Profile</button></div>
+    <div class="banner-item left" onclick="location.href='courierDashboard.php';"><h2>ProJet</h2></div>
+    <div class="banner-item middle"><button class="banner-button" onclick="location.href='courierDashboard.php';">Home</button> <button class="banner-button" onclick="location.href='courierProfile.php';">My Profile</button></div>
     <div class="banner-item right"><button class="banner-button" onclick="location.href='logout.php';">Logout</button></div>
 </div>
 <div class="grid-container">
-
-    <div class="grid-item"><p>Send Packages</p> <button class="send-button" onclick="location.href='customerCallCourierPage.php';" style="cursor: pointer;">Call Courier</button> <button class="send-button" onclick="location.href='customerDeliverPackagePage.php';" style="cursor: pointer;">Deliver Yourself</button></div>
-    <div class='grid-item' onclick="location.href='customerPackagesPage.php';" style="cursor: pointer;"><p>My Packages</p> <img src='../../asset/package.jpg' style='width:50%;height:60%'> </div>
-    <div class="grid-item" onclick="location.href='customerProfile.php';" style="cursor: pointer;"><p>My Profile</p> <img src="../../asset/myprofile.png" style="width:30%;height:50%"></div>
-    <div class="grid-item" onclick="location.href='customerCreateReportPage.php';"><p>Create Report</p><img src="../../asset/report.png" style="width:30%;height:60%"></div>
-    <div class="grid-item" onclick="location.href='customerReviewCourier.php';" style="cursor: pointer;"><p>Review Courier</p> <img src="../../asset/courier1.png" style="width:50%;height:60%"></div>
-    <div class="grid-item" onclick="location.href='logout.php';" style="cursor: pointer;"><p>Logout</p><img src="../../asset/logout.png" style="width:40%;height:60% "></div>
 
 </div>
 
 </body>
 </html>
-

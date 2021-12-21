@@ -90,7 +90,7 @@ function logIn($mysqli)
                     $result_find_cor_id = $mysqli->query($query_find_cor_id) or die('Error in query: ' . $mysqli->error);
                     if($result_find_cor_id->num_rows==1){
                         $row=$result_find_cor_id->fetch_assoc();
-                        $id = (int) $row['company_ID'];
+                        $id = (int) $row['courier_ID'];
                         $_SESSION['user_id'] = $id;
                     }
                 }
