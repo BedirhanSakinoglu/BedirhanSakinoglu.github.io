@@ -349,7 +349,7 @@ if (isset($_POST['get_info'])){
                         <p>&#9642; Mandatory information about the package are denoted with the * sign.</p>
                     </div>
                 </div>
-                <button type="submit" class="report-button mt-auto" name="get_info">Continue to next step</button>
+                <button type="submit" class="report-button" name="get_info">Continue to next step</button>
             </div>
         </div>
     </form>

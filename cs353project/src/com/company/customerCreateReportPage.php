@@ -67,6 +67,14 @@ if (isset($_POST['send_report'])){
             /* background-image: linear-gradient(to top, #d9afd9 0%, #97d9e1 100%); */
         }
 
+        textarea{
+            resize: none;
+            width: 100%;
+            height: 50%;
+            font-size: 2vh;
+            font-family: "Google Sans";
+        }
+
         .banner-container{
             display: grid;
             background-color: #3aafff;
@@ -299,11 +307,11 @@ if (isset($_POST['send_report'])){
                     <p>&#9642; Please write your description as explanatory as possible.</p>
                     <p>&#9642; Your report will be investigated and you will be contacted soon.</p>
                 </div>
-            </div>
-            <form class="mr-2" style="text-align: right" action="" method="post">
-                <button type="submit" class="report-button mt-4" name="send_report">Send Report</button>
-            </form>
 
+            <form class="mr-2" style="text-align: right" action="" method="post">
+                <button type="submit" class="report-button " name="send_report">Send Report</button>
+            </form>
+            </div>
         </div>
     </form>
 </div>

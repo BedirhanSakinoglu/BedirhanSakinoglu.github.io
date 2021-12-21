@@ -72,6 +72,9 @@ function checkButton() {
                 <input class="form-input" id="txt-input" type="text" placeholder="Phone" name = "phone" required>
                 <br>
                 
+                <input class="form-input" id="txt-input" type="text" placeholder="Branch ID" name = "branch_ID" required>
+                <br>
+                
                 <input class="form-input" id="txt-input" type="number" placeholder="Salary" name = "salary" required>
                 <br>
                 
@@ -122,16 +125,19 @@ function checkButton() {
                 <input class="form-input" id="txt-input" type="text" placeholder="Username" name = "username" required>
                 <br>
                 
-                <!--   Salary Input-->
-                <input class="form-input" type="number" placeholder="Salary" id="txt-input"  name="salary" required>
-                <br>
-                
                 <!--   Email Input-->
                 <input class="form-input" type="text" placeholder="Email" id="txt-input" name="email" required>
                 <br>
                 
                 <!--   Phone Input-->
                 <input class="form-input" type="text" placeholder="Phone" id="txt-input"  name="phone" required>
+                <br>
+                
+                <input class="form-input" id="txt-input" type="text" placeholder="Branch ID" name = "branch_ID" required>
+                <br>
+                
+                <!--   Salary Input-->
+                <input class="form-input" type="number" placeholder="Salary" id="txt-input"  name="salary" required>
                 <br>
                 
                 <!--   Password Input-->

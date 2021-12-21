@@ -90,7 +90,7 @@ function logIn($mysqli)
                     $result_find_cor_id = $mysqli->query($query_find_cor_id) or die('Error in query: ' . $mysqli->error);
                     if($result_find_cor_id->num_rows==1){
                         $row=$result_find_cor_id->fetch_assoc();
-                        $id = (int) $row['company_ID'];
+                        $id = (int) $row['courier_ID'];
                         $_SESSION['user_id'] = $id;
                     }
                 }
@@ -131,6 +131,7 @@ function register_courier($mysqli){
     $username = $_POST['username'];
     $password = $_POST['password'];
     $email = $_POST['email'];
+    $branch_ID = $_POST['branch_ID'];
     $phone = $_POST['phone'];
     $salary = $_POST['salary'];
     $price = $_POST['price'];
@@ -138,12 +139,18 @@ function register_courier($mysqli){
 
     $sql="INSERT INTO user (username, email, password, phone) 
                             VALUES ('$username', '$email', '$password', '$phone')";
-    $mysqli->query($sql) or die('Error in query: ' . $mysqli->error);;
-    //mysqli_query($mysqli,$sql);
+    $mysqli->query($sql) or die('Error in query: ' . $mysqli->error);
+
     $id = mysqli_insert_id($mysqli);
     $sql2="INSERT INTO courier (courier_ID, salary, price, courier_type) VALUES ($id, '$salary', '$price', '$couriertype')";
-    //mysqli_query($mysqli,$sql2);
-    $mysqli->query($sql2) or die('Error in query: ' . $mysqli->error);;
+
+    $mysqli->query($sql2) or die('Error in query: ' . $mysqli->error);
+
+    $sql3="INSERT INTO works_at 
+                            VALUES ('$id', '$branch_ID')";
+    $mysqli->query($sql3) or die('Error in query: ' . $mysqli->error);
+
+
     header("location: courierDashboard.php");
     $_SESSION['user_id'] = $id;
 }
@@ -152,6 +159,7 @@ function register_employee($mysqli){
     $username = $_POST['username'];
     $password = $_POST['password'];
     $email = $_POST['email'];
+    $branch_ID = $_POST['branch_ID'];
     $phone = $_POST['phone'];
     $salary = $_POST['salary'];
     $sql="INSERT INTO user (username, email, password, phone) 
@@ -160,6 +168,10 @@ function register_employee($mysqli){
     $id = mysqli_insert_id($mysqli);
     $sql2="INSERT INTO employee (employee_ID, salary) VALUES ($id, '$salary')";
     $mysqli->query($sql2) or die('Error in query: ' . $mysqli->error);;
+
+    $sql3="INSERT INTO works 
+                            VALUES ('$id', '$branch_ID')";
+    $mysqli->query($sql3) or die('Error in query: ' . $mysqli->error);
     header("location: employeeDashboard.php");
     $_SESSION['user_id'] = $id;
 }

@@ -15,14 +15,23 @@ if (isset($_POST['submit_review'])){
     if (isset($_POST['submit_review'])){
         $description = $_POST['review_description'];
     }
-    $courierID = $_POST['id_courier'];
     $rating = $_POST['rating'];
 
-    $query_insert_review = ("INSERT INTO courier_review(courier_ID,text,rate) VALUES('$courierID', '$description', '$rating') ");
+    $json_post = $_POST['COURIER'];
+    $json_post_obj = json_decode($json_post, true);
+    $courier_ID = $json_post_obj['courier_ID'];
+    $package_ID = $json_post_obj['package_ID'];
+
+    $query_insert_review = ("INSERT INTO courier_review(courier_ID,text,rate) VALUES('$courier_ID', '$description', '$rating') ");
     mysqli_query($mysqli, $query_insert_review) or die('Error in query: ' . $mysqli->error);
 
+    $query_insert_review = ("INSERT INTO evaluate(customer_ID, courier_ID, package_ID) VALUES('$id', '$courier_ID', '$package_ID') ");
+    mysqli_query($mysqli, $query_insert_review) or die('Error in query: ' . $mysqli->error);
+
+
+
     echo "<script>
-            if(confirm('Review Created' )){document.location.href='customerDashboard.php'};
+            if(confirm('Review Created ' + ' $courier_ID ' + ' $package_ID ' + ' $json_post ' )){document.location.href='customerDashboard.php'};
             </script>";
 }
 ?>
@@ -72,6 +81,14 @@ if (isset($_POST['submit_review'])){
             font-family: 'Dubai Light';
 
             /* background-image: linear-gradient(to top, #d9afd9 0%, #97d9e1 100%); */
+        }
+
+        textarea{
+            resize: none;
+            width: 100%;
+            height: 50%;
+            font-size: 2vh;
+            font-family: "Google Sans";
         }
 
         .banner-container{
@@ -240,23 +257,29 @@ if (isset($_POST['submit_review'])){
                         <h3 class="panel-header">All of your packages and corresponding couriers are below:</h3>
                         <table>
                             <table style="width: 98.3%" id="packages">
-                                <th style="width:4vh;">Package ID</th>
-                                <th style="width:4vh;">Date Sent</th>
-                                <th style="width:4vh;">Status</th>
-                                <th style="width:4vh;">Courier ID</th>
+                                <th style="width:4vh;"></th>
+                                <th>Package ID</th>
+                                <th >Date Sent</th>
+                                <th >Status</th>
+                                <th >Courier ID</th>
                             </table>
                             <div style="height:60vh; overflow-y: scroll;">
                                 <table id="packages">
                                     <?php
                                     $query = "SELECT *
                                         FROM package p, send_to st, assigns a
-                                        WHERE (st.taker_ID = '$id' OR st.sender_ID = '$id') AND p.package_ID = st.package_ID AND a.package_ID = p.package_ID AND p.status = 'delivered'";
+                                        WHERE st.taker_ID = '$id' AND p.package_ID = st.package_ID AND a.package_ID = p.package_ID AND p.status = 'delivered' AND p.package_ID NOT IN (SELECT package_ID FROM evaluate)";
                                     $packages = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
                                     if($packages->num_rows > 0)
                                     {
                                         while($row = $packages->fetch_assoc()){
-                                            $package_id = $row['package_ID'];
-                                            echo sprintf("<tr><td style='width:4vh; text-align: center'><input type='radio' id='$package_id' name='PACKAGE' value='$package_id' required></td><td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td>
+                                            $package_ID = $row['package_ID'];
+                                            $courier_ID = $row['courier_ID'];
+
+                                            $json_obj = array("package_ID"=>$package_ID, "courier_ID"=>$courier_ID);
+                                            $json = json_encode($json_obj);
+
+                                            echo sprintf("<tr><td style='width:4vh; text-align: center'><input type='radio' id='$courier_ID' name='COURIER' value='$json' required></td><td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td>
                                 </tr>", $row['package_ID'], $row['send_time'], $row['status'], $row['courier_ID']);
                                         }
                                     }
@@ -271,13 +294,10 @@ if (isset($_POST['submit_review'])){
             </div>
             <div class="col-5 border-left mt-5 border-secondary d-flex flex-column">
                 <div class="ml-5">
-                    <li class="list-group-item mt-4 mr-5 border border-secondary">
-                        <h3 class="panel-header">Enter the ID of the Courier*</h3>
-                        <textarea id="report_description" name="id_courier" rows="1" cols="30" required></textarea>
-                    </li>
+
                     <li class="list-group-item mt-4 mr-5 border border-secondary">
                         <h3 class="panel-header">Rate Your Experience with the Courier*</h3>
-                        <input id="ratinginput" name="rating" class="rating rating-loading" data-min="0" data-max="5" data-step="0.5" value="2">
+                        <input id="ratinginput" name="rating" class="rating rating-loading" data-min="0" data-max="5" data-step="0.5" value="0">
 
 
                     </li>
@@ -285,11 +305,12 @@ if (isset($_POST['submit_review'])){
                         <h3 class="panel-header">Please Enter Your Review</h3>
                         <textarea id="report_description" name="review_description" rows="4" cols="50"></textarea>
                     </li>
-                </div>
-                <form class="mr-2" style="text-align: right" action="" method="post">
-                    <button type="submit" class="report-button mt-4" name="submit_review">Submit Review</button>
-                </form>
 
+                    <form class="mr-2" style="text-align: right" action="" method="post">
+                        <button type="submit" class="report-button mt-4" name="submit_review">Submit Review</button>
+                    </form>
+
+                </div>
             </div>
     </form>
 </div>
