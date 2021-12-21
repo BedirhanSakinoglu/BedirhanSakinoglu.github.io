@@ -11,9 +11,18 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
 
 $id = $_SESSION['user_id'];
 if (isset($_POST['submit_review'])){
+    $description = "";
+    if (isset($_POST['submit_review'])){
+        $description = $_POST['review_description'];
+    }
+    $courierID = $_POST['id_courier'];
+    $rating = $_POST['rating'];
+
+    $query_insert_review = ("INSERT INTO courier_review(courier_ID,text,rate) VALUES('$courierID', '$description', '$rating') ");
+    mysqli_query($mysqli, $query_insert_review) or die('Error in query: ' . $mysqli->error);
 
     echo "<script>
-            if(confirm('Report Created' )){document.location.href='customerDashboard.php'};
+            if(confirm('Review Created' )){document.location.href='customerDashboard.php'};
             </script>";
 }
 ?>
@@ -28,6 +37,12 @@ if (isset($_POST['submit_review'])){
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script type="text/javascript" src="customerCallCourierPageJS.js"></script>
+
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.2/css/star-rating.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.2/js/star-rating.min.js"></script>
+
     <style>
         /* Fonts Form Google Font ::- https://fonts.google.com/  -:: */
         @import url('https://fonts.googleapis.com/css?family=Abel|Abril+Fatface|Alegreya|Arima+Madurai|Dancing+Script|Dosis|Merriweather|Oleo+Script|Overlock|PT+Serif|Pacifico|Playball|Playfair+Display|Share|Unica+One|Vibur');
@@ -254,10 +269,11 @@ if (isset($_POST['submit_review'])){
                 <div class="ml-5">
                     <li class="list-group-item mt-4 mr-5 border border-secondary">
                         <h3 class="panel-header">Enter the ID of the Courier*</h3>
-                        <textarea id="report_description" name="id_courier" rows="1" cols="30"></textarea>
+                        <textarea id="report_description" name="id_courier" rows="1" cols="30" required></textarea>
                     </li>
                     <li class="list-group-item mt-4 mr-5 border border-secondary">
                         <h3 class="panel-header">Rate Your Experience with the Courier*</h3>
+                        <input id="ratinginput" name="rating" class="rating rating-loading" data-min="0" data-max="5" data-step="0.5" value="2">
 
 
                     </li>

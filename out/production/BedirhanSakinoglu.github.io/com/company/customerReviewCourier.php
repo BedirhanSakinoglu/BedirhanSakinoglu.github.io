@@ -10,18 +10,19 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
 }
 
 $id = $_SESSION['user_id'];
-if (isset($_POST['send_report'])){
-    $package_id = $_POST['PACKAGE'];
-    $package_problem = $_POST['package_problem'];
-    $description = $_POST['report_description'];
+if (isset($_POST['submit_review'])){
+    $description = "";
+    if (isset($_POST['submit_review'])){
+        $description = $_POST['review_description'];
+    }
+    $courierID = $_POST['id_courier'];
+    $rating = $_POST['rating'];
 
-    $query_insert_report = ("INSERT INTO report(customer_ID,content,report_type,is_accepted) VALUES('$id', '$description', '$package_problem', 'FALSE') ");
-    mysqli_query($mysqli, $query_insert_report) or die('Error in query: ' . $mysqli->error);
+    $query_insert_review = ("INSERT INTO courier_review(courier_ID,text,rate) VALUES('$courierID', '$description', '$rating') ");
+    mysqli_query($mysqli, $query_insert_review) or die('Error in query: ' . $mysqli->error);
 
-    $query_insert_has_relation = ("INSERT INTO has(package_ID,report_ID) VALUES('$package_id', LAST_INSERT_ID()) ");
-    mysqli_query($mysqli, $query_insert_has_relation) or die('Error in query: ' . $mysqli->error);
     echo "<script>
-            if(confirm('Report Created' )){document.location.href='customerDashboard.php'};
+            if(confirm('Review Created' )){document.location.href='customerDashboard.php'};
             </script>";
 }
 ?>
@@ -36,6 +37,12 @@ if (isset($_POST['send_report'])){
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script type="text/javascript" src="customerCallCourierPageJS.js"></script>
+
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.2/css/star-rating.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.2/js/star-rating.min.js"></script>
+
     <style>
         /* Fonts Form Google Font ::- https://fonts.google.com/  -:: */
         @import url('https://fonts.googleapis.com/css?family=Abel|Abril+Fatface|Alegreya|Arima+Madurai|Dancing+Script|Dosis|Merriweather|Oleo+Script|Overlock|PT+Serif|Pacifico|Playball|Playfair+Display|Share|Unica+One|Vibur');
@@ -229,18 +236,17 @@ if (isset($_POST['send_report'])){
                         <h3 class="panel-header">All of your packages and corresponding couriers are below:</h3>
                         <table>
                             <table style="width: 98.3%" id="packages">
-                                <th style="width:4vh;"></th>
-                                <th>Package ID</th>
-                                <th>Date Sent</th>
-                                <th>Status</th>
-                                <th>Courier ID</th>
+                                <th style="width:4vh;">Package ID</th>
+                                <th style="width:4vh;">Date Sent</th>
+                                <th style="width:4vh;">Status</th>
+                                <th style="width:4vh;">Courier ID</th>
                             </table>
-                            <div style="height:30vh; overflow-y: scroll;">
+                            <div style="height:60vh; overflow-y: scroll;">
                                 <table id="packages">
                                     <?php
                                     $query = "SELECT *
                                         FROM package p, send_to st, assigns a
-                                        WHERE (st.taker_ID = '$id' OR st.sender_ID = '$id') AND p.package_ID = st.package_ID AND a.package_ID = p.package_ID AND p.status = 'delivered'";
+                                        WHERE (st.taker_ID = '$id' OR st.sender_ID = '$id') AND p.package_ID = st.package_ID AND a.package_ID = p.package_ID AND a.is_delivered = 'delivered'";
                                     $packages = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
                                     if($packages->num_rows > 0)
                                     {
@@ -261,15 +267,23 @@ if (isset($_POST['send_report'])){
             </div>
             <div class="col-5 border-left mt-5 border-secondary d-flex flex-column">
                 <div class="ml-5">
-                    <div class="">
-                        <p>&#9642; Please fill information about your report needed to continue.</p>
-                        <p>&#9642; Mandatory information about your report are denoted with the * sign.</p>
-                        <p>&#9642; Please write your description as explanatory as possible.</p>
-                        <p>&#9642; Your report will be investigated and you will be contacted soon.</p>
-                    </div>
+                    <li class="list-group-item mt-4 mr-5 border border-secondary">
+                        <h3 class="panel-header">Enter the ID of the Courier*</h3>
+                        <textarea id="report_description" name="id_courier" rows="1" cols="30" required></textarea>
+                    </li>
+                    <li class="list-group-item mt-4 mr-5 border border-secondary">
+                        <h3 class="panel-header">Rate Your Experience with the Courier*</h3>
+                        <input id="ratinginput" name="rating" class="rating rating-loading" data-min="0" data-max="5" data-step="0.5" value="2">
+
+
+                    </li>
+                    <li class="list-group-item mt-4 mr-5 border border-secondary">
+                        <h3 class="panel-header">Please Enter Your Review</h3>
+                        <textarea id="report_description" name="review_description" rows="4" cols="50"></textarea>
+                    </li>
                 </div>
                 <form class="mr-2" style="text-align: right" action="" method="post">
-                    <button type="submit" class="report-button mt-4" name="send_report">Send Report</button>
+                    <button type="submit" class="report-button mt-4" name="submit_review">Submit Review</button>
                 </form>
 
             </div>

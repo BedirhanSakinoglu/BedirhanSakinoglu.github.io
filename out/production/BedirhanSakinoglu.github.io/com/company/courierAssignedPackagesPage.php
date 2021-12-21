@@ -10,18 +10,12 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
 }
 
 $id = $_SESSION['user_id'];
-
-function test(){
-    echo '<script type="text/javascript">
-                        alert("Incorrect Usertype");
-                        </script>';
-}
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <title>Courier Dashboard</title>
+    <title>Customer Dashboard</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <meta name="generator" content="Web Page Maker (unregistered version)">
     <style>
@@ -86,9 +80,8 @@ function test(){
 
         .grid-container{
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            grid-template-rows: 35vh 35vh;
-            column-gap: 5vh;
+            grid-template-columns: 1fr;
+            grid-template-rows: 8vh 4vh 4vh 4vh 4vh;
             row-gap: 5vh;
             margin-right: 3vh;
             margin-left: 3vh;
@@ -97,6 +90,7 @@ function test(){
 
         .grid-item {
             background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.8);
             padding: 20px;
             font-size: 30px;
             text-align: center;
@@ -104,8 +98,9 @@ function test(){
         }
 
         p {
-            font-family: 'Dubai Light';
+            font-family: 'Google Sans';
             margin-bottom: 5vh;
+            font-size: 4vh;
         }
 
         h2 {
@@ -114,6 +109,12 @@ function test(){
             color: white;
             margin-left: 3vh;
             padding-top: 1vh;
+        }
+
+        h3{
+            font-family: 'Google Sans';
+            font-size: 5vh;
+            color: rgb(23, 103, 161);
         }
         /* End body rules */
 
@@ -179,4 +180,3 @@ function test(){
 
 </body>
 </html>
-
