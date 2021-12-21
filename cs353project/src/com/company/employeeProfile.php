@@ -15,9 +15,10 @@ $id = $_SESSION['user_id'];
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <title>Customer Deliver Package</title>
+    <title>Employee Profile</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <meta name="generator" content="Web Page Maker (unregistered version)">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <style>
         /* Fonts Form Google Font ::- https://fonts.google.com/  -:: */
         @import url('https://fonts.googleapis.com/css?family=Abel|Abril+Fatface|Alegreya|Arima+Madurai|Dancing+Script|Dosis|Merriweather|Oleo+Script|Overlock|PT+Serif|Pacifico|Playball|Playfair+Display|Share|Unica+One|Vibur');
@@ -100,7 +101,7 @@ $id = $_SESSION['user_id'];
         p {
             font-family: 'Google Sans';
             margin-bottom: 5vh;
-            font-size: 2vh;
+            font-size: 4vh;
         }
 
         h2 {
@@ -113,7 +114,7 @@ $id = $_SESSION['user_id'];
 
         h3{
             font-family: 'Google Sans';
-            font-size: 3vh;
+            font-size: 5vh;
             color: rgb(23, 103, 161);
         }
         /* End body rules */
@@ -170,12 +171,42 @@ $id = $_SESSION['user_id'];
 </head>
 <body>
 <div class="banner-container">
-    <div class="banner-item left" onclick="location.href='customerDashboard.php';"><h2>ProJet</h2></div>
-    <div class="banner-item middle"><button class="banner-button">Home</button> <button class="banner-button">My Profile</button></div>
-    <div class="banner-item right"><button class="banner-button">Logout</button></div>
+    <div class="banner-item left" onclick="location.href='employeeDashboard.php';"><h2>ProJet</h2></div>
+    <div class="banner-item middle"><button class="banner-button" onclick="location.href='employeeDashboard.php';">Home</button> <button class="banner-button" onclick="location.href='employeeProfile.php';">My Profile</button></div>
+    <div class="banner-item right"><button class="banner-button" onclick="location.href='logout.php';">Logout</button></div>
 </div>
 <div class="grid-container">
-
+    <?php
+    $query = "SELECT * FROM user u, employee e, branch b, works w 
+WHERE u.user_ID='$id' AND e.employee_ID = u.user_ID AND b.branch_ID = w.branch_ID AND w.employee_ID = e.employee_ID";
+    $result = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
+    $result_employee = $result->fetch_assoc();
+    ?>
+    <div><h3>
+            <?php
+            echo sprintf($result_employee['username']);
+            ?>
+        </h3></div>
+    <div><p><?php
+            echo sprintf("User ID: ");
+            echo sprintf($result_employee['user_ID']);
+            ?></p></div>
+    <div><p><?php
+            echo sprintf("Email: ");
+            echo sprintf($result_employee['email']);
+            ?></p></div>
+    <div><p><?php
+            echo sprintf("Phone Number: ");
+            echo sprintf($result_employee['phone']);
+            ?></p></div>
+    <div><p><?php
+            echo sprintf("Branch ID: ");
+            echo sprintf($result_employee['branch_ID']);
+            ?></p></div>
+    <div><p style="margin-bottom: 0"><?php
+            echo sprintf("Branch Address: ");
+            echo sprintf($result_employee['address']);
+            ?></p></div>
 </div>
 
 </body>
