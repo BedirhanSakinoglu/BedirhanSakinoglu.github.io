@@ -179,7 +179,7 @@ function test(){
     <div class="grid-item"><p>Send Packages</p> <button class="send-button" onclick="location.href='customerCallCourierPage.php';" style="cursor: pointer;">Call Courier</button> <button class="send-button" onclick="location.href='customerDeliverPackagePage.php';" style="cursor: pointer;">Deliver Yourself</button></div>
     <div class='grid-item' onclick="location.href='customerPackagesPage.php';" style="cursor: pointer;"><p>My Packages</p> <img src='../../asset/package.jpg' style='width:50%;height:60%'> </div>
     <div class="grid-item" onclick="location.href='customerProfile.php';" style="cursor: pointer;"><p>My Profile</p> <img src="../../asset/myprofile.png" style="width:30%;height:50%"></div>
-    <div class="grid-item" onclick="location.href='customerCreateReportPage.php';"><p>Create Report</p><img src="../../asset/report.png" style="width:30%;height:60%"></div>
+    <div class="grid-item" onclick="location.href='customerCreateReportPage.php';" style="cursor: pointer;"><p>Create Report</p><img src="../../asset/report.png" style="width:30%;height:60%"></div>
     <div class="grid-item" onclick="location.href='customerReviewCourier.php';" style="cursor: pointer;"><p>Review Courier</p> <img src="../../asset/courier1.png" style="width:50%;height:60%"></div>
     <div class="grid-item" onclick="location.href='logout.php';" style="cursor: pointer;"><p>Logout</p><img src="../../asset/logout.png" style="width:40%;height:60% "></div>
 

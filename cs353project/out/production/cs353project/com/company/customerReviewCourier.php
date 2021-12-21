@@ -83,6 +83,14 @@ if (isset($_POST['submit_review'])){
             /* background-image: linear-gradient(to top, #d9afd9 0%, #97d9e1 100%); */
         }
 
+        textarea{
+            resize: none;
+            width: 100%;
+            height: 50%;
+            font-size: 2vh;
+            font-family: "Google Sans";
+        }
+
         .banner-container{
             display: grid;
             background-color: #3aafff;
@@ -289,7 +297,7 @@ if (isset($_POST['submit_review'])){
 
                     <li class="list-group-item mt-4 mr-5 border border-secondary">
                         <h3 class="panel-header">Rate Your Experience with the Courier*</h3>
-                        <input id="ratinginput" name="rating" class="rating rating-loading" data-min="0" data-max="5" data-step="0.5" value="2">
+                        <input id="ratinginput" name="rating" class="rating rating-loading" data-min="0" data-max="5" data-step="0.5" value="0">
 
 
                     </li>
@@ -297,14 +305,16 @@ if (isset($_POST['submit_review'])){
                         <h3 class="panel-header">Please Enter Your Review</h3>
                         <textarea id="report_description" name="review_description" rows="4" cols="50"></textarea>
                     </li>
-                </div>
-                <form class="mr-2" style="text-align: right" action="" method="post">
-                    <button type="submit" class="report-button mt-4" name="submit_review">Submit Review</button>
-                </form>
 
+                    <form class="mr-2" style="text-align: right" action="" method="post">
+                        <button type="submit" class="report-button mt-4" name="submit_review">Submit Review</button>
+                    </form>
+
+                </div>
             </div>
     </form>
 </div>
 </div>
 </body>
 </html>
+
