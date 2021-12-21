@@ -194,7 +194,7 @@ public class DBConnector {
                             "report_type VARCHAR(50) NOT NULL," +
                             "is_accepted VARCHAR(50) NOT NULL," +
                             "FOREIGN KEY (customer_ID) REFERENCES customer(customer_ID)," +
-                            "PRIMARY KEY (report_ID)" +
+                            "PRIMARY KEY (report_ID, customer_ID)" +
                             ");"
             );
 

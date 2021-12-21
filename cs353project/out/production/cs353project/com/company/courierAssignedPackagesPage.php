@@ -39,10 +39,11 @@ $id = $_SESSION['user_id'];
         }
         h1 {
             font-size: 75px;
-            text-align: center;
+            text-align: left;
             background-size: 100% auto !important;
             font-family: 'Google Sans';
-            color: #3e403f;
+            color: #1c4894;
+            padding-bottom: 3vh;
         }
         /* Start body rules */
         body {
@@ -219,7 +220,7 @@ $id = $_SESSION['user_id'];
     <div class="banner-item right"><button class="banner-button" onclick="location.href='logout.php';">Logout</button></div>
 </div>
 <div class="grid-container">
-    <h1>My Packages</h1>
+    <h1>Assigned Packages</h1>
     <table id="packages">
         <tr>
             <th>Package ID</th>

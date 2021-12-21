@@ -2,7 +2,6 @@
 session_start();
 require_once "config.php";
 
-
 if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
     header("location: login.php");
 } else if(!isset($_SESSION['loggedin'])){
@@ -15,7 +14,7 @@ if (isset($_POST['send_report'])){
     $package_problem = $_POST['package_problem'];
     $description = $_POST['report_description'];
 
-    $query_insert_report = ("INSERT INTO report(customer_ID,content,report_type,is_accepted) VALUES('$id', '$description', '$package_problem', 'FALSE') ");
+    $query_insert_report = ("INSERT INTO report(customer_ID,content,report_type,is_accepted) VALUES('$id', '$description', '$package_problem', 'waiting') ");
     mysqli_query($mysqli, $query_insert_report) or die('Error in query: ' . $mysqli->error);
 
     $query_insert_has_relation = ("INSERT INTO has(package_ID,report_ID) VALUES('$package_id', LAST_INSERT_ID()) ");
@@ -249,7 +248,7 @@ if (isset($_POST['send_report'])){
                                 <?php
                                 $query = "SELECT *
                                         FROM package p, send_to st
-                                        WHERE (st.taker_ID = '$id' OR st.sender_ID = '$id') AND p.package_ID = st.package_ID";
+                                        WHERE (st.taker_ID = '$id' OR st.sender_ID = '$id') AND p.package_ID = st.package_ID AND p.package_ID NOT IN(SELECT package_ID FROM has h)";
                                 $packages = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
                                 if($packages->num_rows > 0)
                                 {
