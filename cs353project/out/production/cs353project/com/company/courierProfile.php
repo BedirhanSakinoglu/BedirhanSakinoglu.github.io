@@ -176,7 +176,7 @@ $id = $_SESSION['user_id'];
 </div>
 <div class="grid-container">
     <?php
-    $query = "SELECT * FROM user u, courier c, branch b, works_at w 
+    $query = "SELECT * FROM user u, courier c, branch b, works_at w
 WHERE u.user_ID='$id' AND c.courier_ID = u.user_ID AND b.branch_ID = w.branch_ID AND w.courier_ID = c.courier_ID";
     $result = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
     $result_courier = $result->fetch_assoc();
