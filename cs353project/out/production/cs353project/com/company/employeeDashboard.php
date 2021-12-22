@@ -21,7 +21,7 @@ function test(){
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <title>Customer Dashboard</title>
+    <title>Employee Dashboard</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <meta name="generator" content="Web Page Maker (unregistered version)">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -176,11 +176,11 @@ function test(){
 </div>
 <div class="grid-container">
 
-    <div class="grid-item"><p>Send Packages</p> <button class="send-button" onclick="location.href='customerCallCourierPage.php';" style="cursor: pointer;">Call Courier</button> <button class="send-button" onclick="location.href='customerDeliverPackagePage.php';" style="cursor: pointer;">Deliver Yourself</button></div>
-    <div class='grid-item' onclick="location.href='customerPackagesPage.php';" style="cursor: pointer;"><p>My Packages</p> <img src='../../asset/package.jpg' style='width:50%;height:60%'> </div>
-    <div class="grid-item" onclick="location.href='customerProfile.php';" style="cursor: pointer;"><p>My Profile</p> <img src="../../asset/myprofile.png" style="width:30%;height:50%"></div>
-    <div class="grid-item" onclick="location.href='customerCreateReportPage.php';" style="cursor: pointer;"><p>Create Report</p><img src="../../asset/report.png" style="width:30%;height:60%"></div>
-    <div class="grid-item" onclick="location.href='customerReviewCourier.php';" style="cursor: pointer;"><p>Review Courier</p> <img src="../../asset/courier1.png" style="width:50%;height:60%"></div>
+    <div class='grid-item' onclick="location.href='employeeAssignPackage.php';" style="cursor: pointer;"><p>Assign Courier to Deliver a Package</p> <img src='../../asset/courier1.png' style='width:50%;height:60%'> </div>
+    <div class='grid-item' onclick="location.href='employeeTransferPackage.php';" style="cursor: pointer;"><p>Transfer a Package To Another Branch</p> <img src='../../asset/transfer.jpg' style='width:50%;height:60%'> </div>
+    <div class="grid-item" onclick="location.href='employeeProfile.php';" style="cursor: pointer;"><p>My Profile</p> <img src="../../asset/myprofile.png" style="width:30%;height:50%"></div>
+    <div class="grid-item" onclick="location.href='employeeViewPackages.php';" style="cursor: pointer;"><p>View New Packages</p><img src="../../asset/package.jpg" style="width:30%;height:60%"></div>
+    <div class="grid-item" onclick="location.href='employeeViewReports.php';" style="cursor: pointer;"><p>View Reports</p> <img src="../../asset/report.png" style="width:50%;height:60%"></div>
     <div class="grid-item" onclick="location.href='logout.php';" style="cursor: pointer;"><p>Logout</p><img src="../../asset/logout.png" style="width:40%;height:60% "></div>
 
 </div>

@@ -20,10 +20,12 @@ function set_session_info($mysqli){
     $_SESSION['delivery_type'] = $_POST['delivery_type'];
 
     if(isset($_POST['delivery_time_default'])) {
-        $_SESSION['delivery_time'] = $_POST['delivery_time_default'];
+        $dt2 = new DateTime("+1 month");
+        $date = $dt2->format("Y-m-d");
+        $_SESSION['delivery_time'] = $date;
     }
     else {
-        $_SESSION['delivery_time'] = $_POST['date_day']."-".$_POST['date_month']."-".$_POST['date_year'];
+        $_SESSION['delivery_time'] = date("Y-m-d", strtotime($_POST['date_day']."-".$_POST['date_month']."-".$_POST['date_year']));
     }
 
     if($_SESSION['delivery_type'] == "deliver_person") {
@@ -304,7 +306,7 @@ if (isset($_POST['get_info'])){
                         <label for="default_time" class="mr-5">Send in default time</label>
                         <br>
                         <div id="date_div">
-                            <label for="date" class="ml-1">Choose Date (DD/MM/YY):</label>
+                            <label for="date" class="ml-1">Choose Date (DD/MM/YYYY):</label>
                             <input type="text" id="date_day"
                                    name="date_day" value="" class="m-2" style="width: 5vh" required>
 
