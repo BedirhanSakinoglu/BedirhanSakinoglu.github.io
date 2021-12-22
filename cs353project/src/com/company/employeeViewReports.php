@@ -11,17 +11,27 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
 
 $id = $_SESSION['user_id'];
 
-function test(){
-    echo '<script type="text/javascript">
-                        alert("Incorrect Usertype");
-                        </script>';
+if (isset($_POST['positive'])){
+    $report_id= $_POST['positive'];
+    $query = "UPDATE report SET is_accepted='accepted' WHERE report_ID = '$report_id' ";
+    mysqli_query($mysqli, $query);
+    echo "<script>
+            if(confirm('Report Evaluated' )){document.location.href='employeeDashboard.php'};
+            </script>";
+}
+if (isset($_POST['negative'])){
+    $report_id= $_POST['negative'];
+    $query = "UPDATE report SET is_accepted='rejected' WHERE report_ID = '$report_id' ";
+    mysqli_query($mysqli, $query);
+    echo "<script>
+            if(confirm('Report Evaluated' )){document.location.href='employeeDashboard.php'};
+            </script>";
 }
 ?>
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <title>Employee View Report</title>
+    <title>Customer Packages</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <meta name="generator" content="Web Page Maker (unregistered version)">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -39,10 +49,11 @@ function test(){
         }
         h1 {
             font-size: 75px;
-            text-align: center;
+            text-align: left;
             background-size: 100% auto !important;
             font-family: 'Google Sans';
-            color: #3e403f;
+            color: #1c4894;
+            padding-bottom: 3vh;
         }
         /* Start body rules */
         body {
@@ -54,6 +65,56 @@ function test(){
             font-family: 'Dubai Light';
 
             /* background-image: linear-gradient(to top, #d9afd9 0%, #97d9e1 100%); */
+        }
+
+        .confirm-button-n {
+            color: #ffffff;
+
+            background: #ff0000;
+            width: 100%;
+            height: 5vh;
+            outline: none;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s linear;
+            letter-spacing: 0.05em;
+        }
+        .confirm-button-p {
+            color: #ffffff;
+
+            background: #1bff00;
+            width: 100%;
+            height: 5vh;
+            outline: none;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s linear;
+            letter-spacing: 0.05em;
+        }
+
+        #packages {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #packages td, #customers th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #packages tr:nth-child(even){background-color: #f2f2f2;}
+
+        #packages tr:hover {background-color: #ddd;}
+
+        #packages th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            padding-left: 8px;
+            text-align: left;
+            background-color: #3aafff;
+            color: white;
         }
 
         .banner-container{
@@ -86,10 +147,6 @@ function test(){
         }
 
         .grid-container{
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            grid-template-rows: 35vh 35vh;
-            column-gap: 5vh;
             row-gap: 5vh;
             margin-right: 3vh;
             margin-left: 3vh;
@@ -98,6 +155,7 @@ function test(){
 
         .grid-item {
             background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.8);
             padding: 20px;
             font-size: 30px;
             text-align: center;
@@ -105,8 +163,9 @@ function test(){
         }
 
         p {
-            font-family: 'Dubai Light';
+            font-family: 'Google Sans';
             margin-bottom: 5vh;
+            font-size: 2vh;
         }
 
         h2 {
@@ -115,6 +174,12 @@ function test(){
             color: white;
             margin-left: 3vh;
             padding-top: 1vh;
+        }
+
+        h3{
+            font-family: 'Google Sans';
+            font-size: 3vh;
+            color: rgb(23, 103, 161);
         }
         /* End body rules */
 
@@ -175,9 +240,50 @@ function test(){
     <div class="banner-item right"><button class="banner-button" onclick="location.href='logout.php';">Logout</button></div>
 </div>
 <div class="grid-container">
+    <h1>Reports</h1>
+    <h3>All of the reports are listed below:</h3>
+    <table id="packages">
+        <tr>
+            <th>Report ID</th>
+            <th>Package ID</th>
+            <th >Sender</th>
+            <th >Receiver</th>
+            <th >Package Status</th>
+            <th>Report Type</th>
+            <th>Content</th>
+            <th style="background-color: white;"></th>
+        </tr>
+        <form method="post">
+            <?php
+            $query = "SELECT *
+                        FROM report r, package p, has h
+                        WHERE r.is_accepted = 'waiting' AND r.report_ID = h.report_ID AND p.package_ID = h.package_ID";
 
+            $reports = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
+            if($reports->num_rows > 0)
+            {
+                while($row = $reports->fetch_assoc()){
+                    $pid = $row['package_ID'];
+                    $rid = $row['report_ID'];
+
+                    $query_sender_name = "SELECT u.username FROM user u, send_to s WHERE s.package_ID = '$pid' AND s.sender_ID = u.user_ID";
+                    $result_sender_name = $mysqli->query($query_sender_name) or die('Error in query: ' . $mysqli->error);
+                    $sender_name = $result_sender_name->fetch_assoc();
+
+                    $query_taker_name = "SELECT u.username FROM user u, send_to s WHERE s.package_ID = '$pid' AND s.taker_ID = u.user_ID";
+                    $result_taker_name = $mysqli->query($query_taker_name) or die('Error in query: ' . $mysqli->error);
+                    $taker_name = $result_taker_name->fetch_assoc();
+
+                    echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td>
+                                 <td style='padding: 0px'><button class='confirm-button-p' type='submit' name='positive' value='$rid'>Accept</button></td><td style='padding: 0px'><button class='confirm-button-n' type='submit' name='negative' value='$rid'>Reject</button></td></tr>", $rid, $pid, $sender_name['username'], $taker_name['username'], $row['status'], $row['report_type'], $row['content']);
+
+                }
+            }
+
+            ?>
+        </form>
+    </table>
 </div>
-
 </body>
 </html>
 
