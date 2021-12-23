@@ -1,6 +1,12 @@
 <?php
 session_start();
 require_once "config.php";
+if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
+    header("location: login.php");
+} else if(!isset($_SESSION['loggedin'])){
+    header("location: login.php");
+}
+
 $id = $_SESSION['user_id'];
 
 function send_package($mysqli) {
@@ -32,6 +38,23 @@ function send_package($mysqli) {
 
     $query_insert_send_to = "INSERT INTO send_to VALUES('$id','$customer_ID',LAST_INSERT_ID())";
     $mysqli->query($query_insert_send_to) or die('Error in query: ' . $mysqli->error);
+
+    $query_optimal_employee = "SELECT a1.employee_ID as e FROM assign_to_employee a1, works w1 WHERE a1.employee_ID = w1.employee_ID AND w1.branch_ID = '$branch_ID' GROUP BY a1.employee_ID HAVING COUNT(a1.package_ID) <= ALL(SELECT COUNT(a2.package_ID) as package_count FROM assign_to_employee a2, works w2 WHERE a2.employee_ID = w2.employee_ID AND w2.branch_ID = '$branch_ID' GROUP BY a2.employee_ID)";
+    $result = $mysqli->query($query_optimal_employee) or die('Error in query: ' . $mysqli->error);
+    if($result->num_rows == 1){
+        $row = $result->fetch_assoc();
+        $employee_ID = $row['e'];
+        $query_insert_assign_to_employee = "INSERT INTO assign_to_employee VALUES(LAST_INSERT_ID(),'$employee_ID','waiting')";
+        $mysqli->query($query_insert_assign_to_employee) or die('Error in query: ' . $mysqli->error);
+    }
+    else{
+        $query_optimal_employee = "SELECT a1.employee_ID as e FROM works a1 WHERE a1.branch_ID = '$branch_ID' AND a1.employee_ID <= ALL(SELECT a2.employee_ID FROM works a2 WHERE a2.branch_ID = '$branch_ID')";
+        $result = $mysqli->query($query_optimal_employee) or die('Error in query: ' . $mysqli->error);
+        $row = $result->fetch_assoc();
+        $employee_ID = $row['e'];
+        $query_insert_assign_to_employee = "INSERT INTO assign_to_employee VALUES (LAST_INSERT_ID(),'$employee_ID','waiting')";
+        $mysqli->query($query_insert_assign_to_employee) or die('Error in query: ' . $mysqli->error);
+    }
 
     echo "<script>
             if(confirm('Package Created' )){document.location.href='customerDashboard.php'};

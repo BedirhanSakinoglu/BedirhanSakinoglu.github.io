@@ -1,6 +1,12 @@
 <?php
 session_start();
 require_once "config.php";
+if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
+    header("location: login.php");
+} else if(!isset($_SESSION['loggedin'])){
+    header("location: login.php");
+}
+
 $id = $_SESSION['user_id'];
 
 function send_package($mysqli) {
@@ -432,7 +438,7 @@ if(isset($_POST['send_package'])) {
                     <div class="">
                         <p>&#9642; Please select a user from the list you want to send package to</p>
                         <p>&#9642; Please select a branch that you want to send your package by</p>
-                        <p>&#9642; Please select a pickup_location branch that you want to send your package by</p>
+                        <p>&#9642; Please select a pickup location that you want to send your package by</p>
                         <p>&#9642; After selecting all, click on "Send Package" button to complete process</p>
                     </div>
                     <button type="submit" class="report-button mt-5" name="send_package">Send Package</button>
