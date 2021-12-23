@@ -1,6 +1,12 @@
 <?php
 session_start();
 require_once "config.php";
+if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
+    header("location: login.php");
+} else if(!isset($_SESSION['loggedin'])){
+    header("location: login.php");
+}
+
 $id = $_SESSION['user_id'];
 
 function send_package($mysqli) {

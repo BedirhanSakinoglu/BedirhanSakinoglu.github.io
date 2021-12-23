@@ -1,6 +1,12 @@
 <?php
 session_start();
 require_once "config.php";
+if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
+    header("location: login.php");
+} else if(!isset($_SESSION['loggedin'])){
+    header("location: login.php");
+}
+
 $id = $_SESSION['user_id'];
 
 function send_package($mysqli) {
@@ -20,11 +26,12 @@ function send_package($mysqli) {
 
     $customer_ID = $_POST['customer_person'];
     $branch_ID = $_POST['branch_ID'];
-    $pickup_address = $_POST['pickup_ID'];
+    $customer_address = $_POST['address_description'];
+    $employee_ID = $_POST['employee_ID'];
 
     //insert into package and submit_pack and send_to relation
     $query_insert_package = "INSERT INTO package(weight, dimension, delivery_address, status, send_time, delivery_time, package_type, courier_type) 
-                                VALUES ('$weight','$dimension_total','$pickup_address','order received','$send_time','$delivery_time','$package_type','$courier_type')";
+                                VALUES ('$weight','$dimension_total','$customer_address','order received','$send_time','$delivery_time','$package_type','$courier_type')";
     $mysqli->query($query_insert_package) or die('Error in query: ' . $mysqli->error);
 
     $query_insert_submit_pack = "INSERT INTO submit_pack VALUES(LAST_INSERT_ID(), '$branch_ID')";
@@ -32,6 +39,10 @@ function send_package($mysqli) {
 
     $query_insert_send_to = "INSERT INTO send_to VALUES('$id','$customer_ID',LAST_INSERT_ID())";
     $mysqli->query($query_insert_send_to) or die('Error in query: ' . $mysqli->error);
+
+    $query_insert_assign_to_employee = "INSERT INTO assign_to_employee VALUES(LAST_INSERT_ID(),'$employee_ID','waiting')";
+    $mysqli->query($query_insert_assign_to_employee) or die('Error in query: ' . $mysqli->error);
+
 
     echo "<script>
             if(confirm('Package Created' )){document.location.href='customerDashboard.php'};
@@ -48,7 +59,7 @@ if(isset($_POST['send_package'])) {
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <title>Customer Dashboard</title>
+    <title>Deliver Yourself - Deliver to Person</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <meta name="generator" content="Web Page Maker (unregistered version)">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -96,7 +107,7 @@ if(isset($_POST['send_package'])) {
 
         .grid-container{
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
             column-gap: 1vh;
             row-gap: 3vh;
             margin-right: 3vh;
@@ -113,7 +124,7 @@ if(isset($_POST['send_package'])) {
 
         .item1{
             grid-row: 1;
-            grid-column: 1 / 3;
+            grid-column: 1 / 4;
         }
 
         .left{
@@ -305,8 +316,14 @@ if(isset($_POST['send_package'])) {
     <form action="" method="post">
         <div class="row">
             <div class="col-7 grid-container" >
+                <div class="grid-item item1 " >
+                    <h3 class="panel-header">Enter a delivery address*</h3>
+                    <div>
+                        <textarea id="address-description" name="address_description" rows="4" cols="80" style="margin-top:2vh;resize:none" required></textarea>
+                    </div>
+                </div>
                 <div class="grid-item" >
-                    <h3 class="panel-header">Select a Person From the List*</h3>
+                    <h3 class="panel-header">Select a Person*</h3>
                     <div style=" margin-top:3vh; width:100%; max-height: 40vh; overflow-y: scroll;">
                         <table id="person-table">
                             <?php
@@ -326,7 +343,7 @@ if(isset($_POST['send_package'])) {
                     </div>
                 </div>
                 <div class="grid-item">
-                    <h3 class="panel-header">Select a Branch From the List*</h3>
+                    <h3 class="panel-header">Select a Branch*</h3>
                     <div style=" margin-top:3vh; width:100%; max-height: 40vh; overflow-y: scroll;">
                         <table class="branch-table">
                             <?php
@@ -344,7 +361,7 @@ if(isset($_POST['send_package'])) {
                     </div>
                 </div>
                 <div class="grid-item">
-                    <h3 class="panel-header">Select a Pickup Location From the List*</h3>
+                    <h3 class="panel-header">Select an Employee*</h3>
                     <div style=" margin-top:3vh; width:100%; max-height: 40vh; overflow-y: scroll;">
                         <table id="branch-table" class="branch-table">
                             <?php
@@ -354,16 +371,16 @@ if(isset($_POST['send_package'])) {
                             }
                             */
 
-                            $pickup_query = "SELECT * FROM pickup_location p, chosen_location c WHERE c.location_ID = p.location_ID";
-                            $all_pickup = $mysqli->query($pickup_query) or die('Error in query: ' . $mysqli->error);
-                            if($all_pickup->num_rows > 0) {
-                                while ($row = $all_pickup->fetch_assoc()) {
-                                    $pickup_ID_radio = $row['location_ID'];
+                            $employee_query = "SELECT * FROM employee e, works w, user u WHERE e.employee_ID = w.employee_ID AND u.user_ID = e.employee_ID";
+                            $all_employee = $mysqli->query($employee_query) or die('Error in query: ' . $mysqli->error);
+                            if($all_employee->num_rows > 0) {
+                                while ($row = $all_employee->fetch_assoc()) {
+                                    $employee_name = $row['username'];
+                                    $employee_ID = $row['user_ID'];
                                     $branch_ID = $row['branch_ID'];
-                                    $pickup_address = $row['address'];
 
-                                    echo sprintf("<tr style='display: none' id='$branch_ID'> <td style='width:4vh; text-align: center'><input type='radio' name='pickup_ID' value='$pickup_address' required></td>
-                                        <td>%s</td> </tr>", $row['location_name']);
+                                    echo sprintf("<tr style='display: none' id='$branch_ID'> <td style='width:4vh; text-align: center'><input type='radio' name='employee_ID' value='$employee_ID' required></td>
+                                        <td>%s</td> </tr>", $employee_name);
                                 }
                             }
                             ?>
@@ -382,9 +399,10 @@ if(isset($_POST['send_package'])) {
                 </div>
                 <div class="ml-2">
                     <div class="">
+                        <p>&#9642; Please enter an address you want to send package to</p>
                         <p>&#9642; Please select a user from the list you want to send package to</p>
                         <p>&#9642; Please select a branch that you want to send your package by</p>
-                        <p>&#9642; Please select a pickup_location branch that you want to send your package by</p>
+                        <p>&#9642; Please select an employee branch that you want to send your package by</p>
                         <p>&#9642; After selecting all, click on "Send Package" button to complete process</p>
                     </div>
                     <button type="submit" class="report-button mt-5" name="send_package">Send Package</button>

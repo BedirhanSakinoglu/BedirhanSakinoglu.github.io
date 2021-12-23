@@ -15,7 +15,7 @@ if (isset($_POST['confirm'])){
     $confirm_package_id = $_POST['confirm'];
     $confirm_query = ("UPDATE package SET status='delivered' WHERE package_ID = '$confirm_package_id' ");
     mysqli_query($mysqli, $confirm_query);
-    //header("location: customerPackagesPage.php");
+
 }
 ?>
 

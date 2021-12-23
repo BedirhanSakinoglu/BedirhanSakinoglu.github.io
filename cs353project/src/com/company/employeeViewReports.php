@@ -70,9 +70,9 @@ if (isset($_POST['negative'])){
         .confirm-button-n {
             color: #ffffff;
 
-            background: #ff0000;
-            width: 100%;
-            height: 5vh;
+            background: #A00000;
+            width: 80%;
+            height: 80%;
             outline: none;
             border: none;
             cursor: pointer;
@@ -83,9 +83,9 @@ if (isset($_POST['negative'])){
         .confirm-button-p {
             color: #ffffff;
 
-            background: #1bff00;
-            width: 100%;
-            height: 5vh;
+            background: #1EA204;
+            width: 80%;
+            height: 80%;
             outline: none;
             border: none;
             cursor: pointer;
@@ -258,7 +258,6 @@ if (isset($_POST['negative'])){
             $query = "SELECT *
                         FROM report r, package p, has h
                         WHERE r.is_accepted = 'waiting' AND r.report_ID = h.report_ID AND p.package_ID = h.package_ID";
-
             $reports = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
             if($reports->num_rows > 0)
             {
@@ -275,11 +274,10 @@ if (isset($_POST['negative'])){
                     $taker_name = $result_taker_name->fetch_assoc();
 
                     echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td>
-                                 <td style='padding: 0px'><button class='confirm-button-p' type='submit' name='positive' value='$rid'>Accept</button></td><td style='padding: 0px'><button class='confirm-button-n' type='submit' name='negative' value='$rid'>Reject</button></td></tr>", $rid, $pid, $sender_name['username'], $taker_name['username'], $row['status'], $row['report_type'], $row['content']);
+                                 <td style='text-align: center; border-width: 0px; padding: 0px'><button class='confirm-button-p' type='submit' name='positive' value='$rid'>Accept</button></td><td style='text-align: center; border-width: 0px; padding: 0px'><button class='confirm-button-n' type='submit' name='negative' value='$rid'>Reject</button></td></tr>", $rid, $pid, $sender_name['username'], $taker_name['username'], $row['status'], $row['report_type'], $row['content']);
 
                 }
             }
-
             ?>
         </form>
     </table>

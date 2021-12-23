@@ -29,13 +29,13 @@ function set_session_info($mysqli){
     }
 
     if($_SESSION['delivery_type'] == "deliver_person") {
-        header("location: courierToPersonPage.php");
+        header("location: customerDeliverPackage_DeliverToPerson.php");
     }
     else if($_SESSION['delivery_type'] == "deliver_pickup_location") {
-        header("location: courierToPickupLocationPage.php");
+        header("location: customerDeliverPackage_DeliverToPickupLocation.php");
     }
     else if($_SESSION['delivery_type'] == "deliver_address") {
-        header("location: courierToAddressPage.php");
+        header("location: customerDeliverPackage_DeliverToAddress.php");
     }
 }
 if (isset($_POST['get_info'])){
@@ -47,7 +47,7 @@ if (isset($_POST['get_info'])){
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <title>Customer Call Courier</title>
+    <title>Customer Deliver Package</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <meta name="generator" content="Web Page Maker (unregistered version)">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">

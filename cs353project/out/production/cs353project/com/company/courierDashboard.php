@@ -182,7 +182,7 @@ function test(){
     <div class="banner-item right"><button class="banner-button" onclick="location.href='logout.php';">Logout</button></div>
 </div>
 <div class="grid-container">
-    <div class='grid-item item1' onclick="location.href='courierAssignedPackagesPage.php';" style="cursor: pointer;"><p>Assigned Packages</p> <img src='../../asset/package.jpg' style='width:100%;'> </div>
+    <div class='grid-item item1' onclick="location.href='courierAssignedPackages.php';" style="cursor: pointer;"><p>Assigned Packages</p> <img src='../../asset/package.jpg' style='width:100%;'> </div>
     <div class="grid-item" onclick="location.href='courierProfile.php';" style="cursor: pointer;"><p>My Profile</p> <img src="../../asset/myprofile.png" style="width:25%;"></div>
     <div class="grid-item" onclick="location.href='logout.php';" style="cursor: pointer;"><p>Logout</p><img src="../../asset/logout.png" style="width:30%; "></div>
 

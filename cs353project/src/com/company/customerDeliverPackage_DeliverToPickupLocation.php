@@ -27,6 +27,7 @@ function send_package($mysqli) {
     $customer_ID = $_POST['customer_person'];
     $branch_ID = $_POST['branch_ID'];
     $pickup_address = $_POST['pickup_ID'];
+    $employee_ID = $_POST['employee_ID'];
 
     //insert into package and submit_pack and send_to relation
     $query_insert_package = "INSERT INTO package(weight, dimension, delivery_address, status, send_time, delivery_time, package_type, courier_type) 
@@ -38,6 +39,10 @@ function send_package($mysqli) {
 
     $query_insert_send_to = "INSERT INTO send_to VALUES('$id','$customer_ID',LAST_INSERT_ID())";
     $mysqli->query($query_insert_send_to) or die('Error in query: ' . $mysqli->error);
+
+    $query_insert_assign_to_employee = "INSERT INTO assign_to_employee VALUES(LAST_INSERT_ID(),'$employee_ID','waiting')";
+    $mysqli->query($query_insert_assign_to_employee) or die('Error in query: ' . $mysqli->error);
+
 
     echo "<script>
             if(confirm('Package Created' )){document.location.href='customerDashboard.php'};
@@ -54,7 +59,7 @@ if(isset($_POST['send_package'])) {
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <title>Customer Dashboard</title>
+    <title>Deliver Yourself - Deliver to Pickup Location</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <meta name="generator" content="Web Page Maker (unregistered version)">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -102,7 +107,7 @@ if(isset($_POST['send_package'])) {
 
         .grid-container{
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr;
             column-gap: 1vh;
             row-gap: 3vh;
             margin-right: 3vh;
@@ -284,10 +289,14 @@ if(isset($_POST['send_package'])) {
     </style>
 
     <script>
-        function getPickupLocations(clicked_value) {
+        function getPickupLocationsAndEmployeeList(clicked_value) {
 
             var array = document.getElementById('branch-table').firstElementChild.childNodes;
+            var employee_array = document.getElementById('branch-table2').firstElementChild.childNodes;
             console.log(array);
+            console.log(employee_array);
+
+            //Get pickup locations
             for (let i = 0; i < array.length - 1; i++ ) {
                 if(array[i].id == clicked_value) {
                     array[i].style.display = 'table-row';
@@ -296,6 +305,18 @@ if(isset($_POST['send_package'])) {
             for (let i = 0; i < array.length - 1; i++ ) {
                 if(array[i].id != clicked_value) {
                     array[i].style.display = 'none';
+                }
+            }
+
+            //Get employee list
+            for (let i = 0; i < employee_array.length - 1; i++ ) {
+                if(employee_array[i].id == clicked_value) {
+                    employee_array[i].style.display = 'table-row';
+                }
+            }
+            for (let i = 0; i < employee_array.length - 1; i++ ) {
+                if(employee_array[i].id != clicked_value) {
+                    employee_array[i].style.display = 'none';
                 }
             }
         }
@@ -341,7 +362,7 @@ if(isset($_POST['send_package'])) {
                             if($all_branches->num_rows > 0) {
                                 while ($row = $all_branches->fetch_assoc()) {
                                     $branch_ID_radio = $row['branch_ID'];
-                                    echo sprintf("<tr> <td style='width:4vh; text-align: center'><input type='radio' name='branch_ID' value='$branch_ID_radio' onclick='getPickupLocations(this.value);' required></td>
+                                    echo sprintf("<tr> <td style='width:4vh; text-align: center'><input type='radio' name='branch_ID' value='$branch_ID_radio' onclick='getPickupLocationsAndEmployeeList(this.value);' required></td>
                                         <td>%s</td> </tr>", $row['address']);
                                 }
                             }
@@ -376,6 +397,33 @@ if(isset($_POST['send_package'])) {
                         </table>
                     </div>
                 </div>
+                <div class="grid-item">
+                    <h3 class="panel-header">Select an Employee*</h3>
+                    <div style=" margin-top:3vh; width:100%; max-height: 40vh; overflow-y: scroll;">
+                        <table id="branch-table2" class="branch-table">
+                            <?php
+                            /*
+                            if(isset($_GET['branch_ID'])){
+                                echo sprintf("<p>mal alper</p>");
+                            }
+                            */
+
+                            $employee_query = "SELECT * FROM employee e, works w, user u WHERE e.employee_ID = w.employee_ID AND u.user_ID = e.employee_ID";
+                            $all_employee = $mysqli->query($employee_query) or die('Error in query: ' . $mysqli->error);
+                            if($all_employee->num_rows > 0) {
+                                while ($row = $all_employee->fetch_assoc()) {
+                                    $employee_name = $row['username'];
+                                    $employee_ID = $row['user_ID'];
+                                    $branch_ID = $row['branch_ID'];
+
+                                    echo sprintf("<tr style='display: none' id='$branch_ID'> <td style='width:4vh; text-align: center'><input type='radio' name='employee_ID' value='$employee_ID' required></td>
+                                        <td>%s</td> </tr>", $employee_name);
+                                }
+                            }
+                            ?>
+                        </table>
+                    </div>
+                </div>
             </div>
 
             <div class="col-4 border-left mt-4 border-secondary d-flex flex-column">
@@ -390,7 +438,7 @@ if(isset($_POST['send_package'])) {
                     <div class="">
                         <p>&#9642; Please select a user from the list you want to send package to</p>
                         <p>&#9642; Please select a branch that you want to send your package by</p>
-                        <p>&#9642; Please select a pickup_location branch that you want to send your package by</p>
+                        <p>&#9642; Please select a pickup location that you want to send your package by</p>
                         <p>&#9642; After selecting all, click on "Send Package" button to complete process</p>
                     </div>
                     <button type="submit" class="report-button mt-5" name="send_package">Send Package</button>

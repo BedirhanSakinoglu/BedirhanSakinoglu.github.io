@@ -443,13 +443,27 @@ public class DBConnector {
             //Initializing employees
             stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('natasha', '123', 'nat@gmail.com', '05439784321')");
             stmt.executeUpdate("INSERT INTO employee VALUES(LAST_INSERT_ID(), 500)");
+            stmt.executeUpdate("INSERT INTO works VALUES(LAST_INSERT_ID(), 1)");
+
 
             stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('nuri', '123', 'papacum@gmail.com', '05039984333')");
             stmt.executeUpdate("INSERT INTO employee VALUES(LAST_INSERT_ID(), 10000)");
+            stmt.executeUpdate("INSERT INTO works VALUES(LAST_INSERT_ID(), 2)");
 
-            //Initializing employee branches
-            stmt.executeUpdate("INSERT INTO works VALUES(7, 1)");
-            stmt.executeUpdate("INSERT INTO works VALUES(8, 2)");
+            //Initializing employees
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('alex', '123', 'a@gmail.com', '05049784321')");
+            stmt.executeUpdate("INSERT INTO employee VALUES(LAST_INSERT_ID(), 50040)");
+            stmt.executeUpdate("INSERT INTO works VALUES(LAST_INSERT_ID(), 3)");
+
+
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('deivid', '123', 'devil@gmail.com', '09039984333')");
+            stmt.executeUpdate("INSERT INTO employee VALUES(LAST_INSERT_ID(), 6000)");
+            stmt.executeUpdate("INSERT INTO works VALUES(LAST_INSERT_ID(), 4)");
+
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('hakan', '123', 'hak@gmail.com', '09038984333')");
+            stmt.executeUpdate("INSERT INTO employee VALUES(LAST_INSERT_ID(), 6000)");
+            stmt.executeUpdate("INSERT INTO works VALUES(LAST_INSERT_ID(), 4)");
+
 
             stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(35.5, 'order received', DATE '2015-12-17' ,'spoilable_package','30x30x43','hamamönü', DATE '2015-12-31',0)");
             stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(1,2, LAST_INSERT_ID())");
