@@ -20,11 +20,11 @@ function send_package($mysqli) {
 
     $customer_ID = $_POST['customer_person'];
     $branch_ID = $_POST['branch_ID'];
-    $customer_address = $_POST['address_description'];
+    $pickup_address = $_POST['pickup_ID'];
 
     //insert into package and submit_pack and send_to relation
     $query_insert_package = "INSERT INTO package(weight, dimension, delivery_address, status, send_time, delivery_time, package_type, courier_type) 
-                                VALUES ('$weight','$dimension_total','$customer_address','order received','$send_time','$delivery_time','$package_type','$courier_type')";
+                                VALUES ('$weight','$dimension_total','$pickup_address','order received','$send_time','$delivery_time','$package_type','$courier_type')";
     $mysqli->query($query_insert_package) or die('Error in query: ' . $mysqli->error);
 
     $query_insert_submit_pack = "INSERT INTO submit_pack VALUES(LAST_INSERT_ID(), '$branch_ID')";
@@ -142,7 +142,7 @@ if(isset($_POST['send_package'])) {
             width: 100%;
         }
 
-        #branch-table{
+        .branch-table{
             width: 100%;
         }
 
@@ -164,16 +164,16 @@ if(isset($_POST['send_package'])) {
             color: white;
         }
 
-        #branch-table td, #branch-table th {
+        .branch-table td, .branch-table th {
             border: 1px solid #ddd;
             padding: 8px;
         }
 
-        #branch-table tr:nth-child(even){background-color: #f2f2f2;}
+        .branch-table tr:nth-child(even){background-color: #f2f2f2;}
 
-        #branch-table tr:hover {background-color: #ddd;}
+        .branch-table tr:hover {background-color: #ddd;}
 
-        #branch-table th {
+        .branch-table th {
             padding-top: 12px;
             padding-bottom: 12px;
             padding-left: 8px;
@@ -277,6 +277,23 @@ if(isset($_POST['send_package'])) {
         }
     </style>
 
+    <script>
+        function getPickupLocations(clicked_value) {
+
+            var array = document.getElementById('branch-table').firstElementChild.childNodes;
+            console.log(array);
+            for (let i = 0; i < array.length - 1; i++ ) {
+                if(array[i].id == clicked_value) {
+                    array[i].style.display = 'table-row';
+                }
+            }
+            for (let i = 0; i < array.length - 1; i++ ) {
+                if(array[i].id != clicked_value) {
+                    array[i].style.display = 'none';
+                }
+            }
+        }
+    </script>
 </head>
 <body>
 <div class="banner-container">
@@ -288,12 +305,6 @@ if(isset($_POST['send_package'])) {
     <form action="" method="post">
         <div class="row">
             <div class="col-7 grid-container" >
-                <div class="grid-item item1 " >
-                    <h3 class="panel-header">Select a Person From the List*</h3>
-                    <div>
-                        <textarea id="address-description" name="address_description" rows="4" cols="80" style="margin-top:2vh;resize:none"></textarea>
-                    </div>
-                </div>
                 <div class="grid-item" >
                     <h3 class="panel-header">Select a Person From the List*</h3>
                     <div style=" margin-top:3vh; width:100%; max-height: 40vh; overflow-y: scroll;">
@@ -317,14 +328,14 @@ if(isset($_POST['send_package'])) {
                 <div class="grid-item">
                     <h3 class="panel-header">Select a Branch From the List*</h3>
                     <div style=" margin-top:3vh; width:100%; max-height: 40vh; overflow-y: scroll;">
-                        <table id="branch-table">
+                        <table class="branch-table">
                             <?php
                             $branch_query = "SELECT * FROM branch";
                             $all_branches = $mysqli->query($branch_query) or die('Error in query: ' . $mysqli->error);
                             if($all_branches->num_rows > 0) {
                                 while ($row = $all_branches->fetch_assoc()) {
                                     $branch_ID_radio = $row['branch_ID'];
-                                    echo sprintf("<tr> <td style='width:4vh; text-align: center'><input type='radio' name='branch_ID' value='$branch_ID_radio' required></td>
+                                    echo sprintf("<tr> <td style='width:4vh; text-align: center'><input type='radio' name='branch_ID' value='$branch_ID_radio' onclick='getPickupLocations(this.value);' required></td>
                                         <td>%s</td> </tr>", $row['address']);
                                 }
                             }
@@ -332,7 +343,35 @@ if(isset($_POST['send_package'])) {
                         </table>
                     </div>
                 </div>
+                <div class="grid-item">
+                    <h3 class="panel-header">Select a Pickup Location From the List*</h3>
+                    <div style=" margin-top:3vh; width:100%; max-height: 40vh; overflow-y: scroll;">
+                        <table id="branch-table" class="branch-table">
+                            <?php
+                            /*
+                            if(isset($_GET['branch_ID'])){
+                                echo sprintf("<p>mal alper</p>");
+                            }
+                            */
+
+                            $pickup_query = "SELECT * FROM pickup_location p, chosen_location c WHERE c.location_ID = p.location_ID";
+                            $all_pickup = $mysqli->query($pickup_query) or die('Error in query: ' . $mysqli->error);
+                            if($all_pickup->num_rows > 0) {
+                                while ($row = $all_pickup->fetch_assoc()) {
+                                    $pickup_ID_radio = $row['location_ID'];
+                                    $branch_ID = $row['branch_ID'];
+                                    $pickup_address = $row['address'];
+
+                                    echo sprintf("<tr style='display: none' id='$branch_ID'> <td style='width:4vh; text-align: center'><input type='radio' name='pickup_ID' value='$pickup_address' required></td>
+                                        <td>%s</td> </tr>", $row['location_name']);
+                                }
+                            }
+                            ?>
+                        </table>
+                    </div>
+                </div>
             </div>
+
             <div class="col-4 border-left mt-4 border-secondary d-flex flex-column">
                 <div class="ml-2">
                     <h3 class="panel-header">Step 2/2</h3>
@@ -343,12 +382,12 @@ if(isset($_POST['send_package'])) {
                 </div>
                 <div class="ml-2">
                     <div class="">
-                        <p>&#9642; Enter the address you want to send package.</p>
                         <p>&#9642; Please select a user from the list you want to send package to</p>
                         <p>&#9642; Please select a branch that you want to send your package by</p>
-                        <p>&#9642; After selecting all, click on "Send Package" button to complete proccess</p>
+                        <p>&#9642; Please select a pickup_location branch that you want to send your package by</p>
+                        <p>&#9642; After selecting all, click on "Send Package" button to complete process</p>
                     </div>
-                    <button type="submit" class="report-button mt-5" name="get_info">Send Package</button>
+                    <button type="submit" class="report-button mt-5" name="send_package">Send Package</button>
                 </div>
             </div>
         </div>

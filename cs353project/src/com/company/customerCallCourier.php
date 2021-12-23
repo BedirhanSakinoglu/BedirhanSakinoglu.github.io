@@ -29,13 +29,13 @@ function set_session_info($mysqli){
     }
 
     if($_SESSION['delivery_type'] == "deliver_person") {
-        header("location: courierToPersonPage.php");
+        header("location: customerCallCourier_courierToPerson.php");
     }
     else if($_SESSION['delivery_type'] == "deliver_pickup_location") {
-        header("location: courierToPickupLocationPage.php");
+        header("location: customerCallCourier_courierToPickupLocation.php");
     }
     else if($_SESSION['delivery_type'] == "deliver_address") {
-        header("location: courierToAddressPage.php");
+        header("location: customerCallCourier_courierToAddress.php");
     }
 }
 if (isset($_POST['get_info'])){

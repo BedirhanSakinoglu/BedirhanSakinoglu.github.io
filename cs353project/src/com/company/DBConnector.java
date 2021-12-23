@@ -398,6 +398,36 @@ public class DBConnector {
             stmt.executeUpdate("INSERT INTO branch (address, phone) VALUES('batikent', '12345675551')");
             stmt.executeUpdate("INSERT INTO branch (address, phone) VALUES('yasamkent', '989898898')");
 
+            //Initializing pickup_location
+            stmt.executeUpdate("INSERT INTO pickup_location (location_name, address, phone) VALUES('erdal bakkal', '9980 Linda St. Huntley, IL 60142', '310055555')");
+            stmt.executeUpdate("INSERT INTO chosen_location (location_ID, branch_ID) VALUES(LAST_INSERT_ID(), 1)");
+
+            stmt.executeUpdate("INSERT INTO pickup_location (location_name, address, phone) VALUES('bilkent ptt', '8794 Orange St.', '312059255')");
+            stmt.executeUpdate("INSERT INTO chosen_location (location_ID, branch_ID) VALUES(LAST_INSERT_ID(), 1)");
+
+            stmt.executeUpdate("INSERT INTO pickup_location (location_name, address, phone) VALUES('atasun optik', '7010 Bald Hill Drive', '312055855')");
+            stmt.executeUpdate("INSERT INTO chosen_location (location_ID, branch_ID) VALUES(LAST_INSERT_ID(), 2)");
+
+            stmt.executeUpdate("INSERT INTO pickup_location (location_name, address, phone) VALUES('alper bey dükkan', '135 East County Street', '312055509')");
+            stmt.executeUpdate("INSERT INTO chosen_location (location_ID, branch_ID) VALUES(LAST_INSERT_ID(), 2)");
+
+            stmt.executeUpdate("INSERT INTO pickup_location (location_name, address, phone) VALUES('82 çatı', '8998 Mill Road', '312055531')");
+            stmt.executeUpdate("INSERT INTO chosen_location (location_ID, branch_ID) VALUES(LAST_INSERT_ID(), 2)");
+
+            stmt.executeUpdate("INSERT INTO pickup_location (location_name, address, phone) VALUES('starbuks res bilkent', 'Silicon Valley Facebook 8392. Road', '312095555')");
+            stmt.executeUpdate("INSERT INTO chosen_location (location_ID, branch_ID) VALUES(LAST_INSERT_ID(), 3)");
+
+            stmt.executeUpdate("INSERT INTO pickup_location (location_name, address, phone) VALUES('nur eczane', 'Bilkent center kapı no 19', '312096555')");
+            stmt.executeUpdate("INSERT INTO chosen_location (location_ID, branch_ID) VALUES(LAST_INSERT_ID(), 3)");
+
+            stmt.executeUpdate("INSERT INTO pickup_location (location_name, address, phone) VALUES('merkez bankası', 'kızılay avm 4.kat 10A', '305055555')");
+            stmt.executeUpdate("INSERT INTO chosen_location (location_ID, branch_ID) VALUES(LAST_INSERT_ID(), 4)");
+
+            stmt.executeUpdate("INSERT INTO pickup_location (location_name, address, phone) VALUES('komagene çiköfte', 'bilkent 1 camlık site', '306055555')");
+            stmt.executeUpdate("INSERT INTO chosen_location (location_ID, branch_ID) VALUES(LAST_INSERT_ID(), 4)");
+
+            stmt.executeUpdate("INSERT INTO pickup_location (location_name, address, phone) VALUES('dost kitapevi', 'kızılay olgunlar 483.sokak', '305055444')");
+            stmt.executeUpdate("INSERT INTO chosen_location (location_ID, branch_ID) VALUES(LAST_INSERT_ID(), 4)");
 
             //Initializing couriers
             stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('ferat', '123', 'ferat@gmail.com', '05439784323')");
@@ -421,22 +451,22 @@ public class DBConnector {
             stmt.executeUpdate("INSERT INTO works VALUES(7, 1)");
             stmt.executeUpdate("INSERT INTO works VALUES(8, 2)");
 
-            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(35.5, 'order received', DATE '2015-12-17' ,'spoilable','30x30x43','hamamönü', DATE '2015-12-31',0)");
+            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(35.5, 'order received', DATE '2015-12-17' ,'spoilable_package','30x30x43','hamamönü', DATE '2015-12-31',0)");
             stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(1,2, LAST_INSERT_ID())");
 
-            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(32.1, 'on transfer', DATE '2015-12-17' ,'spoilable','30x10x43','izmir', DATE '2010-12-31',0)");
+            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(32.1, 'on transfer', DATE '2015-12-17' ,'spoilable_package','30x10x43','izmir', DATE '2010-12-31',0)");
             stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(1,2,LAST_INSERT_ID())");
 
-            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(10, 'on branch', DATE '2012-01-17' ,'fragile','10x30x43','bilkent', DATE '2019-12-31',0)");
+            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(10, 'on branch', DATE '2012-01-17' ,'fragile_package','10x30x43','bilkent', DATE '2019-12-31',0)");
             stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(2,1,LAST_INSERT_ID())");
 
-            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(100, 'on branch', DATE '2010-01-17' ,'spoiled','10x10x43','karacaahmet', DATE '2019-12-31',0)");
+            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(100, 'on branch', DATE '2010-01-17' ,'spoilable_package','10x10x43','karacaahmet', DATE '2019-12-31',0)");
             stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(2,1,LAST_INSERT_ID())");
 
-            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(9.5, 'order received', DATE '2020-01-17' ,'box','10x57x43','selcuk efes', DATE '2020-12-31',0)");
+            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(9.5, 'order received', DATE '2020-01-17' ,'default_package','10x57x43','selcuk efes', DATE '2020-12-31',0)");
             stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(3,1,LAST_INSERT_ID())");
 
-            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(90.5, 'order received', DATE '2020-01-17' ,'fragile','10x57x43','77 yurt', DATE '2020-12-31',0)");
+            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(90.5, 'order received', DATE '2020-01-17' ,'fragile_package','10x57x43','77 yurt', DATE '2020-12-31',0)");
             stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(1,4,LAST_INSERT_ID())");
 
             stmt.executeUpdate("INSERT INTO assigns VALUES(1,5,'received package')");
