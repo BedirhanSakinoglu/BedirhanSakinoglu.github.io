@@ -9,13 +9,45 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
     header("location: login.php");
 }
 
+$id = $_SESSION['user_id'];
+
 if(isset($_POST['hand_over_btn'])){
     $status_package_ID = $_POST['hand_over_btn'];
     $status_change_query = "UPDATE package SET status='on branch' WHERE package_ID = '$status_package_ID' ";
     mysqli_query($mysqli, $status_change_query);
-}
 
-$id = $_SESSION['user_id'];
+    $courier_branch_query = "SELECT w.branch_ID as bid FROM works_at w WHERE w.courier_ID = '$id'";
+    $result = $mysqli->query($courier_branch_query) or die('Error in query: ' . $mysqli->error);
+    $row = $result->fetch_assoc();
+    $branch_ID = $row['bid'];
+
+    #assignging to employee
+    $query_optimal_employee = "SELECT e1.employee_ID as e FROM employee e1, works w1 WHERE w1.branch_ID = '$branch_ID' AND e1.employee_ID = w1.employee_ID AND w1.employee_ID NOT IN(SELECT a1.employee_ID FROM assign_to_employee a1)";
+    $result = $mysqli->query($query_optimal_employee) or die('Error in query: ' . $mysqli->error);
+
+    if($result->num_rows == 0){
+        $query_optimal_employee = "SELECT a1.employee_ID as e FROM assign_to_employee a1, works w1 WHERE a1.employee_ID = w1.employee_ID AND w1.branch_ID = '$branch_ID' GROUP BY a1.employee_ID HAVING COUNT(a1.package_ID) <= ALL(SELECT COUNT(a2.package_ID) as package_count FROM assign_to_employee a2, works w2 WHERE a2.employee_ID = w2.employee_ID AND w2.branch_ID = '$branch_ID' GROUP BY a2.employee_ID)";
+        $result = $mysqli->query($query_optimal_employee) or die('Error in query: ' . $mysqli->error);
+    }
+
+    if($result->num_rows > 0){
+        $row = $result->fetch_assoc();
+        $employee_ID = $row['e'];
+        $query_insert_assign_to_employee = "INSERT INTO assign_to_employee VALUES('$status_package_ID','$employee_ID','waiting')";
+        $mysqli->query($query_insert_assign_to_employee) or die('Error in query: ' . $mysqli->error);
+    }
+    else{
+        $query_optimal_employee = "SELECT a1.employee_ID as e FROM works a1 WHERE a1.branch_ID = '$branch_ID' AND a1.employee_ID <= ALL(SELECT a2.employee_ID FROM works a2 WHERE a2.branch_ID = '$branch_ID')";
+        $result = $mysqli->query($query_optimal_employee) or die('Error in query: ' . $mysqli->error);
+        $row = $result->fetch_assoc();
+        $employee_ID = $row['e'];
+        $query_insert_assign_to_employee = "INSERT INTO assign_to_employee VALUES ('$status_package_ID','$employee_ID','waiting')";
+        $mysqli->query($query_insert_assign_to_employee) or die('Error in query: ' . $mysqli->error);
+    }
+
+    $update_is_delivered_query = "UPDATE assigns SET is_delivered= 'received package' WHERE package_ID = '$status_package_ID'";
+    mysqli_query($mysqli, $update_is_delivered_query);
+}
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">

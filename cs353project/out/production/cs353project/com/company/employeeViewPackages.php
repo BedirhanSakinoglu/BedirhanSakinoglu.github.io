@@ -12,26 +12,43 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
 $id = $_SESSION['user_id'];
 
 if (isset($_POST['positive'])){
-    $report_id= $_POST['positive'];
-    $query = "UPDATE report SET is_accepted='accepted' WHERE report_ID = '$report_id' ";
-    mysqli_query($mysqli, $query);
+    $package_id= $_POST['positive'];
+    /*
+        1) package status "on branch" olacak +++
+        2) submit_pack relationundaki branch_ID yeni branch_ID ile değişecek
+        3) assign_to_employee yeni employee_ID ile değişecek
+    */
+    $query_transfer_package_status = "UPDATE package SET status = 'on branch' WHERE package_ID = '$package_id' ";
+    mysqli_query($mysqli, $query_transfer_package_status);
+
+    $query_branch_id = "SELECT branch_ID FROM works WHERE employee_ID = '$id'";
+    $result_branch_id  = mysqli_query($mysqli, $query_branch_id);
+    $row = $result_branch_id->fetch_assoc();
+    $branch_ID = $row['branch_ID'];
+
+    $query_submit_pack = "UPDATE submit_pack SET branch_ID = '$branch_ID' WHERE package_ID = '$package_id'";
+    mysqli_query($mysqli, $query_submit_pack);
+
+    $query_assign_to_employee = "UPDATE assign_to_employee SET employee_ID = '$id' WHERE package_ID = '$package_id'";
+    mysqli_query($mysqli, $query_assign_to_employee);
+
     echo "<script>
-            if(confirm('Report Evaluated' )){document.location.href='employeeDashboard.php'};
+            if(confirm('Package Accepted' )){document.location.href='employeeDashboard.php'};
             </script>";
 }
 if (isset($_POST['negative'])){
-    $report_id= $_POST['negative'];
-    $query = "UPDATE report SET is_accepted='rejected' WHERE report_ID = '$report_id' ";
-    mysqli_query($mysqli, $query);
+    $pid= $_POST['negative'];
+    $query_transfer_package_status = "UPDATE package SET status = 'on branch' WHERE package_ID = '$pid' ";
+    mysqli_query($mysqli, $query_transfer_package_status);
     echo "<script>
-            if(confirm('Report Evaluated' )){document.location.href='employeeDashboard.php'};
+            if(confirm('Package Rejected' )){document.location.href='employeeDashboard.php'};
             </script>";
 }
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <title>View Packages</title>
+    <title>New Packages</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <meta name="generator" content="Web Page Maker (unregistered version)">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -240,41 +257,30 @@ if (isset($_POST['negative'])){
     <div class="banner-item right"><button class="banner-button" onclick="location.href='logout.php';">Logout</button></div>
 </div>
 <div class="grid-container">
-    <h1>Packages</h1>
-    <h3>All of the packages are listed below:</h3>
+    <h1>New Packages</h1>
+    <h3>All of the packages assigned to you are listed below:</h3>
     <table id="packages">
         <tr>
-            <th>Report ID</th>
             <th>Package ID</th>
-            <th >Sender</th>
-            <th >Receiver</th>
-            <th >Package Status</th>
-            <th>Report Type</th>
-            <th>Content</th>
+            <th>Delivery Date</th>
+            <th >Delivery Address</th>
             <th style="background-color: white;"></th>
         </tr>
         <form method="post">
             <?php
             $query = "SELECT *
-                        FROM report r, package p, has h
-                        WHERE r.is_accepted = 'waiting' AND r.report_ID = h.report_ID AND p.package_ID = h.package_ID";
-            $reports = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
-            if($reports->num_rows > 0)
+                        FROM transfer_pack t, package p, works w
+                        WHERE t.package_ID = p.package_ID AND t.branch_ID = w.branch_ID AND w.employee_ID = '$id' AND p.status = 'on transfer'";
+            $packages = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
+            if($packages->num_rows > 0)
             {
-                while($row = $reports->fetch_assoc()){
+                while($row = $packages->fetch_assoc()){
                     $pid = $row['package_ID'];
-                    $rid = $row['report_ID'];
+                    $delivery_time = $row['delivery_time'];
+                    $delivery_address = $row['delivery_address'];
 
-                    $query_sender_name = "SELECT u.username FROM user u, send_to s WHERE s.package_ID = '$pid' AND s.sender_ID = u.user_ID";
-                    $result_sender_name = $mysqli->query($query_sender_name) or die('Error in query: ' . $mysqli->error);
-                    $sender_name = $result_sender_name->fetch_assoc();
-
-                    $query_taker_name = "SELECT u.username FROM user u, send_to s WHERE s.package_ID = '$pid' AND s.taker_ID = u.user_ID";
-                    $result_taker_name = $mysqli->query($query_taker_name) or die('Error in query: ' . $mysqli->error);
-                    $taker_name = $result_taker_name->fetch_assoc();
-
-                    echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td>
-                                 <td style='text-align: center; border-width: 0px; padding: 0px'><button class='confirm-button-p' type='submit' name='positive' value='$rid'>Accept</button></td><td style='text-align: center; border-width: 0px; padding: 0px'><button class='confirm-button-n' type='submit' name='negative' value='$rid'>Reject</button></td></tr>", $rid, $pid, $sender_name['username'], $taker_name['username'], $row['status'], $row['report_type'], $row['content']);
+                    echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td> 
+                                 <td style='text-align: center; border-width: 0px; padding: 0px'><button class='confirm-button-p' type='submit' name='positive' value='$pid'>Accept</button></td><td style='text-align: center; border-width: 0px; padding: 0px'><button class='confirm-button-n' type='submit' name='negative' value='$pid'>Reject</button></td></tr>", $pid, $delivery_time, $delivery_address);
 
                 }
             }

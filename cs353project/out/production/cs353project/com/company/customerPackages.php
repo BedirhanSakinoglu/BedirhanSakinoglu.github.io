@@ -219,6 +219,7 @@ if (isset($_POST['confirm'])){
 </div>
 <div class="grid-container">
     <h1>My Packages</h1>
+    <div style=" margin-top:3vh; width:100%; max-height: 75vh; overflow-y: scroll;">
     <table id="packages">
         <tr>
             <th>Package ID</th>
@@ -286,6 +287,7 @@ if (isset($_POST['confirm'])){
             ?>
         </form>
     </table>
+    </div>
 </div>
 
 </body>

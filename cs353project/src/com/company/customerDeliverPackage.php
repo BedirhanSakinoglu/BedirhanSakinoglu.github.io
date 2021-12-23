@@ -16,7 +16,7 @@ function set_session_info($mysqli){
     $_SESSION['dimension1'] = $_POST['dimension1'];
     $_SESSION['dimension2'] = $_POST['dimension2'];
     $_SESSION['dimension3'] = $_POST['dimension3'];
-    $_SESSION['courier_type'] = $_POST['courier_type'];
+    $_SESSION['courier_type'] = 'default_courier';
     $_SESSION['delivery_type'] = $_POST['delivery_type'];
 
     if(isset($_POST['delivery_time_default'])) {
@@ -285,21 +285,7 @@ if (isset($_POST['get_info'])){
                         <span>X</span>
                         <input type="text" id="dimension3"
                                name="dimension3" value="" class="m-3" style="width: 5vh" required>
-                    </li>
-                    <li class="list-group-item mt-4 border border-secondary">
-                        <h3 class="panel-header">Choose Courier Type*</h3>
-                        <input type="radio" id="default_courier"
-                               name="courier_type" value="default_courier" required>
-                        <label for="default_courier" class="mr-5">Default Courier</label>
 
-                        <input type="radio" id="fast_courier"
-                               name="courier_type" value="fast_courier">
-                        <label for="fast_courier" class="mr-5">Fast Courier</label>
-
-                        <input type="radio" id="heavy_courier"
-                               name="courier_type" value="heavy_courier">
-                        <label for="heavy_courier" class="mr-5">Heavy Courier</label>
-                    </li>
                     <li class="list-group-item mt-4 border border-secondary">
                         <h3 class="panel-header">Select Delivery Time</h3>
                         <input type="checkbox" name="delivery_time_default" id="default_time" onclick="myFunction();">

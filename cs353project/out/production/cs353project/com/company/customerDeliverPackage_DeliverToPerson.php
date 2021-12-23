@@ -36,7 +36,7 @@ function send_package($mysqli) {
 
     //insert into package and submit_pack and send_to relation
     $query_insert_package = "INSERT INTO package(weight, dimension, delivery_address, status, send_time, delivery_time, package_type, courier_type) 
-                                VALUES ('$weight','$dimension_total','$customer_address','order received','$send_time','$delivery_time','$package_type','$courier_type')";
+                                VALUES ('$weight','$dimension_total','$customer_address','on branch','$send_time','$delivery_time','$package_type','$courier_type')";
     $mysqli->query($query_insert_package) or die('Error in query: ' . $mysqli->error);
 
     $query_insert_submit_pack = "INSERT INTO submit_pack VALUES(LAST_INSERT_ID(), '$branch_ID')";

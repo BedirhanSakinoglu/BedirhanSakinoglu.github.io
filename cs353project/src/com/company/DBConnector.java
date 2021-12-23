@@ -318,7 +318,8 @@ public class DBConnector {
                             "package_ID INT," +
                             "branch_ID INT," +
                             "employee_ID INT," +
-                            "PRIMARY KEY (package_ID)," +
+                            "transfer_ID INT AUTO_INCREMENT," +
+                            "PRIMARY KEY (transfer_ID)," +
                             "FOREIGN KEY (branch_ID) REFERENCES branch(branch_ID)," +
                             "FOREIGN KEY (employee_ID) REFERENCES employee(employee_ID)," +
                             "FOREIGN KEY (package_ID) REFERENCES package(package_ID)" +
@@ -432,13 +433,28 @@ public class DBConnector {
             //Initializing couriers
             stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('ferat', '123', 'ferat@gmail.com', '05439784323')");
             stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 1000, 10, 'default')");
+            stmt.executeUpdate("INSERT INTO works_at VALUES(LAST_INSERT_ID(), 1)");
 
-            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('sinan', '123', 'tırıntırın@gmail.com', '05039984323')");
-            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 4000, 50, 'heavy')");
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('pembe', '123', 'küpek@gmail.com', '05439284323')");
+            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 1000, 10, 'default')");
+            stmt.executeUpdate("INSERT INTO works_at VALUES(LAST_INSERT_ID(), 1)");
 
-            //Initializing courier branches
-            stmt.executeUpdate("INSERT INTO works_at VALUES(5, 1)");
-            stmt.executeUpdate("INSERT INTO works_at VALUES(6, 2)");
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('aleyna', '123', 'futbol@gmail.com', '05039996323')");
+            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 6000, 50, 'fast')");
+            stmt.executeUpdate("INSERT INTO works_at VALUES(LAST_INSERT_ID(), 2)");
+
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('ezgi', '123', 'labne@gmail.com', '01039984323')");
+            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 10000, 10, 'default')");
+            stmt.executeUpdate("INSERT INTO works_at VALUES(LAST_INSERT_ID(), 3)");
+
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('elon', '123', 'musk@gmail.com', '05329984323')");
+            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 4020, 50, 'heavy')");
+            stmt.executeUpdate("INSERT INTO works_at VALUES(LAST_INSERT_ID(), 4)");
+
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('ziya', '123', 'hor@gmail.com', '05097984323')");
+            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 4020, 50, 'heavy')");
+            stmt.executeUpdate("INSERT INTO works_at VALUES(LAST_INSERT_ID(), 4)");
+
 
             //Initializing employees
             stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('natasha', '123', 'nat@gmail.com', '05439784321')");
@@ -464,7 +480,7 @@ public class DBConnector {
             stmt.executeUpdate("INSERT INTO employee VALUES(LAST_INSERT_ID(), 6000)");
             stmt.executeUpdate("INSERT INTO works VALUES(LAST_INSERT_ID(), 4)");
 
-
+/*
             stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(35.5, 'order received', DATE '2015-12-17' ,'spoilable_package','30x30x43','hamamönü', DATE '2015-12-31',0)");
             stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(1,2, LAST_INSERT_ID())");
 
@@ -487,7 +503,7 @@ public class DBConnector {
             stmt.executeUpdate("INSERT INTO assigns VALUES(2,5,'received package')");
             stmt.executeUpdate("INSERT INTO assigns VALUES(3,6,'received package')");
             stmt.executeUpdate("INSERT INTO assigns VALUES(4,6,'received package')");
-            stmt.executeUpdate("INSERT INTO assigns VALUES(5,5,'not received package')");
+            stmt.executeUpdate("INSERT INTO assigns VALUES(5,5,'received package')");*/
 
         } catch (SQLException e) {
             System.out.println("SQLException: " + e.getMessage());
