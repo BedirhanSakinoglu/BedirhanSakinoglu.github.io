@@ -39,8 +39,8 @@ function send_package($mysqli) {
     $query_insert_send_to = "INSERT INTO send_to VALUES('$id','$customer_ID',LAST_INSERT_ID())";
     $mysqli->query($query_insert_send_to) or die('Error in query: ' . $mysqli->error);
 
-    #assign to employeede olmadığı için başta sıkıntı oluyor olmayanlara nasıl bakcam bilmiyorum
-    $query_optimal_employee = "SELECT e1.employee_ID as e FROM employee e1, works w1 WHERE w1.branch_ID = '$branch_ID' AND e1.employee_ID = w1.employee_ID AND NOT IN(SELECT a1.employee_ID FROM assign_to_employee a1)";
+    #assignging to employee
+    $query_optimal_employee = "SELECT e1.employee_ID as e FROM employee e1, works w1 WHERE w1.branch_ID = '$branch_ID' AND e1.employee_ID = w1.employee_ID AND w1.employee_ID NOT IN(SELECT a1.employee_ID FROM assign_to_employee a1)";
     $result = $mysqli->query($query_optimal_employee) or die('Error in query: ' . $mysqli->error);
 
     echo sprintf('%d',$result->num_rows);

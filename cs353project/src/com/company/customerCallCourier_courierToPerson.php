@@ -44,9 +44,18 @@ function send_package($mysqli) {
     $query_insert_send_to = "INSERT INTO send_to VALUES('$id','$customer_ID',LAST_INSERT_ID())";
     $mysqli->query($query_insert_send_to) or die('Error in query: ' . $mysqli->error);
 
-    $query_optimal_employee = "SELECT a1.employee_ID as e FROM assign_to_employee a1, works w1 WHERE a1.employee_ID = w1.employee_ID AND w1.branch_ID = '$branch_ID' GROUP BY a1.employee_ID HAVING COUNT(a1.package_ID) <= ALL(SELECT COUNT(a2.package_ID) as package_count FROM assign_to_employee a2, works w2 WHERE a2.employee_ID = w2.employee_ID AND w2.branch_ID = '$branch_ID' GROUP BY a2.employee_ID)";
+    #assignging to employee
+    $query_optimal_employee = "SELECT e1.employee_ID as e FROM employee e1, works w1 WHERE w1.branch_ID = '$branch_ID' AND e1.employee_ID = w1.employee_ID AND w1.employee_ID NOT IN(SELECT a1.employee_ID FROM assign_to_employee a1)";
     $result = $mysqli->query($query_optimal_employee) or die('Error in query: ' . $mysqli->error);
-    if($result->num_rows == 1){
+
+    echo sprintf('%d',$result->num_rows);
+
+    if($result->num_rows == 0){
+        $query_optimal_employee = "SELECT a1.employee_ID as e FROM assign_to_employee a1, works w1 WHERE a1.employee_ID = w1.employee_ID AND w1.branch_ID = '$branch_ID' GROUP BY a1.employee_ID HAVING COUNT(a1.package_ID) <= ALL(SELECT COUNT(a2.package_ID) as package_count FROM assign_to_employee a2, works w2 WHERE a2.employee_ID = w2.employee_ID AND w2.branch_ID = '$branch_ID' GROUP BY a2.employee_ID)";
+        $result = $mysqli->query($query_optimal_employee) or die('Error in query: ' . $mysqli->error);
+    }
+    echo sprintf('%d',$result->num_rows);
+    if($result->num_rows > 0){
         $row = $result->fetch_assoc();
         $employee_ID = $row['e'];
         $query_insert_assign_to_employee = "INSERT INTO assign_to_employee VALUES(LAST_INSERT_ID(),'$employee_ID','waiting')";
