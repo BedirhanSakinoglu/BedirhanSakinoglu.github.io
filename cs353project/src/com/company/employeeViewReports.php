@@ -70,7 +70,7 @@ if (isset($_POST['negative'])){
         .confirm-button-n {
             color: #ffffff;
 
-            background: #A00000;
+            background: #D11B1B;
             width: 80%;
             height: 80%;
             outline: none;
