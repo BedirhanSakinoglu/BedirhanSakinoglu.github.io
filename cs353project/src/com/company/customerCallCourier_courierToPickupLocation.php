@@ -306,7 +306,7 @@ if(isset($_POST['send_package'])) {
         <div class="row">
             <div class="col-7 grid-container" >
                 <div class="grid-item" >
-                    <h3 class="panel-header">Select a Person From the List*</h3>
+                    <h3 class="panel-header">Select a Person*</h3>
                     <div style=" margin-top:3vh; width:100%; max-height: 40vh; overflow-y: scroll;">
                         <table id="person-table">
                             <?php
