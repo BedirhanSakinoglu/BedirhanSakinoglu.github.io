@@ -309,15 +309,7 @@ if(isset($_POST['deliver_customer_btn'])) {
                     }
                 }
 
-                else if($row['status'] == "on branch"){
-                    $pickup_query = "SELECT b.address FROM works_at wa, branch b WHERE b.branch_ID = wa.branch_ID AND wa.courier_ID = '$id'";
-                    $pickup = $mysqli->query($pickup_query) or die('Error in query: ' . $mysqli->error);
-                    $pickup_address = $pickup->fetch_assoc();
-
-                    echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td> </tr>",
-                        $row['package_ID'], $row['send_time'], $pickup_address['address'], $row['delivery_address'],$row['delivery_time'], $row['status']);
-                }
-                else if($row['status'] == "delivered"){
+                else if($row['status'] == "on branch" or $row['status'] == "delivered" or $row['status'] == "received" or $row['status'] == "lost"){
                     $pickup_query = "SELECT b.address FROM works_at wa, branch b WHERE b.branch_ID = wa.branch_ID AND wa.courier_ID = '$id'";
                     $pickup = $mysqli->query($pickup_query) or die('Error in query: ' . $mysqli->error);
                     $pickup_address = $pickup->fetch_assoc();

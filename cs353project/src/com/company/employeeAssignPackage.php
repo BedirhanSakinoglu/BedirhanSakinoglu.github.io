@@ -13,7 +13,7 @@ if (isset($_POST['assign_package'])){
     $package_ID = $_POST['package_ID'];
     $courier_ID = $_POST['courier_ID'];
 
-    $query_assign_package = "INSERT INTO assigns(package_ID, courier_ID, is_delivered) VALUES ('$package_ID', '$courier_ID', 'received package')";
+    $query_assign_package = "INSERT INTO assigns(package_ID, courier_ID, is_delivered) VALUES ('$package_ID', '$courier_ID', 'by_employee')";
     $mysqli->query($query_assign_package) or die('Error in query: ' . $mysqli->error);
 
     $query_update_package = "UPDATE package SET status = 'on delivery' WHERE package_ID = '$package_ID'"; //burası kurye hemen alınca on delivery mi olcak order received olmaz mı

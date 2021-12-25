@@ -256,14 +256,15 @@ if (isset($_POST['negative'])){
         <form method="post">
             <?php
             $query = "SELECT *
-                        FROM report r, package p, has h
-                        WHERE r.is_accepted = 'waiting' AND r.report_ID = h.report_ID AND p.package_ID = h.package_ID";
+                        FROM report r, package p, has h, submit_pack sp, works w
+                        WHERE sp.branch_ID = w.branch_ID AND w.employee_ID = '$id' AND sp.package_ID = p.package_ID AND r.is_accepted <> 'rejected' AND r.report_ID = h.report_ID AND p.package_ID = h.package_ID";
             $reports = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
             if($reports->num_rows > 0)
             {
                 while($row = $reports->fetch_assoc()){
                     $pid = $row['package_ID'];
                     $rid = $row['report_ID'];
+                    $is_accepted = $row['is_accepted'];
 
                     $query_sender_name = "SELECT u.username FROM user u, send_to s WHERE s.package_ID = '$pid' AND s.sender_ID = u.user_ID";
                     $result_sender_name = $mysqli->query($query_sender_name) or die('Error in query: ' . $mysqli->error);
@@ -273,8 +274,14 @@ if (isset($_POST['negative'])){
                     $result_taker_name = $mysqli->query($query_taker_name) or die('Error in query: ' . $mysqli->error);
                     $taker_name = $result_taker_name->fetch_assoc();
 
-                    echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td>
+                    if($is_accepted == "accepted"){
+                        echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td>
+                                 </tr>", $rid, $pid, $sender_name['username'], $taker_name['username'], $row['status'], $row['report_type'], $row['content']);
+                    }
+                    else {
+                        echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td>
                                  <td style='text-align: center; border-width: 0px; padding: 0px'><button class='confirm-button-p' type='submit' name='positive' value='$rid'>Accept</button></td><td style='text-align: center; border-width: 0px; padding: 0px'><button class='confirm-button-n' type='submit' name='negative' value='$rid'>Reject</button></td></tr>", $rid, $pid, $sender_name['username'], $taker_name['username'], $row['status'], $row['report_type'], $row['content']);
+                    }
 
                 }
             }

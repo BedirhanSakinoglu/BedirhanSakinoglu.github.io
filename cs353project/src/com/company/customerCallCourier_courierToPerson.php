@@ -56,7 +56,7 @@ function send_package($mysqli) {
     if($result->num_rows > 0){
         $row = $result->fetch_assoc();
         $courier_ID = $row['e'];
-        $query_insert_assign_to_courier = "INSERT INTO assigns(package_ID, courier_ID, is_delivered)  VALUES(LAST_INSERT_ID(),'$courier_ID','waiting')";
+        $query_insert_assign_to_courier = "INSERT INTO assigns(package_ID, courier_ID, is_delivered)  VALUES(LAST_INSERT_ID(),'$courier_ID','by_customer')";
         $mysqli->query($query_insert_assign_to_courier) or die('Error in query: ' . $mysqli->error);
     }
     else{
@@ -64,7 +64,7 @@ function send_package($mysqli) {
         $result = $mysqli->query($query_optimal_courier) or die('Error in query: ' . $mysqli->error);
         $row = $result->fetch_assoc();
         $courier_ID = $row['e'];
-        $query_insert_assign_to_courier = "INSERT INTO assigns(package_ID, courier_ID, is_delivered)  VALUES (LAST_INSERT_ID(),'$courier_ID','waiting')";
+        $query_insert_assign_to_courier = "INSERT INTO assigns(package_ID, courier_ID, is_delivered)  VALUES (LAST_INSERT_ID(),'$courier_ID','by_customer')";
         $mysqli->query($query_insert_assign_to_courier) or die('Error in query: ' . $mysqli->error);
     }
     #-----------------------------------

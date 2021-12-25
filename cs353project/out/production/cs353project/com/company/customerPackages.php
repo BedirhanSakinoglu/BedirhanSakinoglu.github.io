@@ -11,11 +11,24 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
 
 $id = $_SESSION['user_id'];
 
-if (isset($_POST['confirm'])){
-    $confirm_package_id = $_POST['confirm'];
-    $confirm_query = ("UPDATE package SET status='delivered' WHERE package_ID = '$confirm_package_id' ");
+if(isset($_POST['received'])){
+    $package_id = $_POST['received'];
+    $confirm_query = ("UPDATE package SET status='received' WHERE package_ID = '$package_id' ");
+    mysqli_query($mysqli, $confirm_query);
+}
+else if(isset($_POST['not_received'])){
+    $package_id = $_POST['not_received'];
+    $confirm_query = ("UPDATE package SET status='lost' WHERE package_ID = '$package_id' ");
     mysqli_query($mysqli, $confirm_query);
 
+    $query_insert_report = ("INSERT INTO report(customer_ID,content,report_type,is_accepted) VALUES('$id', 'AUTO REPORT: Package has not received customer.', 'lost_package', 'accepted') ");
+    mysqli_query($mysqli, $query_insert_report) or die('Error in query: ' . $mysqli->error);
+
+    $query_insert_has_relation = ("INSERT INTO has(package_ID,report_ID) VALUES('$package_id', LAST_INSERT_ID()) ");
+    mysqli_query($mysqli, $query_insert_has_relation) or die('Error in query: ' . $mysqli->error);
+    echo "<script>
+            if(confirm('Auto report created for lost package' )){document.location.href='customerPackages.php'};
+            </script>";
 }
 ?>
 
@@ -56,6 +69,33 @@ if (isset($_POST['confirm'])){
             font-family: 'Dubai Light';
 
             /* background-image: linear-gradient(to top, #d9afd9 0%, #97d9e1 100%); */
+        }
+
+        .confirm-button-n {
+            color: #ffffff;
+
+            background: #D11B1B;
+            width: 80%;
+            height: 80%;
+            outline: none;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s linear;
+            letter-spacing: 0.05em;
+        }
+        .confirm-button-p {
+            color: #ffffff;
+
+            background: #1EA204;
+            width: 80%;
+            height: 80%;
+            outline: none;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s linear;
+            letter-spacing: 0.05em;
         }
 
         .confirm-button {
@@ -274,9 +314,9 @@ if (isset($_POST['confirm'])){
                     $result_taker_name = $mysqli->query($query_taker_name) or die('Error in query: ' . $mysqli->error);
                     $taker_name = $result_taker_name->fetch_assoc();
 
-                    if($row['status'] == 'on branch') {
+                    if($row['status'] == 'delivered') {
                         echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td>
-                                 <td style='padding: 0px'><button class='confirm-button' type='submit' name='confirm' value='$pid'>Confirm Package</button></td></tr>", $row['package_ID'], $row['send_time'], $row['delivery_time'], $sender_name['username'], $taker_name['username'], $row['status'], $row['delivery_address']);
+                                 <td style='padding: 0px'><button class='confirm-button-p' type='submit' name='received' value='$pid'>Received</button></td> <button class='confirm-button-n' type='submit' name='not_received' value='$pid'>Not Received</button></tr>", $row['package_ID'], $row['send_time'], $row['delivery_time'], $sender_name['username'], $taker_name['username'], $row['status'], $row['delivery_address']);
                     }
                     else{
                         echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td>

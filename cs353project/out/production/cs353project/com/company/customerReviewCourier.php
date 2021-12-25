@@ -31,7 +31,7 @@ if (isset($_POST['submit_review'])){
 
 
     echo "<script>
-            if(confirm('Review Created ' + ' $courier_ID ' + ' $package_ID ' + ' $json_post ' )){document.location.href='customerDashboard.php'};
+            if(confirm('Review Created ')){document.location.href='customerDashboard.php'};
             </script>";
 }
 ?>
@@ -268,7 +268,7 @@ if (isset($_POST['submit_review'])){
                                     <?php
                                     $query = "SELECT *
                                         FROM package p, send_to st, assigns a
-                                        WHERE st.taker_ID = '$id' AND p.package_ID = st.package_ID AND a.package_ID = p.package_ID AND p.status = 'delivered' AND p.package_ID NOT IN (SELECT package_ID FROM evaluate)";
+                                        WHERE st.taker_ID = '$id' AND p.package_ID = st.package_ID AND a.package_ID = p.package_ID AND p.status = 'received' AND a.is_delivered = 'by_employee' AND p.package_ID NOT IN (SELECT package_ID FROM evaluate)";
                                     $packages = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
                                     if($packages->num_rows > 0)
                                     {
