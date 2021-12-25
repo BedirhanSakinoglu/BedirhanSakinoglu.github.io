@@ -66,7 +66,7 @@ function logIn($mysqli)
                 if($result_comp->num_rows==1) {
                     header("location: companyRepresentativeDashboard.php");
                     //lets find the user id belonging to this username
-                    $query_find_comp_rep_id = "SELECT employee_ID FROM user u, company_representative c WHERE u.username = '$user' AND c.company_ID = u.user_ID";
+                    $query_find_comp_rep_id = "SELECT company_ID FROM user u, company_representative c WHERE u.username = '$user' AND c.company_ID = u.user_ID";
                     $result_find_comp_rep_id = $mysqli->query($query_find_comp_rep_id) or die('Error in query: ' . $mysqli->error);
                     if($result_find_comp_rep_id->num_rows==1){
                         $row=$result_find_comp_rep_id->fetch_assoc();

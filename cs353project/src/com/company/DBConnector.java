@@ -191,7 +191,7 @@ public class DBConnector {
                             "report_ID INT AUTO_INCREMENT," +
                             "customer_ID INT," +
                             "content VARCHAR(50) NOT NULL," +
-                            "report_type VARCHAR(50) NOT NULL," +
+                            "report_type VARCHAR(200) NOT NULL," +
                             "is_accepted VARCHAR(50) NOT NULL," +
                             "FOREIGN KEY (customer_ID) REFERENCES customer(customer_ID)," +
                             "PRIMARY KEY (report_ID, customer_ID)" +
@@ -330,7 +330,6 @@ public class DBConnector {
             //contract Table
             stmt.executeUpdate(
                     "CREATE TABLE contract(" +
-                            "package_ID INT," +
                             "company_ID INT," +
                             "branch_ID INT," +
                             "is_Approved VARCHAR(50) NOT NULL," +
@@ -518,6 +517,15 @@ public class DBConnector {
             stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('hakan', '123', 'hak@gmail.com', '09038984333')");
             stmt.executeUpdate("INSERT INTO employee VALUES(LAST_INSERT_ID(), 6000)");
             stmt.executeUpdate("INSERT INTO works VALUES(LAST_INSERT_ID(), 4)");
+
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('ali', '123', 'agaoglu@gmail.com', '99939984323')");
+            stmt.executeUpdate("INSERT INTO company_representative VALUES(LAST_INSERT_ID(), 'stanley cmp.')");
+
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('john', '123', 'jk@gmail.com', '89939984323')");
+            stmt.executeUpdate("INSERT INTO company_representative VALUES(LAST_INSERT_ID(), 'pull&bear')");
+
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('cagla', '123', 'şikel@gmail.com', '83939984323')");
+            stmt.executeUpdate("INSERT INTO company_representative VALUES(LAST_INSERT_ID(), 'adl tekstil')");
 
         } catch (SQLException e) {
             System.out.println("SQLException: " + e.getMessage());

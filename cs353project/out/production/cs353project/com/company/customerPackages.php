@@ -21,7 +21,7 @@ else if(isset($_POST['not_received'])){
     $confirm_query = ("UPDATE package SET status='lost' WHERE package_ID = '$package_id' ");
     mysqli_query($mysqli, $confirm_query);
 
-    $query_insert_report = ("INSERT INTO report(customer_ID,content,report_type,is_accepted) VALUES('$id', 'AUTO REPORT: Package has not received customer.', 'lost_package', 'accepted') ");
+    $query_insert_report = ("INSERT INTO report(customer_ID,content,report_type,is_accepted) VALUES('$id', 'AUTO REPORT: Package has not been received by the customer.', 'lost_package', 'accepted') ");
     mysqli_query($mysqli, $query_insert_report) or die('Error in query: ' . $mysqli->error);
 
     $query_insert_has_relation = ("INSERT INTO has(package_ID,report_ID) VALUES('$package_id', LAST_INSERT_ID()) ");
@@ -316,7 +316,7 @@ else if(isset($_POST['not_received'])){
 
                     if($row['status'] == 'delivered') {
                         echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td>
-                                 <td style='padding: 0px'><button class='confirm-button-p' type='submit' name='received' value='$pid'>Received</button></td> <button class='confirm-button-n' type='submit' name='not_received' value='$pid'>Not Received</button></tr>", $row['package_ID'], $row['send_time'], $row['delivery_time'], $sender_name['username'], $taker_name['username'], $row['status'], $row['delivery_address']);
+                                 <td style='text-align: center; border-width: 0px; padding: 0px'><button class='confirm-button-p' type='submit' name='received' value='$pid'>Received</button></td><td style='text-align: center; border-width: 0px; padding: 0px'><button class='confirm-button-n' type='submit' name='not_received' value='$pid'>Not Received</button></td> </tr>", $row['package_ID'], $row['send_time'], $row['delivery_time'], $sender_name['username'], $taker_name['username'], $row['status'], $row['delivery_address']);
                     }
                     else{
                         echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td>

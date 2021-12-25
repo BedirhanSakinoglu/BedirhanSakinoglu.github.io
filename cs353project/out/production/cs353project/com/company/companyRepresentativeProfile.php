@@ -10,18 +10,12 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
 }
 
 $id = $_SESSION['user_id'];
-
-function test(){
-    echo '<script type="text/javascript">
-                        alert("Incorrect Usertype");
-                        </script>';
-}
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <title>Company Representative Dashboard</title>
+    <title>Company Representative Profile</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <meta name="generator" content="Web Page Maker (unregistered version)">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -87,38 +81,18 @@ function test(){
 
         .grid-container{
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            grid-template-rows: 30vh 30vh;
-            grid-auto-flow: column;
-            column-gap: 7vh;
-            row-gap: 7vh;
-            margin-right: 30vh;
-            margin-left: 30vh;
-            margin-top: 10vh;
+            grid-template-columns: 1fr;
+            grid-template-rows: 8vh 4vh 4vh 4vh 4vh;
+            row-gap: 5vh;
+            margin-right: 3vh;
+            margin-left: 3vh;
+            margin-top: 7vh;
         }
-
-        .grid-item {
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            font-size: 30px;
-            text-align: center;
-            box-shadow: 0 5px 20px hsla(205, 75%, 36%, 0.31);
-        }
-
-        .item1{
-            grid-column: 1;
-            grid-row: 1 / 3;
-        }
-
-        .item2{
-            grid-column: 2;
-            grid-row: 1 / 3;
-        }
-
 
         p {
-            font-family: 'Dubai Light';
+            font-family: 'Google Sans';
             margin-bottom: 5vh;
+            font-size: 4vh;
         }
 
         h2 {
@@ -127,6 +101,12 @@ function test(){
             color: white;
             margin-left: 3vh;
             padding-top: 1vh;
+        }
+
+        h3{
+            font-family: 'Google Sans';
+            font-size: 5vh;
+            color: rgb(23, 103, 161);
         }
         /* End body rules */
 
@@ -152,26 +132,6 @@ function test(){
             letter-spacing: 0.05em;
         }
 
-        .send-button{
-            display: inline-block;
-            color: #fff;
-
-            width: 25vh;
-            height: 15vh;
-
-            background: #4e8bb4;
-            border-radius: 5px;
-
-            outline: none;
-            border: none;
-
-            cursor: pointer;
-            text-align: center;
-            font-size: 2vh;
-            transition: all 0.2s linear;
-            letter-spacing: 0.05em;
-        }
-
         /* buttons hover */
         button:hover {
             background: #29436c;
@@ -187,12 +147,33 @@ function test(){
     <div class="banner-item right"><button class="banner-button" onclick="location.href='logout.php';">Logout</button></div>
 </div>
 <div class="grid-container">
-    <div class='grid-item item1' onclick="location.href='companyRepresentativeViewContracts.php';" style="cursor: pointer;"><p>View Contracts</p> <img src='../../asset/viewcontracts.png' style='width:100%; padding-top: 8vh'> </div>
-    <div class="grid-item item2" onclick="location.href='companyRepresentativeMakeContract.php';" style="cursor: pointer;"><p>Make New Contract</p> <img src="../../asset/makecontract.png" style="width:100%;"></div>
-    <div class="grid-item" onclick="location.href='companyRepresentativeProfile.php';" style="cursor: pointer;"><p>My Profile</p> <img src="../../asset/myprofile.png" style="width:35%;"></div>
-    <div class="grid-item" onclick="location.href='logout.php';" style="cursor: pointer;"><p>Logout</p><img src="../../asset/logout.png" style="width:45%; "></div>
+    <?php
+    $query = "SELECT * FROM company_representative cr, user u WHERE u.user_ID = cr.company_ID AND u.user_ID = '$id'";
+    $result = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
+    $result_comp_rep = $result->fetch_assoc();
+    ?>
+    <div><h3>
+            <?php
+            echo sprintf($result_comp_rep['username']);
+            ?>
+        </h3></div>
+    <div><p><?php
+            echo sprintf("User ID: ");
+            echo sprintf($result_comp_rep['user_ID']);
+            ?></p></div>
+    <div><p><?php
+            echo sprintf("Email: ");
+            echo sprintf($result_comp_rep['email']);
+            ?></p></div>
+    <div><p><?php
+            echo sprintf("Phone Number: ");
+            echo sprintf($result_comp_rep['phone']);
+            ?></p></div>
+    <div><p><?php
+            echo sprintf("Company Name: ");
+            echo sprintf($result_comp_rep['company_name']);
+            ?></p></div>
 </div>
 
 </body>
 </html>
-

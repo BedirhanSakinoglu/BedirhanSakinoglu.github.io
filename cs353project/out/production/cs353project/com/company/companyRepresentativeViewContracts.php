@@ -11,17 +11,12 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
 
 $id = $_SESSION['user_id'];
 
-function test(){
-    echo '<script type="text/javascript">
-                        alert("Incorrect Usertype");
-                        </script>';
-}
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <title>Company Representative Dashboard</title>
+    <title>View Contracts</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <meta name="generator" content="Web Page Maker (unregistered version)">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -39,10 +34,11 @@ function test(){
         }
         h1 {
             font-size: 75px;
-            text-align: center;
+            text-align: left;
             background-size: 100% auto !important;
             font-family: 'Google Sans';
-            color: #3e403f;
+            color: #1c4894;
+            padding-bottom: 3vh;
         }
         /* Start body rules */
         body {
@@ -54,6 +50,70 @@ function test(){
             font-family: 'Dubai Light';
 
             /* background-image: linear-gradient(to top, #d9afd9 0%, #97d9e1 100%); */
+        }
+
+        .confirm-button-n {
+            color: #ffffff;
+
+            background: #D11B1B;
+            width: 80%;
+            height: 80%;
+            outline: none;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s linear;
+            letter-spacing: 0.05em;
+        }
+        .confirm-button-p {
+            color: #ffffff;
+
+            background: #1EA204;
+            width: 80%;
+            height: 80%;
+            outline: none;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s linear;
+            letter-spacing: 0.05em;
+        }
+
+        .confirm-button {
+            color: #fff;
+
+            background: #377095;
+            width: 100%;
+            height: 5vh;
+            outline: none;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s linear;
+            letter-spacing: 0.05em;
+        }
+
+        #packages {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #packages td, #customers th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #packages tr:nth-child(even){background-color: #f2f2f2;}
+
+        #packages tr:hover {background-color: #ddd;}
+
+        #packages th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            padding-left: 8px;
+            text-align: left;
+            background-color: #3aafff;
+            color: white;
         }
 
         .banner-container{
@@ -86,39 +146,25 @@ function test(){
         }
 
         .grid-container{
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            grid-template-rows: 30vh 30vh;
-            grid-auto-flow: column;
-            column-gap: 7vh;
-            row-gap: 7vh;
-            margin-right: 30vh;
-            margin-left: 30vh;
-            margin-top: 10vh;
+            row-gap: 5vh;
+            margin-right: 3vh;
+            margin-left: 3vh;
+            margin-top: 7vh;
         }
 
         .grid-item {
             background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.8);
             padding: 20px;
             font-size: 30px;
             text-align: center;
             box-shadow: 0 5px 20px hsla(205, 75%, 36%, 0.31);
         }
 
-        .item1{
-            grid-column: 1;
-            grid-row: 1 / 3;
-        }
-
-        .item2{
-            grid-column: 2;
-            grid-row: 1 / 3;
-        }
-
-
         p {
-            font-family: 'Dubai Light';
+            font-family: 'Google Sans';
             margin-bottom: 5vh;
+            font-size: 2vh;
         }
 
         h2 {
@@ -127,6 +173,12 @@ function test(){
             color: white;
             margin-left: 3vh;
             padding-top: 1vh;
+        }
+
+        h3{
+            font-family: 'Google Sans';
+            font-size: 3vh;
+            color: rgb(23, 103, 161);
         }
         /* End body rules */
 
@@ -187,12 +239,30 @@ function test(){
     <div class="banner-item right"><button class="banner-button" onclick="location.href='logout.php';">Logout</button></div>
 </div>
 <div class="grid-container">
-    <div class='grid-item item1' onclick="location.href='companyRepresentativeViewContracts.php';" style="cursor: pointer;"><p>View Contracts</p> <img src='../../asset/viewcontracts.png' style='width:100%; padding-top: 8vh'> </div>
-    <div class="grid-item item2" onclick="location.href='companyRepresentativeMakeContract.php';" style="cursor: pointer;"><p>Make New Contract</p> <img src="../../asset/makecontract.png" style="width:100%;"></div>
-    <div class="grid-item" onclick="location.href='companyRepresentativeProfile.php';" style="cursor: pointer;"><p>My Profile</p> <img src="../../asset/myprofile.png" style="width:35%;"></div>
-    <div class="grid-item" onclick="location.href='logout.php';" style="cursor: pointer;"><p>Logout</p><img src="../../asset/logout.png" style="width:45%; "></div>
+    <h1>View Contracts</h1>
+    <div style=" margin-top:3vh; width:100%; max-height: 75vh; overflow-y: scroll;">
+        <table id="packages">
+            <tr>
+                <th>Branch ID</th>
+                <th>Branch Address</th>
+                <th>Contract Status</th>
+            </tr>
+            <form method="post">
+                <?php
+                $query = "SELECT b.branch_ID, b.address, c.is_approved FROM branch b, contract c WHERE b.branch_ID = c.branch_ID AND c.company_ID = '$id'";
+                $contracts = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
+                if($contracts->num_rows > 0)
+                {
+                    while($row = $contracts->fetch_assoc()){
+                        echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td> </tr>",
+                            $row['branch_ID'], $row['address'], $row['is_approved']);
+                    }
+                }
+                ?>
+            </form>
+        </table>
+    </div>
 </div>
 
 </body>
 </html>
-

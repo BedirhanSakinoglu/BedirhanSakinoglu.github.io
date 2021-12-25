@@ -178,10 +178,11 @@ function test(){
 
     <div class='grid-item' onclick="location.href='employeeAssignPackage.php';" style="cursor: pointer;"><p>Assign Courier to Deliver a Package</p> <img src='../../asset/courier1.png' style='width:50%;height:60%'> </div>
     <div class='grid-item' onclick="location.href='employeeTransferPackage.php';" style="cursor: pointer;"><p>Transfer a Package To Another Branch</p> <img src='../../asset/transfer.jpg' style='width:50%;height:60%'> </div>
-    <div class="grid-item" onclick="location.href='employeeProfile.php';" style="cursor: pointer;"><p>My Profile</p> <img src="../../asset/myprofile.png" style="width:30%;height:50%"></div>
-    <div class="grid-item" onclick="location.href='employeeViewPackages.php';" style="cursor: pointer;"><p>View New Packages</p><img src="../../asset/package.jpg" style="width:30%;height:60%"></div>
-    <div class="grid-item" onclick="location.href='employeeViewReports.php';" style="cursor: pointer;"><p>View Reports</p> <img src="../../asset/report.png" style="width:50%;height:60%"></div>
+    <div class="grid-item" onclick="location.href='employeeViewContracts.php';" style="cursor: pointer;"><p>View Contracts</p> <img src="../../asset/myprofile.png" style="width:30%;height:50%"></div>
+    <div class="grid-item" onclick="location.href='employeeViewPackages.php';" style="cursor: pointer;"><p>View New Packages</p><img src="../../asset/package.jpg" style="width:40%;height:60%"></div>
+    <div class="grid-item" onclick="location.href='employeeViewReports.php';" style="cursor: pointer;"><p>View Reports</p> <img src="../../asset/report.png" style="width:35%;height:60%"></div>
     <div class="grid-item" onclick="location.href='logout.php';" style="cursor: pointer;"><p>Logout</p><img src="../../asset/logout.png" style="width:40%;height:60% "></div>
+
 
 </div>
 
