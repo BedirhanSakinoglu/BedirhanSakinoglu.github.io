@@ -275,7 +275,7 @@ if(isset($_POST['hand_over_btn'])){
         {
             while($row = $packages1->fetch_assoc())
             {
-                if($row['status'] == "order received"){
+                if($row['status'] == "order received"){ //BURDA Bİ DEĞİŞİKLİK OLCAK!!!!!!!!!!!!!!!!!!! order received -> on delivery olcak gibi
                     $assigned_package_ID = $row['package_ID'];
                     $pickup_query = "SELECT c.address FROM send_to st, customer c WHERE st.sender_ID = c.customer_ID AND st.package_ID = '$assigned_package_ID'";
                     $pickup = $mysqli->query($pickup_query) or die('Error in query: ' . $mysqli->error);
