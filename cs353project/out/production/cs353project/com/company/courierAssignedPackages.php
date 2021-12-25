@@ -272,7 +272,7 @@ if(isset($_POST['deliver_customer_btn'])) {
         <form method="post">
         <?php
         //to get package_id, send_time, delivery_time, status, delivery_address
-        $query1 = "SELECT *
+        $query1 = "SELECT DISTINCT p.package_ID, p.status, p.delivery_address, p.send_time, p.delivery_time
                         FROM package p, assigns a
                         WHERE a.courier_ID = '$id' AND p.package_ID = a.package_ID";
 
@@ -281,7 +281,7 @@ if(isset($_POST['deliver_customer_btn'])) {
         {
             while($row = $packages1->fetch_assoc())
             {
-                if($row['status'] == "order received" or  $row['status'] == "on delivery"){ //BURDA Bİ DEĞİŞİKLİK OLCAK!!!!!!!!!!!!!!!!!!! order received -> on delivery olcak gibi
+                if($row['status'] == "order received" or  $row['status'] == "on delivery"){
                     $assigned_package_ID = $row['package_ID'];
                     $pickup_query = "SELECT c.address FROM send_to st, customer c WHERE st.sender_ID = c.customer_ID AND st.package_ID = '$assigned_package_ID'";
                     $pickup = $mysqli->query($pickup_query) or die('Error in query: ' . $mysqli->error);
@@ -293,12 +293,16 @@ if(isset($_POST['deliver_customer_btn'])) {
 
                     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     //kurye branche götürürken, branche teslim ettim demesi için
+                    //eğer kuryeye customer tarafından package verildiyse, onu branche koycam diye buton olcak
+
                     if($row['status'] == "order received") {
                         echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td> <td style='padding: 0px'><button class='confirm-button' type='submit' name='hand_over_btn' value='$assigned_package_ID'>Deliver to Branch</button></td> </tr>",
                             $row['package_ID'], $row['send_time'], $pickup_address['address'], $delivery_address['address'],$row['delivery_time'], $row['status']);
                     }
                     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     //kurye customera götürürken, teslim ettim demesi için
+                    //eğer kurye branchten aldı (employee tarafından assign edildi) ve customer a dağıtıma çıktıysa, onu customera verdim diye buton olcak
+
                     else if($row['status'] == "on delivery") {
                         echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td> <td style='padding: 0px'><button class='confirm-button' type='submit' name='deliver_customer_btn' value='$assigned_package_ID'>Deliver to Customer</button></td> </tr>",
                             $row['package_ID'], $row['send_time'], $delivery_address['address'], $row['delivery_address'], $row['delivery_time'], $row['status']);
@@ -306,6 +310,14 @@ if(isset($_POST['deliver_customer_btn'])) {
                 }
 
                 else if($row['status'] == "on branch"){
+                    $pickup_query = "SELECT b.address FROM works_at wa, branch b WHERE b.branch_ID = wa.branch_ID AND wa.courier_ID = '$id'";
+                    $pickup = $mysqli->query($pickup_query) or die('Error in query: ' . $mysqli->error);
+                    $pickup_address = $pickup->fetch_assoc();
+
+                    echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td> </tr>",
+                        $row['package_ID'], $row['send_time'], $pickup_address['address'], $row['delivery_address'],$row['delivery_time'], $row['status']);
+                }
+                else if($row['status'] == "delivered"){
                     $pickup_query = "SELECT b.address FROM works_at wa, branch b WHERE b.branch_ID = wa.branch_ID AND wa.courier_ID = '$id'";
                     $pickup = $mysqli->query($pickup_query) or die('Error in query: ' . $mysqli->error);
                     $pickup_address = $pickup->fetch_assoc();
