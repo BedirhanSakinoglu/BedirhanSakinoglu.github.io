@@ -48,7 +48,7 @@ if (isset($_POST['negative'])){
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <title>New Packages</title>
+    <title>View Packages</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <meta name="generator" content="Web Page Maker (unregistered version)">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -262,25 +262,33 @@ if (isset($_POST['negative'])){
     <table id="packages">
         <tr>
             <th>Package ID</th>
+            <th>Sender Branch</th>
             <th>Delivery Date</th>
             <th >Delivery Address</th>
             <th style="background-color: white;"></th>
         </tr>
         <form method="post">
             <?php
-            $query = "SELECT *
+            $query = "SELECT DISTINCT t.package_ID, t.branch_ID, p.delivery_time, p.delivery_address
                         FROM transfer_pack t, package p, works w
                         WHERE t.package_ID = p.package_ID AND t.branch_ID = w.branch_ID AND w.employee_ID = '$id' AND p.status = 'on transfer'";
             $packages = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
             if($packages->num_rows > 0)
             {
                 while($row = $packages->fetch_assoc()){
+                    $sender_branch_query = "SELECT b.address
+                        FROM transfer_pack t, package p, works w, branch b
+                        WHERE t.package_ID = p.package_ID AND w.employee_ID = t.employee_ID AND p.status = 'on transfer' AND b.branch_ID = w.branch_ID";
                     $pid = $row['package_ID'];
                     $delivery_time = $row['delivery_time'];
                     $delivery_address = $row['delivery_address'];
 
-                    echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td> 
-                                 <td style='text-align: center; border-width: 0px; padding: 0px'><button class='confirm-button-p' type='submit' name='positive' value='$pid'>Accept</button></td><td style='text-align: center; border-width: 0px; padding: 0px'><button class='confirm-button-n' type='submit' name='negative' value='$pid'>Reject</button></td></tr>", $pid, $delivery_time, $delivery_address);
+                    $result = $mysqli->query($sender_branch_query) or die('Error in query: ' . $mysqli->error);
+                    $row = $result->fetch_assoc();
+                    $sender_address = $row['address'];
+
+                    echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> 
+                                 <td style='text-align: center; border-width: 0px; padding: 0px'><button class='confirm-button-p' type='submit' name='positive' value='$pid'>Accept</button></td><td style='text-align: center; border-width: 0px; padding: 0px'><button class='confirm-button-n' type='submit' name='negative' value='$pid'>Reject</button></td></tr>", $pid, $sender_address, $delivery_time, $delivery_address);
 
                 }
             }

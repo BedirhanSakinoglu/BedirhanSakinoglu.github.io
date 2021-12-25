@@ -124,7 +124,7 @@ public class DBConnector {
                             "send_time DATE NOT NULL," +
                             "delivery_time DATE NOT NULL," +
                             "package_type VARCHAR(50) NOT NULL," +
-                            "courier_type INT," +
+                            "courier_type VARCHAR(50)," +
                             "PRIMARY KEY (package_ID)" +
                             ");"
             );
@@ -227,7 +227,8 @@ public class DBConnector {
                             "package_ID INT," +
                             "courier_ID INT," +
                             "is_delivered VARCHAR(50) NOT NULL," +
-                            "PRIMARY KEY (package_ID)," +
+                            "assigns_ID INT AUTO_INCREMENT," +
+                            "PRIMARY KEY (assigns_ID)," +
                             "FOREIGN KEY (courier_ID) REFERENCES courier(courier_ID)," +
                             "FOREIGN KEY (package_ID) REFERENCES package(package_ID)" +
                             ");"
@@ -385,13 +386,15 @@ public class DBConnector {
 
             stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('utku_sezer', '123', 'utkus@gmail.com', '05439984328')");
             stmt.executeUpdate("INSERT INTO customer VALUES(LAST_INSERT_ID(),'bilkent camlık')");
+
             stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('lara_fener', '123', 'laraf@gmail.com', '05439984323')");
-            stmt.executeUpdate("INSERT INTO customer VALUES(LAST_INSERT_ID(),'yasamkent karina')");
+            stmt.executeUpdate("INSERT INTO customer VALUES(LAST_INSERT_ID(),'besa karina')");
 
             stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('ege_uyar', '123', 'egey@gmail.com', '05437684328')");
             stmt.executeUpdate("INSERT INTO customer VALUES(LAST_INSERT_ID(),'manisa havuz')");
+
             stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('bilge_han', '123', 'bilgeh@gmail.com', '00939984323')");
-            stmt.executeUpdate("INSERT INTO customer VALUES(LAST_INSERT_ID(),'yasamkent cagdas')");
+            stmt.executeUpdate("INSERT INTO customer VALUES(LAST_INSERT_ID(),'nova cagdas')");
 
             //Initializing branches
             stmt.executeUpdate("INSERT INTO branch (address, phone) VALUES('bayirasagi', '312555555')");
@@ -432,45 +435,81 @@ public class DBConnector {
 
             //Initializing couriers
             stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('ferat', '123', 'ferat@gmail.com', '05439784323')");
-            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 1000, 10, 'default')");
+            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 1000, 10, 'default_courier')");
             stmt.executeUpdate("INSERT INTO works_at VALUES(LAST_INSERT_ID(), 1)");
 
-            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('pembe', '123', 'küpek@gmail.com', '05439284323')");
-            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 1000, 10, 'default')");
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('pembe', '123', 'küpek@gmail.com', '03439284323')");
+            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 1000, 10, 'fast_courier')");
+            stmt.executeUpdate("INSERT INTO works_at VALUES(LAST_INSERT_ID(), 1)");
+
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('gökan', '123', 'tas@gmail.com', '05139284323')");
+            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 12000, 490, 'heavy_courier')");
             stmt.executeUpdate("INSERT INTO works_at VALUES(LAST_INSERT_ID(), 1)");
 
             stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('aleyna', '123', 'futbol@gmail.com', '05039996323')");
-            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 6000, 50, 'fast')");
+            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 6000, 50, 'fast_courier')");
             stmt.executeUpdate("INSERT INTO works_at VALUES(LAST_INSERT_ID(), 2)");
 
-            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('ezgi', '123', 'labne@gmail.com', '01039984323')");
-            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 10000, 10, 'default')");
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('götçe', '123', 'gök@gmail.com', '05095996323')");
+            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 43000, 10, 'default_courier')");
+            stmt.executeUpdate("INSERT INTO works_at VALUES(LAST_INSERT_ID(), 2)");
+
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('gizem', '123', 'giz@gmail.com', '05010996323')");
+            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 6000, 540, 'heavy_courier')");
+            stmt.executeUpdate("INSERT INTO works_at VALUES(LAST_INSERT_ID(), 2)");
+
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('erdemaga', '123', 'aga@gmail.com', '01039984323')");
+            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 10000, 10, 'default_courier')");
+            stmt.executeUpdate("INSERT INTO works_at VALUES(LAST_INSERT_ID(), 3)");
+
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('elif', '123', 'davas@gmail.com', '10039984323')");
+            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 10000, 10, 'heavy_courier')");
+            stmt.executeUpdate("INSERT INTO works_at VALUES(LAST_INSERT_ID(), 3)");
+
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('bedo', '123', 'konya@gmail.com', '09039984323')");
+            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 1000, 10, 'fast_courier')");
             stmt.executeUpdate("INSERT INTO works_at VALUES(LAST_INSERT_ID(), 3)");
 
             stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('elon', '123', 'musk@gmail.com', '05329984323')");
-            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 4020, 50, 'heavy')");
+            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 4020, 50, 'heavy_courier')");
             stmt.executeUpdate("INSERT INTO works_at VALUES(LAST_INSERT_ID(), 4)");
 
             stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('ziya', '123', 'hor@gmail.com', '05097984323')");
-            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 4020, 50, 'heavy')");
+            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 4000, 200, 'fast_courier')");
             stmt.executeUpdate("INSERT INTO works_at VALUES(LAST_INSERT_ID(), 4)");
 
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('can', '123', 'kaz@gmail.com', '05099184323')");
+            stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 400, 10, 'default_courier')");
+            stmt.executeUpdate("INSERT INTO works_at VALUES(LAST_INSERT_ID(), 4)");
 
             //Initializing employees
             stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('natasha', '123', 'nat@gmail.com', '05439784321')");
             stmt.executeUpdate("INSERT INTO employee VALUES(LAST_INSERT_ID(), 500)");
             stmt.executeUpdate("INSERT INTO works VALUES(LAST_INSERT_ID(), 1)");
 
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('gönül', '123', 'neyseh@gmail.com', '01839784321')");
+            stmt.executeUpdate("INSERT INTO employee VALUES(LAST_INSERT_ID(), 1500)");
+            stmt.executeUpdate("INSERT INTO works VALUES(LAST_INSERT_ID(), 1)");
 
             stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('nuri', '123', 'papacum@gmail.com', '05039984333')");
             stmt.executeUpdate("INSERT INTO employee VALUES(LAST_INSERT_ID(), 10000)");
             stmt.executeUpdate("INSERT INTO works VALUES(LAST_INSERT_ID(), 2)");
 
-            //Initializing employees
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('haluk', '123', 'babababa@gmail.com', '05011984333')");
+            stmt.executeUpdate("INSERT INTO employee VALUES(LAST_INSERT_ID(), 9000)");
+            stmt.executeUpdate("INSERT INTO works VALUES(LAST_INSERT_ID(), 2)");
+
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('cengiz', '123', 'hun@gmail.com', '02039984333')");
+            stmt.executeUpdate("INSERT INTO employee VALUES(LAST_INSERT_ID(), 10600)");
+            stmt.executeUpdate("INSERT INTO works VALUES(LAST_INSERT_ID(), 2)");
+
             stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('alex', '123', 'a@gmail.com', '05049784321')");
             stmt.executeUpdate("INSERT INTO employee VALUES(LAST_INSERT_ID(), 50040)");
             stmt.executeUpdate("INSERT INTO works VALUES(LAST_INSERT_ID(), 3)");
 
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('ferman', '123', 'akgul@gmail.com', '05010084321')");
+            stmt.executeUpdate("INSERT INTO employee VALUES(LAST_INSERT_ID(), 540)");
+            stmt.executeUpdate("INSERT INTO works VALUES(LAST_INSERT_ID(), 3)");
 
             stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('deivid', '123', 'devil@gmail.com', '09039984333')");
             stmt.executeUpdate("INSERT INTO employee VALUES(LAST_INSERT_ID(), 6000)");
@@ -479,31 +518,6 @@ public class DBConnector {
             stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('hakan', '123', 'hak@gmail.com', '09038984333')");
             stmt.executeUpdate("INSERT INTO employee VALUES(LAST_INSERT_ID(), 6000)");
             stmt.executeUpdate("INSERT INTO works VALUES(LAST_INSERT_ID(), 4)");
-
-/*
-            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(35.5, 'order received', DATE '2015-12-17' ,'spoilable_package','30x30x43','hamamönü', DATE '2015-12-31',0)");
-            stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(1,2, LAST_INSERT_ID())");
-
-            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(32.1, 'on transfer', DATE '2015-12-17' ,'spoilable_package','30x10x43','izmir', DATE '2010-12-31',0)");
-            stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(1,2,LAST_INSERT_ID())");
-
-            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(10, 'on branch', DATE '2012-01-17' ,'fragile_package','10x30x43','bilkent', DATE '2019-12-31',0)");
-            stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(2,1,LAST_INSERT_ID())");
-
-            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(100, 'on branch', DATE '2010-01-17' ,'spoilable_package','10x10x43','karacaahmet', DATE '2019-12-31',0)");
-            stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(2,1,LAST_INSERT_ID())");
-
-            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(9.5, 'order received', DATE '2020-01-17' ,'default_package','10x57x43','selcuk efes', DATE '2020-12-31',0)");
-            stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(3,1,LAST_INSERT_ID())");
-
-            stmt.executeUpdate("INSERT INTO package(weight, status, send_time, package_type, dimension, delivery_address, delivery_time, courier_type) VALUES(90.5, 'order received', DATE '2020-01-17' ,'fragile_package','10x57x43','77 yurt', DATE '2020-12-31',0)");
-            stmt.executeUpdate("INSERT INTO send_to(sender_ID, taker_ID, package_ID) VALUES(1,4,LAST_INSERT_ID())");
-
-            stmt.executeUpdate("INSERT INTO assigns VALUES(1,5,'received package')");
-            stmt.executeUpdate("INSERT INTO assigns VALUES(2,5,'received package')");
-            stmt.executeUpdate("INSERT INTO assigns VALUES(3,6,'received package')");
-            stmt.executeUpdate("INSERT INTO assigns VALUES(4,6,'received package')");
-            stmt.executeUpdate("INSERT INTO assigns VALUES(5,5,'received package')");*/
 
         } catch (SQLException e) {
             System.out.println("SQLException: " + e.getMessage());

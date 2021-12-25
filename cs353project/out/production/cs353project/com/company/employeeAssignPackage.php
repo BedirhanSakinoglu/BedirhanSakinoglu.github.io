@@ -16,7 +16,7 @@ if (isset($_POST['assign_package'])){
     $query_assign_package = "INSERT INTO assigns(package_ID, courier_ID, is_delivered) VALUES ('$package_ID', '$courier_ID', 'received package')";
     $mysqli->query($query_assign_package) or die('Error in query: ' . $mysqli->error);
 
-    $query_update_package = "UPDATE package SET status = 'on delivery' WHERE package_ID = '$package_ID'";
+    $query_update_package = "UPDATE package SET status = 'on delivery' WHERE package_ID = '$package_ID'"; //burası kurye hemen alınca on delivery mi olcak order received olmaz mı
     $mysqli->query($query_update_package) or die('Error in query: ' . $mysqli->error);
 
     echo "<script>
@@ -28,7 +28,7 @@ if (isset($_POST['assign_package'])){
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <title>Customer Dashboard</title>
+    <title>Assigned Packages</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <meta name="generator" content="Web Page Maker (unregistered version)">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -310,7 +310,7 @@ if (isset($_POST['assign_package'])){
                     <div style=" margin-top:3vh; width:100%; max-height: 75vh; overflow-y: scroll;">
                         <table id="courier-table">
                             <?php
-                            $courier_query = "SELECT c.courier_ID as cid, c.username as cname, c.courier_type as ctype FROM courier c, works_at wa, works w WHERE wa.courier_ID = c.courier_ID AND w.employee_ID = '$id' AND wa.branch_ID = w.branch_ID";
+                            $courier_query = "SELECT c.courier_ID as cid, u.username as cname, c.courier_type as ctype FROM courier c, user u, works_at wa, works w WHERE u.user_ID = c.courier_ID AND wa.courier_ID = c.courier_ID AND w.employee_ID = '$id' AND wa.branch_ID = w.branch_ID";
                             $all_couriers = $mysqli->query($courier_query) or die('Error in query: ' . $mysqli->error);
                             if($all_couriers->num_rows > 0) {
                                 while ($row = $all_couriers->fetch_assoc()) {

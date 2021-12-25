@@ -40,26 +40,26 @@ function send_package($mysqli) {
     $mysqli->query($query_insert_send_to) or die('Error in query: ' . $mysqli->error);
 
     #assignging to courier -----------------
-    $query_optimal_courier = "SELECT e1.courier_ID as e FROM courier e1, works_at w1 WHERE w1.branch_ID = '$branch_ID' AND e1.courier_ID = w1.courier_ID AND w1.courier_ID NOT IN(SELECT a1.courier_ID FROM assigns a1)";
+    $query_optimal_courier = "SELECT e1.courier_ID as e FROM courier e1, works_at w1 WHERE e1.courier_type = '$courier_type' AND w1.branch_ID = '$branch_ID' AND e1.courier_ID = w1.courier_ID AND w1.courier_ID NOT IN(SELECT a1.courier_ID FROM assigns a1)";
     $result = $mysqli->query($query_optimal_courier) or die('Error in query: ' . $mysqli->error);
 
     if($result->num_rows == 0){
-        $query_optimal_courier = "SELECT a1.courier_ID as e FROM assigns a1, works_at w1 WHERE a1.courier_ID = w1.courier_ID AND w1.branch_ID = '$branch_ID' GROUP BY a1.courier_ID HAVING COUNT(a1.package_ID) <= ALL(SELECT COUNT(a2.package_ID) as package_count FROM assigns a2, works_at w2 WHERE a2.courier_ID = w2.courier_ID AND w2.branch_ID = '$branch_ID' GROUP BY a2.courier_ID)";
+        $query_optimal_courier = "SELECT a1.courier_ID as e FROM courier c, assigns a1, works_at w1 WHERE c.courier_type = '$courier_type' AND c.courier_ID = a1.courier_ID AND a1.courier_ID = w1.courier_ID AND w1.branch_ID = '$branch_ID' GROUP BY a1.courier_ID HAVING COUNT(a1.package_ID) <= ALL(SELECT COUNT(a2.package_ID) as package_count FROM assigns a2, works_at w2 WHERE a2.courier_ID = w2.courier_ID AND w2.branch_ID = '$branch_ID' GROUP BY a2.courier_ID)";
         $result = $mysqli->query($query_optimal_courier) or die('Error in query: ' . $mysqli->error);
     }
 
     if($result->num_rows > 0){
         $row = $result->fetch_assoc();
         $courier_ID = $row['e'];
-        $query_insert_assign_to_courier = "INSERT INTO assigns VALUES(LAST_INSERT_ID(),'$courier_ID','waiting')";
+        $query_insert_assign_to_courier = "INSERT INTO assigns(package_ID, courier_ID, is_delivered) VALUES(LAST_INSERT_ID(),'$courier_ID','waiting')";
         $mysqli->query($query_insert_assign_to_courier) or die('Error in query: ' . $mysqli->error);
     }
     else{
-        $query_optimal_courier = "SELECT a1.courier_ID as e FROM works_at a1 WHERE a1.branch_ID = '$branch_ID' AND a1.courier_ID <= ALL(SELECT a2.courier_ID FROM works_at a2 WHERE a2.branch_ID = '$branch_ID')";
+        $query_optimal_courier = "SELECT a1.courier_ID as e FROM courier c, works_at a1 WHERE c.courier_type = '$courier_type' AND c.courier_ID = a1.courier_ID AND a1.branch_ID = '$branch_ID' AND a1.courier_ID <= ALL(SELECT a2.courier_ID FROM works_at a2 WHERE a2.branch_ID = '$branch_ID')";
         $result = $mysqli->query($query_optimal_courier) or die('Error in query: ' . $mysqli->error);
         $row = $result->fetch_assoc();
         $courier_ID = $row['e'];
-        $query_insert_assign_to_courier = "INSERT INTO assigns VALUES (LAST_INSERT_ID(),'$courier_ID','waiting')";
+        $query_insert_assign_to_courier = "INSERT INTO assigns(package_ID, courier_ID, is_delivered) VALUES(package_ID, courier_ID, is_delivered)  (LAST_INSERT_ID(),'$courier_ID','waiting')";
         $mysqli->query($query_insert_assign_to_courier) or die('Error in query: ' . $mysqli->error);
     }
     #-----------------------------------
@@ -79,7 +79,7 @@ if(isset($_POST['send_package'])) {
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <title>Customer Dashboard</title>
+    <title>Customer Call Courier</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <meta name="generator" content="Web Page Maker (unregistered version)">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">

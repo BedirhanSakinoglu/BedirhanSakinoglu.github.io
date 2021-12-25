@@ -29,7 +29,7 @@ if (isset($_POST['transfer_package'])){
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <title>Customer Dashboard</title>
+    <title>Transfer Package</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <meta name="generator" content="Web Page Maker (unregistered version)">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -310,13 +310,14 @@ if (isset($_POST['transfer_package'])){
                     <div style=" margin-top:3vh; width:100%; max-height: 75vh; overflow-y: scroll;">
                         <table id="branch-table">
                             <?php
-                            $branch_query = "SELECT * FROM branch";
+                            //$branch_query = "SELECT * FROM branch";
+                            $branch_query = "SELECT b.branch_ID as id, b.address as address FROM branch b, works w WHERE w.branch_ID <> b.branch_ID AND w.employee_ID = '$id'";
                             $all_branches = $mysqli->query($branch_query) or die('Error in query: ' . $mysqli->error);
                             if($all_branches->num_rows > 0) {
                                 while ($row = $all_branches->fetch_assoc()) {
-                                    $branch_ID_radio = $row['branch_ID'];
+                                    $branch_ID_radio = $row['id'];
                                     echo sprintf("<tr> <td style='width:4vh; text-align: center'><input type='radio' name='branch_ID' value='$branch_ID_radio' required></td>
-                                        <td>%s</td> <td>%s</td> </tr>", $row['branch_ID'], $row['address']);
+                                        <td>%s</td> <td>%s</td> </tr>", $row['id'], $row['address']);
                                 }
                             }
                             ?>

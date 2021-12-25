@@ -30,8 +30,8 @@ function send_package($mysqli) {
     $employee_ID = $_POST['employee_ID'];
 
     //insert into package and submit_pack and send_to relation
-    $query_insert_package = "INSERT INTO package(weight, dimension, delivery_address, status, send_time, delivery_time, package_type, courier_type) 
-                                VALUES ('$weight','$dimension_total','$customer_address','on branch','$send_time','$delivery_time','$package_type','$courier_type')";
+    $query_insert_package = "INSERT INTO package(weight, dimension, delivery_address, status, send_time, delivery_time, package_type) 
+                                VALUES ('$weight','$dimension_total','$customer_address','on branch','$send_time','$delivery_time','$package_type')";
     $mysqli->query($query_insert_package) or die('Error in query: ' . $mysqli->error);
 
     $query_insert_submit_pack = "INSERT INTO submit_pack VALUES(LAST_INSERT_ID(), '$branch_ID')";
@@ -58,7 +58,7 @@ if(isset($_POST['send_package'])) {
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <title>Deliver Yourself - Deliver to Person</title>
+    <title>Deliver Yourself - Deliver to Address</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <meta name="generator" content="Web Page Maker (unregistered version)">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
