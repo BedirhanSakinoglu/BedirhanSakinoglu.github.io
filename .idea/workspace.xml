@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="627f1bb0-1708-44ef-86c3-26f8cd4ee06f" name="Default Changelist" comment="session variables created" />
+    <list id="0f78a115-813b-49cb-9570-18fc7679baaf" name="Changes by Gokhan" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP 8" />
+  <component name="ProjectId" id="22SF6vPG5GDPExMkyPQbugTGaq0" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="postgresql&#10;mysql" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/cs353project" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\User\Desktop\BedirhanSakinoglu.github.io\cs353project\src\com\company" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.DBConnector">
+    <configuration name="DBConnector" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.company.DBConnector" />
+      <module name="BedirhanSakinoglu.github.io" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.company.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="customerPackagesPage.php" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/BedirhanSakinoglu.github.io/com/company/customerPackagesPage.php" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="login.php" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/BedirhanSakinoglu.github.io/com/company/login.php" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="customerCreateReportPage.php" type="PhpLocalRunConfigurationType" factoryName="PHP Console" temporary="true" path="$PROJECT_DIR$/cs353project/src/com/company/customerCreateReportPage.php">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.DBConnector" />
+        <item itemvalue="PHP Script.customerCreateReportPage.php" />
+        <item itemvalue="JavaScript Debug.login.php" />
+        <item itemvalue="JavaScript Debug.customerPackagesPage.php" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="627f1bb0-1708-44ef-86c3-26f8cd4ee06f" name="Default Changelist" comment="" />
+      <created>1639822913565</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1639822913565</updated>
+      <workItem from="1639822917188" duration="3518000" />
+      <workItem from="1639832403330" duration="1207000" />
+      <workItem from="1639834137125" duration="1189000" />
+      <workItem from="1639836711518" duration="11127000" />
+      <workItem from="1639908388738" duration="1377000" />
+      <workItem from="1639913165897" duration="614000" />
+      <workItem from="1639931943652" duration="28000" />
+      <workItem from="1639942949752" duration="154000" />
+      <workItem from="1639989436233" duration="2445000" />
+      <workItem from="1640034745456" duration="296000" />
+      <workItem from="1640037945573" duration="4252000" />
+      <workItem from="1640076225716" duration="2556000" />
+      <workItem from="1640078853543" duration="2246000" />
+      <workItem from="1640084209588" duration="270000" />
+      <workItem from="1640085367705" duration="810000" />
+      <workItem from="1640088052260" duration="597000" />
+      <workItem from="1640090042452" duration="110000" />
+      <workItem from="1640091391668" duration="351000" />
+    </task>
+    <task id="LOCAL-00001" summary="insertion to db">
+      <created>1639839032231</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1639839032231</updated>
+    </task>
+    <task id="LOCAL-00002" summary="php added">
+      <created>1639852011442</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1639852011442</updated>
+    </task>
+    <task id="LOCAL-00003" summary="html added">
+      <created>1639854179556</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1639854179556</updated>
+    </task>
+    <task id="LOCAL-00004" summary="session variables created">
+      <created>1639909133482</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1639909133482</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="insertion to db" />
+    <MESSAGE value="php added" />
+    <MESSAGE value="html added" />
+    <MESSAGE value="session variables created" />
+    <option name="LAST_COMMIT_MESSAGE" value="session variables created" />
+  </component>
+</project>
