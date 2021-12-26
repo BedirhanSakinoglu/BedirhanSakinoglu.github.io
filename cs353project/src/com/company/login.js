@@ -63,22 +63,22 @@ function checkButton() {
                 
             <form action="" method="post">
                 <!--   user name Input-->
-                <input class="form-input" id="txt-input" type="text" placeholder="Username" name = "username" required>
+                <input style="height: 38px;" class="form-input" id="txt-input" type="text" placeholder="Username" name = "username" required>
                 <br>
                 
-                <input class="form-input" id="txt-input" type="text" placeholder="E-mail" name = "email" required>
+                <input style="height: 38px;" class="form-input" id="txt-input" type="text" placeholder="E-mail" name = "email" required>
                 <br>
                 
-                <input class="form-input" id="txt-input" type="text" placeholder="Phone" name = "phone" required>
+                <input style="height: 38px;" class="form-input" id="txt-input" type="text" placeholder="Phone" name = "phone" required>
                 <br>
                 
-                <input class="form-input" id="txt-input" type="text" placeholder="Branch ID" name = "branch_ID" required>
+                <input style="height: 38px;" class="form-input" id="txt-input" type="text" placeholder="Branch ID" name = "branch_ID" required>
                 <br>
                 
-                <input class="form-input" id="txt-input" type="number" placeholder="Salary" name = "salary" required>
+                <input style="height: 38px;" class="form-input" id="txt-input" type="number" placeholder="Salary" name = "salary" required>
                 <br>
                 
-                <input class="form-input" id="txt-input" type="number" placeholder="Price" name = "price" required>
+                <input style="height: 38px;" class="form-input" id="txt-input" type="number" placeholder="Price" name = "price" required>
                 <br>
                 <br>
                 <p>Courier Type:</p>
@@ -95,7 +95,7 @@ function checkButton() {
                 <label for="fast">Fast</label>
                 
                 <!--   Password Input-->
-                <input class="form-input" type="password" placeholder="Password" id="pwd"  name="password" required>
+                <input style="height: 38px;" class="form-input" type="password" placeholder="Password" id="pwd"  name="password" required>
     
                 <!--      button LogIn -->
                 <button class="log-in" type = "submit" name = "register_courier"> Register </button>

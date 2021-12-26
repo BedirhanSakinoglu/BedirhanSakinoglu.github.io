@@ -344,7 +344,6 @@ if (isset($_POST['register_companyrepresentative'])){
 
             border-radius: 0px 5px 5px 0px;
             transition: 0.2s linear;
-
         }
         input[id="txt-input"] {width: 30vh;}
         /* focus  */
