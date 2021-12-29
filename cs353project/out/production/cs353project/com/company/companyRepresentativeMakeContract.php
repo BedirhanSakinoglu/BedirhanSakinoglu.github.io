@@ -16,7 +16,7 @@ if(isset($_POST['contract_branch'])) {
     mysqli_query($mysqli, $query_insert_contract) or die('Error in query: ' . $mysqli->error);
 
     echo "<script>
-            if(confirm('Contract Created' )){document.location.href='companyRepresentativeDashboard.php'};
+            if(confirm('Contract Created' )){document.location.href='companyRepresentativeMakeContract.php'};
             </script>";
 }
 ?>
@@ -101,7 +101,7 @@ if(isset($_POST['contract_branch'])) {
 
         .grid-container{
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             column-gap: 1vh;
             row-gap: 1vh;
             margin-right: 3vh;
@@ -284,42 +284,40 @@ if(isset($_POST['contract_branch'])) {
     <div class="banner-item middle"><button class="banner-button" onclick="location.href='companyRepresentativeDashboard.php';">Home</button> <button class="banner-button" onclick="location.href='companyRepresentativeProfile.php';">My Profile</button></div>
     <div class="banner-item right"><button class="banner-button" onclick="location.href='logout.php';">Logout</button></div>
 </div>
-<div>
-    <form action="" method="post">
-        <div class="row">
-            <div class="col-7 grid-container" >
-                <div class="grid-item">
-                    <h3 class="panel-header">Select a Branch From the List*</h3>
-                    <div style=" margin-top:3vh; width:100%; max-height: 75vh; overflow-y: scroll;">
-                        <table id="branch-table">
-                            <tr>
-                                <th>Branch ID</th>
-                                <th>Branch Address</th>
-                                <th style="background-color: white;"></th>
-                            </tr>
-                            <?php
-                            $branch_query = "SELECT * FROM branch b, contract c WHERE c.company_ID = '$id' AND b.branch_ID NOT IN(SELECT c2.branch_ID FROM contract c2)";
-                            $all_branches = $mysqli->query($branch_query) or die('Error in query: ' . $mysqli->error);
-                            if($all_branches->num_rows > 0) {
-                                while ($row = $all_branches->fetch_assoc()) {
-                                    $branch_ID_button = $row['branch_ID'];
-                                    echo sprintf("<tr> <td>%s</td> <td>%s</td> <td style='padding: 0px'><button class='confirm-button' type='submit' name='contract_branch' value='$branch_ID_button'>Make Contract</button></td> </tr>",
-                                        $row['branch_ID'], $row['address']);
-                                }
-                            }
-                            else {
-                                echo "<script>
-                                            alert('You have already made contract with all branches. Redirecting to the dashboard');
+
+
+
+
+<div class="grid-container">
+    <h3>Make Contract</h3>
+    <div style=" margin-top:3vh; width:100%; max-height: 75vh; overflow-y: scroll;">
+        <form action="" method="post">
+        <table id="branch-table">
+            <tr>
+                <th>Branch ID</th>
+                <th>Branch Address</th>
+                <th style="background-color: white;"></th>
+            </tr>
+            <?php
+            $branch_query = "SELECT * FROM branch b WHERE b.branch_ID NOT IN(SELECT c2.branch_ID FROM contract c2 WHERE c2.company_ID = '$id')";
+            $all_branches = $mysqli->query($branch_query) or die('Error in query: ' . $mysqli->error);
+            if($all_branches->num_rows > 0) {
+                while ($row = $all_branches->fetch_assoc()) {
+                    $branch_ID_button = $row['branch_ID'];
+                    echo sprintf("<tr> <td>%s</td> <td>%s</td> <td style='padding: 0px'><button class='confirm-button' type='submit' name='contract_branch' value='$branch_ID_button'>Make Contract</button></td> </tr>",
+                        $row['branch_ID'], $row['address']);
+                }
+            }
+            else {
+                echo "<script>
+                                            alert('You have no available branch to make a contract. Redirecting to the dashboard');
                                             document.location.href='companyRepresentativeDashboard.php';
                                          </script>";
-                            }
-                            ?>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+            }
+            ?>
+        </table>
     </form>
+    </div>
 </div>
 </body>
 </html>

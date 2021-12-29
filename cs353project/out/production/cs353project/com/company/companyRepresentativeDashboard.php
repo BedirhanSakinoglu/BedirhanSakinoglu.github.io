@@ -187,10 +187,10 @@ function test(){
     <div class="banner-item right"><button class="banner-button" onclick="location.href='logout.php';">Logout</button></div>
 </div>
 <div class="grid-container">
-    <div class='grid-item item1' onclick="location.href='companyRepresentativeViewContracts.php';" style="cursor: pointer;"><p>View Contracts</p> <img src='../../asset/package.jpg' style='width:100%;'> </div>
-    <div class="grid-item item2" onclick="location.href='companyRepresentativeMakeContract.php';" style="cursor: pointer;"><p>Make New Contract</p> <img src="../../asset/myprofile.png" style="width:25%;"></div>
-    <div class="grid-item" onclick="location.href='companyRepresentativeProfile.php';" style="cursor: pointer;"><p>My Profile</p> <img src="../../asset/myprofile.png" style="width:25%;"></div>
-    <div class="grid-item" onclick="location.href='logout.php';" style="cursor: pointer;"><p>Logout</p><img src="../../asset/logout.png" style="width:30%; "></div>
+    <div class='grid-item item1' onclick="location.href='companyRepresentativeViewContracts.php';" style="cursor: pointer;"><p>View Contracts</p> <img src='../../asset/viewcontracts.png' style='width:100%; padding-top: 8vh'> </div>
+    <div class="grid-item item2" onclick="location.href='companyRepresentativeMakeContract.php';" style="cursor: pointer;"><p>Make New Contract</p> <img src="../../asset/makecontract.png" style="width:100%;"></div>
+    <div class="grid-item" onclick="location.href='companyRepresentativeProfile.php';" style="cursor: pointer;"><p>My Profile</p> <img src="../../asset/myprofile.png" style="width:35%;"></div>
+    <div class="grid-item" onclick="location.href='logout.php';" style="cursor: pointer;"><p>Logout</p><img src="../../asset/logout.png" style="width:45%; "></div>
 </div>
 
 </body>

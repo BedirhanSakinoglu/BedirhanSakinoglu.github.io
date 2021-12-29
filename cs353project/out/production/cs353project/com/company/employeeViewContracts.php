@@ -12,21 +12,23 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
 $id = $_SESSION['user_id'];
 
 if(isset($_POST['accept'])){
-    $query = "SELECT branch_ID FROM works WHERE employee_ID = '$id'";
+    $query = "SELECT w.branch_ID, c.company_ID FROM works w, contract c WHERE employee_ID = '$id' AND w.branch_ID = c.branch_ID";
     $branch = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
     $branch_ID_arr = $branch->fetch_assoc();
     $branch_ID = $branch_ID_arr['branch_ID'];
+    $company_ID = $branch_ID_arr['company_ID'];
 
-    $accept_query = ("UPDATE contract SET status='accepted' WHERE branch_ID = '$branch_ID' AND company_ID = '$id' ");
+    $accept_query = ("UPDATE contract SET is_Approved ='accepted' WHERE branch_ID = '$branch_ID' AND company_ID = '$company_ID' ");
     mysqli_query($mysqli, $accept_query);
 }
 if(isset($_POST['reject'])){
-    $query = "SELECT branch_ID FROM works WHERE employee_ID = '$id'";
+    $query = "SELECT w.branch_ID, c.company_ID FROM works w, contract c WHERE employee_ID = '$id' AND w.branch_ID = c.branch_ID";
     $branch = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
     $branch_ID_arr = $branch->fetch_assoc();
     $branch_ID = $branch_ID_arr['branch_ID'];
+    $company_ID = $branch_ID_arr['company_ID'];
 
-    $reject_query = ("UPDATE contract SET status='rejected' WHERE branch_ID = '$branch_ID' AND company_ID = '$id' ");
+    $reject_query = ("UPDATE contract SET is_Approved ='rejected' WHERE branch_ID = '$branch_ID' AND company_ID = '$company_ID' ");
     mysqli_query($mysqli, $reject_query);
 }
 
@@ -269,20 +271,20 @@ if(isset($_POST['reject'])){
             <form method="post">
 
                 <?php
-                $query = "SELECT * FROM branch b, works w, contract c, company_representative cp WHERE w.branch_ID = b.branch_ID AND w.employee_ID = '$id' AND c.branch_ID = b.branch_ID, c.company_ID = cp.company_ID";
+                $query = "SELECT * FROM branch b, works w, contract c, company_representative cp WHERE w.branch_ID = b.branch_ID AND w.employee_ID = '$id' AND c.branch_ID = b.branch_ID AND c.company_ID = cp.company_ID";
                 $contract_reqs = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
                 if($contract_reqs->num_rows > 0)
                 {
                     while($row = $contract_reqs->fetch_assoc()){
                         $comp_id = $row['company_ID'];
 
-                        if($row['status'] == "waiting"){
+                        if($row['is_Approved'] == "waiting"){
                             echo sprintf("<tr> <td>%s</td> <td>%s</td>
-                                    <td style='text-align: center; border-width: 0px; padding: 0px'><button class='confirm-button-p' type='submit' name='accept' value='$comp_id'>Accept</button></td><td style='text-align: center; border-width: 0px; padding: 0px'><button class='confirm-button-n' type='submit' name='reject' value='$comp_id'>Reject</button></td> </tr>", $row['company_name'], $row['status']);
+                                    <td style='text-align: center; border-width: 0px; padding: 0px'><button class='confirm-button-p' type='submit' name='accept' value='$comp_id'>Accept</button></td><td style='text-align: center; border-width: 0px; padding: 0px'><button class='confirm-button-n' type='submit' name='reject' value='$comp_id'>Reject</button></td> </tr>", $row['company_name'], $row['is_Approved']);
                         }
                         else{
                             echo sprintf("<tr> <td>%s</td> <td>%s</td>
-                                    </tr>", $row['company_name'], $row['status']);
+                                    </tr>", $row['company_name'], $row['is_Approved']);
                         }
                     }
                 }
