@@ -170,6 +170,7 @@ public class DBConnector {
                             "package_ID INT," +
                             "PRIMARY KEY (customer_ID, package_ID)," +
                             "FOREIGN KEY (customer_ID) REFERENCES customer(customer_ID)," +
+                            "FOREIGN KEY (package_ID) REFERENCES package(package_ID)," +
                             "FOREIGN KEY (courier_ID ) REFERENCES courier(courier_ID)" +
                             ");"
             );
