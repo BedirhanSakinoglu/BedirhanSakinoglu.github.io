@@ -218,19 +218,19 @@ function listContracts($mysqli){
             display: inline-block;
             color: #fff;
 
-            width: 20vh;
-            height: 5vh;
+            width: 15vh;
+            height: 3vh;
 
-            background: #1767a1;
+            background: #4e8bb4;
             border-radius: 5px;
 
             outline: none;
             border: none;
-            margin-top: 1vh;
+
             cursor: pointer;
             text-align: center;
+            font-size: 2vh;
             transition: all 0.2s linear;
-            margin-right: 14px;
             letter-spacing: 0.05em;
         }
 

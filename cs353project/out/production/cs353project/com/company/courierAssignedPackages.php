@@ -142,12 +142,12 @@ function listPackages($mysqli){
 
         }
         h1 {
-            font-size: 75px;
+            font-size: 45px;
             text-align: left;
             background-size: 100% auto !important;
             font-family: 'Google Sans';
             color: #1c4894;
-            padding-bottom: 3vh;
+            padding-bottom: 15vh;
         }
         /* Start body rules */
         body {
@@ -231,7 +231,6 @@ function listPackages($mysqli){
             display: grid;
             grid-template-columns: 1fr;
             grid-template-rows: 8vh 4vh 4vh 4vh 4vh;
-            row-gap: 5vh;
             margin-right: 3vh;
             margin-left: 3vh;
             margin-top: 7vh;
@@ -248,7 +247,6 @@ function listPackages($mysqli){
 
         p {
             font-family: 'Google Sans';
-            margin-bottom: 5vh;
             font-size: 4vh;
         }
 
