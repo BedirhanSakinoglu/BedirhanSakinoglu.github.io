@@ -28,7 +28,7 @@ if (isset($_POST['assign_package'])){
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <title>Assigned Packages</title>
+    <title>Assign Packages To Couriers</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <meta name="generator" content="Web Page Maker (unregistered version)">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -280,6 +280,7 @@ if (isset($_POST['assign_package'])){
             <div class="col-8 grid-container" >
                 <div class="grid-item" >
                     <h3 class="panel-header">Select a Package*</h3>
+
                     <div style=" margin-top:3vh; width:100%; max-height: 75vh; overflow-y: scroll;">
                         <table id="package-table">
                             <?php

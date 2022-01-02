@@ -54,6 +54,72 @@ if(isset($_POST['deliver_customer_btn'])) {
     $status_change_query = "UPDATE package SET status='delivered' WHERE package_ID = '$status_package_ID' ";
     mysqli_query($mysqli, $status_change_query);
 }
+
+
+function listPackages($mysqli){
+    $id = $_SESSION['user_id'];
+    //to get package_id, send_time, delivery_time, status, delivery_address
+
+    if(isset($_POST['range'])){
+        $weight1 = $_POST['weight1'];
+        $weight2 = $_POST['weight2'];
+        $query1 = "SELECT DISTINCT p.package_ID, p.status, p.delivery_address, p.send_time, p.delivery_time, p.weight
+                        FROM package p, assigns a
+                        WHERE a.courier_ID = '$id' AND p.package_ID = a.package_ID AND p.weight BETWEEN '$weight1' AND '$weight2'
+                        ORDER BY p.delivery_time";
+    }
+    else{
+        $query1 = "SELECT DISTINCT p.package_ID, p.status, p.delivery_address, p.send_time, p.delivery_time, p.weight
+                        FROM package p, assigns a
+                        WHERE a.courier_ID = '$id' AND p.package_ID = a.package_ID 
+                        ORDER BY p.delivery_time";
+    }
+
+    $packages1 = $mysqli->query($query1) or die('Error in query: ' . $mysqli->error);
+    if($packages1->num_rows > 0)
+    {
+        while($row = $packages1->fetch_assoc())
+        {
+            if($row['status'] == "order received" or  $row['status'] == "on delivery"){
+                $assigned_package_ID = $row['package_ID'];
+                $pickup_query = "SELECT c.address FROM send_to st, customer c WHERE st.sender_ID = c.customer_ID AND st.package_ID = '$assigned_package_ID'";
+                $pickup = $mysqli->query($pickup_query) or die('Error in query: ' . $mysqli->error);
+                $pickup_address = $pickup->fetch_assoc();
+
+                $delivery_query = "SELECT b.address FROM works_at wa, branch b WHERE b.branch_ID = wa.branch_ID AND wa.courier_ID = '$id'";
+                $delivery = $mysqli->query($delivery_query) or die('Error in query: ' . $mysqli->error);
+                $delivery_address = $delivery->fetch_assoc();
+
+                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                //kurye branche götürürken, branche teslim ettim demesi için
+                //eğer kuryeye customer tarafından package verildiyse, onu branche koycam diye buton olcak
+
+                if($row['status'] == "order received") {
+                    echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td> <td style='padding: 0px'><button class='confirm-button' type='submit' name='hand_over_btn' value='$assigned_package_ID'>Deliver to Branch</button></td> </tr>",
+                        $row['package_ID'], $row['weight'], $row['send_time'], $pickup_address['address'], $delivery_address['address'],$row['delivery_time'], $row['status']);
+                }
+                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                //kurye customera götürürken, teslim ettim demesi için
+                //eğer kurye branchten aldı (employee tarafından assign edildi) ve customer a dağıtıma çıktıysa, onu customera verdim diye buton olcak
+
+                else if($row['status'] == "on delivery") {
+                    echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td> <td style='padding: 0px'><button class='confirm-button' type='submit' name='deliver_customer_btn' value='$assigned_package_ID'>Deliver to Customer</button></td> </tr>",
+                        $row['package_ID'], $row['weight'], $row['send_time'], $delivery_address['address'], $row['delivery_address'], $row['delivery_time'], $row['status']);
+                }
+            }
+
+            else if($row['status'] == "on branch" or $row['status'] == "delivered" or $row['status'] == "received" or $row['status'] == "lost"){
+                $pickup_query = "SELECT b.address FROM works_at wa, branch b WHERE b.branch_ID = wa.branch_ID AND wa.courier_ID = '$id'";
+                $pickup = $mysqli->query($pickup_query) or die('Error in query: ' . $mysqli->error);
+                $pickup_address = $pickup->fetch_assoc();
+
+                echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td>  <td>%s</td> <td>%s</td> <td>%s</td> </tr>",
+                    $row['package_ID'], $row['weight'], $row['send_time'], $pickup_address['address'], $row['delivery_address'],$row['delivery_time'], $row['status']);
+            }
+        }
+    }
+
+}
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -76,12 +142,12 @@ if(isset($_POST['deliver_customer_btn'])) {
 
         }
         h1 {
-            font-size: 75px;
+            font-size: 45px;
             text-align: left;
             background-size: 100% auto !important;
             font-family: 'Google Sans';
             color: #1c4894;
-            padding-bottom: 3vh;
+            padding-bottom: 15vh;
         }
         /* Start body rules */
         body {
@@ -165,7 +231,6 @@ if(isset($_POST['deliver_customer_btn'])) {
             display: grid;
             grid-template-columns: 1fr;
             grid-template-rows: 8vh 4vh 4vh 4vh 4vh;
-            row-gap: 5vh;
             margin-right: 3vh;
             margin-left: 3vh;
             margin-top: 7vh;
@@ -182,7 +247,6 @@ if(isset($_POST['deliver_customer_btn'])) {
 
         p {
             font-family: 'Google Sans';
-            margin-bottom: 5vh;
             font-size: 4vh;
         }
 
@@ -223,12 +287,12 @@ if(isset($_POST['deliver_customer_btn'])) {
             letter-spacing: 0.05em;
         }
 
-        .send-button{
+        .filter-button{
             display: inline-block;
             color: #fff;
 
-            width: 25vh;
-            height: 15vh;
+            width: 15vh;
+            height: 3vh;
 
             background: #4e8bb4;
             border-radius: 5px;
@@ -259,9 +323,18 @@ if(isset($_POST['deliver_customer_btn'])) {
 </div>
 <div class="grid-container">
     <h1>Assigned Packages</h1>
+    <p style="font-size: 20px">List packages according to the their weight range.</p>
+    <form method="post">
+    <input type="text" id="dimension1"
+           name="weight1" placeholder ="Lower limit" class="m-3" style="width: 15vh">
+    <input type="text" id="dimension1"
+           name="weight2" placeholder ="Upper limit" class="m-3" style="width: 15vh">
+    <button type="submit" class="filter-button" name="range">Filter</button>
+    <p style="font-size: 25px">Assigned packages sorted by delivery time.</p>
     <table id="packages">
         <tr>
             <th>Package ID</th>
+            <th>Package Weight</th>
             <th>Date Sent</th>
             <th>Pickup Address</th>
             <th>Delivery Address</th>
@@ -269,12 +342,13 @@ if(isset($_POST['deliver_customer_btn'])) {
             <th>Package Status</th>
             <th style="background-color: white;"></th>
         </tr>
-        <form method="post">
         <?php
+        /*
         //to get package_id, send_time, delivery_time, status, delivery_address
         $query1 = "SELECT DISTINCT p.package_ID, p.status, p.delivery_address, p.send_time, p.delivery_time
                         FROM package p, assigns a
-                        WHERE a.courier_ID = '$id' AND p.package_ID = a.package_ID";
+                        WHERE a.courier_ID = '$id' AND p.package_ID = a.package_ID
+                        ORDER BY p.delivery_time";
 
         $packages1 = $mysqli->query($query1) or die('Error in query: ' . $mysqli->error);
         if($packages1->num_rows > 0)
@@ -319,9 +393,12 @@ if(isset($_POST['deliver_customer_btn'])) {
                 }
             }
         }
+        */
+        listPackages($mysqli);
         ?>
-        </form>
+
     </table>
+    </form>
 </div>
 
 </body>

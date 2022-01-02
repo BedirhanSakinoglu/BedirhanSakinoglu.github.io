@@ -11,6 +11,25 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === FALSE){
 
 $id = $_SESSION['user_id'];
 
+function listContracts($mysqli){
+    $id = $_SESSION['user_id'];
+
+    if(isset($_POST['search'])){
+        $address = $_POST['searched_address'];
+        $query = "SELECT b.branch_ID, b.address, c.is_approved FROM branch b, contract c WHERE b.address LIKE '%$address%' AND b.branch_ID = c.branch_ID AND c.company_ID = '$id'";
+    }
+    else{
+        $query = "SELECT b.branch_ID, b.address, c.is_approved FROM branch b, contract c WHERE b.branch_ID = c.branch_ID AND c.company_ID = '$id'";
+    }
+    $contracts = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
+    if($contracts->num_rows > 0)
+    {
+        while($row = $contracts->fetch_assoc()){
+            echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td> </tr>",
+                $row['branch_ID'], $row['address'], $row['is_approved']);
+        }
+    }
+}
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -152,15 +171,6 @@ $id = $_SESSION['user_id'];
             margin-top: 7vh;
         }
 
-        .grid-item {
-            background-color: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            font-size: 30px;
-            text-align: center;
-            box-shadow: 0 5px 20px hsla(205, 75%, 36%, 0.31);
-        }
-
         p {
             font-family: 'Google Sans';
             margin-bottom: 5vh;
@@ -204,23 +214,23 @@ $id = $_SESSION['user_id'];
             letter-spacing: 0.05em;
         }
 
-        .send-button{
+        .search-button{
             display: inline-block;
             color: #fff;
 
-            width: 25vh;
-            height: 15vh;
+            width: 20vh;
+            height: 5vh;
 
-            background: #4e8bb4;
+            background: #1767a1;
             border-radius: 5px;
 
             outline: none;
             border: none;
-
+            margin-top: 1vh;
             cursor: pointer;
             text-align: center;
-            font-size: 2vh;
             transition: all 0.2s linear;
+            margin-right: 14px;
             letter-spacing: 0.05em;
         }
 
@@ -240,6 +250,11 @@ $id = $_SESSION['user_id'];
 </div>
 <div class="grid-container">
     <h1>View Contracts</h1>
+    <p style="font-size: 25px">Search by address of the branch.</p>
+    <form method="post">
+    <input type="text" id="dimension1"
+           name="searched_address" placeholder ="Enter Address" class="m-3" style="width: 25vh">
+    <button type="submit" class="search-button" name="search">Search</button>
     <div style=" margin-top:3vh; width:100%; max-height: 75vh; overflow-y: scroll;">
         <table id="packages">
             <tr>
@@ -247,21 +262,13 @@ $id = $_SESSION['user_id'];
                 <th>Branch Address</th>
                 <th>Contract Status</th>
             </tr>
-            <form method="post">
                 <?php
-                $query = "SELECT b.branch_ID, b.address, c.is_approved FROM branch b, contract c WHERE b.branch_ID = c.branch_ID AND c.company_ID = '$id'";
-                $contracts = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
-                if($contracts->num_rows > 0)
-                {
-                    while($row = $contracts->fetch_assoc()){
-                        echo sprintf("<tr> <td>%s</td> <td>%s</td> <td>%s</td> </tr>",
-                            $row['branch_ID'], $row['address'], $row['is_approved']);
-                    }
-                }
+                listContracts($mysqli);
                 ?>
-            </form>
+
         </table>
     </div>
+    </form>
 </div>
 
 </body>

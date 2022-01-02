@@ -46,7 +46,6 @@ public class DBConnector {
             stmt.executeUpdate("DROP TABLE IF EXISTS call_courier");
             stmt.executeUpdate("DROP TABLE IF EXISTS branch");
             stmt.executeUpdate("DROP TABLE IF EXISTS take");
-            stmt.executeUpdate("DROP TABLE IF EXISTS send");
             stmt.executeUpdate("DROP TABLE IF EXISTS collect");
             stmt.executeUpdate("DROP TABLE IF EXISTS assign_to_employee");
             stmt.executeUpdate("DROP TABLE IF EXISTS assigns");
@@ -63,6 +62,7 @@ public class DBConnector {
             stmt.executeUpdate("DROP TABLE IF EXISTS courier");
             stmt.executeUpdate("DROP TABLE IF EXISTS customer");
             stmt.executeUpdate("DROP TABLE IF EXISTS user");
+            stmt.executeUpdate("DROP PROCEDURE IF EXISTS get_user_type");
 
             // Create tables
 
@@ -78,6 +78,10 @@ public class DBConnector {
                             "PRIMARY KEY (user_ID)" +
                             ");"
             );
+
+            // ------------CREATE SECONDARY INDEX ON USER-----------
+            //NEWLY ADDED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            stmt.executeUpdate("CREATE INDEX UserIndex ON user(username);");
 
             //customer Table
             stmt.executeUpdate(
@@ -148,7 +152,7 @@ public class DBConnector {
                             "company_ID INT," +
                             "company_name VARCHAR(50) NOT NULL," +
                             "PRIMARY KEY (company_ID)," +
-                            "FOREIGN KEY (company_ID ) REFERENCES user(user_ID)" +
+                            "FOREIGN KEY (company_ID) REFERENCES user(user_ID)" +
                             ");"
             );
 
@@ -171,17 +175,6 @@ public class DBConnector {
                             "PRIMARY KEY (customer_ID, package_ID)," +
                             "FOREIGN KEY (customer_ID) REFERENCES customer(customer_ID)," +
                             "FOREIGN KEY (package_ID) REFERENCES package(package_ID)," +
-                            "FOREIGN KEY (courier_ID ) REFERENCES courier(courier_ID)" +
-                            ");"
-            );
-
-            //deliver Table
-            stmt.executeUpdate(
-                    "CREATE TABLE deliver(" +
-                            "customer_ID INT," +
-                            "courier_ID INT," +
-                            "PRIMARY KEY (customer_ID, courier_ID)," +
-                            "FOREIGN KEY (customer_ID) REFERENCES customer(customer_ID)," +
                             "FOREIGN KEY (courier_ID ) REFERENCES courier(courier_ID)" +
                             ");"
             );
@@ -210,18 +203,6 @@ public class DBConnector {
                             ");"
             );
 
-            //choose Table
-            stmt.executeUpdate(
-                    "CREATE TABLE choose(" +
-                            "customer_ID INT," +
-                            "location_ID INT," +
-                            "PRIMARY KEY (customer_ID)," +
-                            "FOREIGN KEY (customer_ID) REFERENCES customer (customer_ID)," +
-                            "FOREIGN KEY (location_ID) REFERENCES pickup_location (location_ID)" +
-                            ");"
-            );
-
-
             //assigns Table
             stmt.executeUpdate(
                     "CREATE TABLE assigns(" +
@@ -247,39 +228,6 @@ public class DBConnector {
                             ");"
             );
 
-            //collect Table
-            stmt.executeUpdate(
-                    "CREATE TABLE collect(" +
-                            "package_ID INT," +
-                            "courier_ID INT," +
-                            "PRIMARY KEY (package_ID)," +
-                            "FOREIGN KEY (package_ID) REFERENCES package(package_ID)," +
-                            "FOREIGN KEY (courier_ID) REFERENCES courier(courier_ID)" +
-                            ");"
-            );
-
-            //send Table
-            stmt.executeUpdate(
-                    "CREATE TABLE send(" +
-                            "package_ID INT," +
-                            "customer_ID INT," +
-                            "PRIMARY KEY (package_ID)," +
-                            "FOREIGN KEY (customer_ID) REFERENCES customer(customer_ID)," +
-                            "FOREIGN KEY (package_ID) REFERENCES package(package_ID)" +
-                            ");"
-            );
-
-            //take Table
-            stmt.executeUpdate(
-                    "CREATE TABLE take(" +
-                            "package_ID INT," +
-                            "customer_ID INT," +
-                            "PRIMARY KEY (package_ID)," +
-                            "FOREIGN KEY (customer_ID) REFERENCES customer(customer_ID)," +
-                            "FOREIGN KEY (package_ID) REFERENCES package(package_ID)" +
-                            ");"
-            );
-
             //branch Table
             stmt.executeUpdate(
                     "CREATE TABLE branch(" +
@@ -287,19 +235,6 @@ public class DBConnector {
                             "address VARCHAR(50) NOT NULL," +
                             "phone VARCHAR(50) NOT NULL UNIQUE," +
                             "PRIMARY KEY (branch_ID)" +
-                            ");"
-            );
-
-            //call_courier Table
-            stmt.executeUpdate(
-                    "CREATE TABLE call_courier(" +
-                            "courier_ID INT," +
-                            "branch_ID INT," +
-                            "customer_ID INT," +
-                            "PRIMARY KEY (courier_ID, branch_ID)," +
-                            "FOREIGN KEY (courier_ID) REFERENCES courier(courier_ID)," +
-                            "FOREIGN KEY (branch_ID) REFERENCES branch(branch_ID )," +
-                            "FOREIGN KEY (customer_ID) REFERENCES customer(customer_ID)" +
                             ");"
             );
 
@@ -383,6 +318,16 @@ public class DBConnector {
                             "FOREIGN KEY (package_ID) REFERENCES package(package_ID)" +
                             ");"
             );
+
+
+            // ------STORED PROCEDURE FOR FINDING USER TYPE-----
+            stmt.executeUpdate("CREATE PROCEDURE get_user_type(" + "IN user_ID INT" + ")"
+                    + "SELECT user.user_ID, CASE WHEN(user.user_ID IN (SELECT customer.customer_ID FROM customer)) THEN 'customer' "
+                    + "WHEN(user.user_ID IN (SELECT employee.employee_ID FROM employee)) THEN 'employee' "
+                    + "WHEN(user.user_ID IN (SELECT company_representative.company_ID FROM company_representative)) THEN 'company_representative' "
+                    + "WHEN(user.user_ID IN (SELECT courier.courier_ID FROM courier)) THEN 'courier' END AS user_type "
+                    + "FROM user " + "WHERE user.user_ID = user_ID; ");
+
 
             stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('utku_sezer', '123', 'utkus@gmail.com', '05439984328')");
             stmt.executeUpdate("INSERT INTO customer VALUES(LAST_INSERT_ID(),'bilkent camlık')");

@@ -11,15 +11,44 @@ function logIn($mysqli)
     $query = "SELECT * FROM user WHERE username='$user' AND password='$pass'";
     $result = $mysqli->query($query) or die('Error in query: ' . $mysqli->error);
     $userType = "none";
+
     if($result){
         if($result->num_rows==1) {
-            if (isset($_POST['usertype'])){
-                $userType = $_POST['usertype'];
-            }
             $_SESSION['username'] = $user;
             $_SESSION['password'] = $pass;
             $_SESSION['loggedin'] = true;
             $_SESSION['user_id'] = -1;
+            $sql = "SELECT * FROM user WHERE user.username = '$user' AND user.password = '$pass';";
+            $user_info = mysqli_query($mysqli,$sql);
+            if($user_info->num_rows==1){
+                $user_id = $user_info->fetch_assoc()['user_ID'];
+                $_SESSION['username'] = $user;
+                $_SESSION['user_id'] = $user_id;
+                $sql = "CALL get_user_type($user_id)";
+                $query = mysqli_query($mysqli, $sql);
+                $result = $query->fetch_assoc();
+                $_SESSION['user_type'] = $result['user_type'];
+                $_SESSION['logged_in'] = true;
+                switch($_SESSION['user_type']){
+                    case "customer":
+                        echo "<script>window.location.href='customerDashboard.php';</script>";
+                        break;
+                    case "employee":
+                        echo "<script>window.location.href='employeeDashboard.php';</script>";
+                        break;
+                    case "courier":
+                        echo "<script>window.location.href='courierDashboard.php';</script>";
+                        break;
+                    case "company_representative":
+                        echo "<script>window.location.href='companyRepresentativeDashboard.php';</script>";
+                        break;
+                    default:
+                        echo $_SESSION['user_type'];
+                        break;
+                }
+            }
+
+            /*
             if($userType == "customer"){
                 $query_cust = "SELECT * FROM user u, customer c WHERE u.username='$user' AND c.customer_ID = u.user_ID";
                 $result_cust = $mysqli->query($query_cust) or die('Error in query: ' . $mysqli->error);
@@ -99,7 +128,7 @@ function logIn($mysqli)
                         alert("Incorrect Usertype");
                         </script>';
                 }
-            }
+            }*/
         }
     }
     else{
@@ -456,25 +485,7 @@ if (isset($_POST['register_companyrepresentative'])){
                 <header class=\"head-form\">
                     <h2>Log In</h2>
                     <!--     A welcome message or an explanation of the login form -->
-                    <p>Please select your user type:</p>
-                    <div>
-                        <input type=\"radio\" id=\"customer\"
-                               name=\"usertype\" value=\"customer\" required>
-                        <label for=\"customer\">Customer</label>
-
-                        <input type=\"radio\" id=\"courier\"
-                               name=\"usertype\" value=\"courier\">
-                        <label for=\"courier\">Courier</label>
-
-                        <input type=\"radio\" id=\"employee\"
-                               name=\"usertype\" value=\"employee\">
-                        <label for=\"employee\">Employee</label>
-                        <br/>
-                        <input type=\"radio\" id=\"companyrepresentative\"
-                               name=\"usertype\" value=\"companyrepresentative\">
-                        <label for=\"companyrepresentative\">Company Representative</label>                        
-                    </div>
-
+                    
                 </header>
                 <!--     End  header Content  -->
                 <br>
