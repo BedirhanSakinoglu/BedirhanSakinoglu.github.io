@@ -185,8 +185,8 @@ public class DBConnector {
                     "CREATE TABLE report(" +
                             "report_ID INT AUTO_INCREMENT," +
                             "customer_ID INT," +
-                            "content VARCHAR(50) NOT NULL," +
-                            "report_type VARCHAR(200) NOT NULL," +
+                            "content VARCHAR(200) NOT NULL," +
+                            "report_type VARCHAR(60) NOT NULL," +
                             "is_accepted VARCHAR(50) NOT NULL," +
                             "FOREIGN KEY (customer_ID) REFERENCES customer(customer_ID)," +
                             "PRIMARY KEY (report_ID, customer_ID)" +
@@ -396,7 +396,7 @@ public class DBConnector {
             stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 6000, 50, 'fast_courier')");
             stmt.executeUpdate("INSERT INTO works_at VALUES(LAST_INSERT_ID(), 2)");
 
-            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('götçe', '123', 'gök@gmail.com', '05095996323')");
+            stmt.executeUpdate("INSERT INTO user(username, password, email, phone) VALUES('gökçe', '123', 'gök@gmail.com', '05095996323')");
             stmt.executeUpdate("INSERT INTO courier VALUES(LAST_INSERT_ID(), 43000, 10, 'default_courier')");
             stmt.executeUpdate("INSERT INTO works_at VALUES(LAST_INSERT_ID(), 2)");
 

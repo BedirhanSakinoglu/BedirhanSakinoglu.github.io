@@ -236,8 +236,8 @@ WHERE u.user_ID='$id' AND e.employee_ID = u.user_ID AND b.branch_ID = w.branch_I
         <table>
             <table style="width: 100%" id="packages">
                 <th>Courier ID</th>
-                <th>Review Rate</th>
                 <th>Review Text</th>
+                <th>Review Rate</th>
             </table">
             <table id="packages">
                 <?php
