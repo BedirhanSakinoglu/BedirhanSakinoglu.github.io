@@ -46,6 +46,7 @@ public class DBConnector {
             stmt.executeUpdate("DROP TABLE IF EXISTS call_courier");
             stmt.executeUpdate("DROP TABLE IF EXISTS branch");
             stmt.executeUpdate("DROP TABLE IF EXISTS take");
+            stmt.executeUpdate("DROP TABLE IF EXISTS send");
             stmt.executeUpdate("DROP TABLE IF EXISTS collect");
             stmt.executeUpdate("DROP TABLE IF EXISTS assign_to_employee");
             stmt.executeUpdate("DROP TABLE IF EXISTS assigns");
